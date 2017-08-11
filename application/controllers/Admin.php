@@ -1,0 +1,356 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Admin extends CI_Controller {
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		if(!$this->session->tipe=='admin') {
+			redirect('/home/login', 'refresh');
+		}
+	}
+
+	function __output($nview,$data=null)
+	{
+		$this->load->view('header',$data);
+		$this->load->view($nview,$data);
+		$this->load->view('footer');
+	}
+
+	function entr()
+	{
+		$q = "select * from kode_klas order by kode asc";
+		$hsl = $this->db->query($q);
+		$data['kode'] = $hsl->result_array();
+
+		$this->__output('entri1',$data);
+	}
+
+	function gentr()
+	{
+		$noarsip=trim($this->input->post('noarsip'));
+		$tahun=trim($this->input->post('tahun'));
+		$tanggal=trim($this->input->post('tanggal'));
+		$uraian=trim($this->input->post('uraian'));
+		$kode=trim($this->input->post('kode'));
+		$ket=trim($this->input->post('ket'));
+		$nobox=trim($this->input->post('nobox'));
+		$file="";
+		$config['upload_path'] = 'files/';
+		$config['allowed_types'] = 'pdf|docx|doc';
+		$this->load->library('upload', $config);
+		if ($this->upload->do_upload('file')) {
+			$datafile=$this->upload->data();
+			//$file = $datafile['full_path'];
+			$file = $datafile['file_name'];
+		}else {
+			//echo $this->upload->display_errors();
+			//echo $config['upload_path'];
+			//die();
+		}
+
+		$q = "insert into data_arsip (noarsip,tahun,tanggal,uraian,kode,ket,nobox,file) values ('$noarsip',$tahun,'$tanggal','$uraian','$kode','$ket','$nobox','$file');";
+		$hsl = $this->db->query($q);
+		$q = "SELECT LAST_INSERT_ID() as vid;";
+		$hsl = $this->db->query($q);
+		$row = $hsl->row_array();
+		$v = $row['vid'];
+		//var_dump($row);
+		redirect('/home/', 'refresh');
+	}
+
+	function vedit($id)
+	{
+		if($id!=""){
+			$q = "select * from data_arsip where id=$id";
+			$hsl = $this->db->query($q);
+			$row = $hsl->row_array();
+			$previous = "";
+			if(isset($_SERVER['HTTP_REFERER'])) {
+				$previous = $_SERVER['HTTP_REFERER'];
+				$row['previous'] = $previous;
+			}
+			$q = "select * from kode_klas order by kode asc";
+			$hsl = $this->db->query($q);
+			$row['kode2'] = $hsl->result_array();
+			if(count($row)>0) {
+				$this->__output('edit1',$row);
+			}else{
+				redirect('/home/', 'refresh');
+			}
+		}else {
+			redirect('/home/', 'refresh');
+		}
+
+	}
+
+	function edit1()
+	{
+		$noarsip=trim($this->input->post('noarsip'));
+		$tahun=trim($this->input->post('tahun'));
+		$tanggal=trim($this->input->post('tanggal'));
+		$uraian=trim($this->input->post('uraian'));
+		$kode=trim($this->input->post('kode'));
+		$ket=trim($this->input->post('ket'));
+		$nobox=trim($this->input->post('nobox'));
+		$id=trim($this->input->post('id'));
+		$previous=trim($this->input->post('previous'));
+		$file="";
+		$config['upload_path'] = 'files/';
+		$config['allowed_types'] = 'pdf|docx|doc';
+		$this->load->library('upload', $config);
+		if ($this->upload->do_upload('file')) {
+			$datafile=$this->upload->data();
+			//$file = $datafile['full_path'];
+			$file = $datafile['file_name'];
+		}else {
+			//echo $this->upload->display_errors();
+			//echo $this->input->post('nobox');
+			//die();
+		}
+
+		if(isset($_POST)) {
+			$q = "update data_arsip set noarsip='$noarsip',tanggal='$tanggal',tahun=$tahun,uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file' where id=$id";
+			$hsl = $this->db->query($q);
+		}
+		if($previous=="") {
+			redirect('/home/', 'refresh');
+		}else {
+			header('Location: ' . $previous);
+		}
+	}
+
+	function delfile()
+	{
+		$id=trim($this->input->post('id'));
+		$q = "select file from data_arsip where id=$id";
+		$hsl = $this->db->query($q);
+		$row = $hsl->row_array()['file'];
+		if($row!=""){
+			$alamat = ROOTPATH."/files/".$row;
+			unlink($alamat);
+		}
+		$q = "update data_arsip set file='' where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function del1()
+	{
+		$id=trim($this->input->post('id'));
+		$q = "select file from data_arsip where id=$id";
+		$hsl = $this->db->query($q);
+		$row = $hsl->row_array()['file'];
+		if($row!=""){
+			$alamat = ROOTPATH."/files/".$row;
+			unlink($alamat);
+		}
+		$q = "delete from data_arsip where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function klas()
+	{
+		$q = "select * from kode_klas order by kode asc";
+		$hsl = $this->db->query($q);
+		$data['user'] = $hsl->result_array();
+		$this->__output('klas',$data);
+	}
+
+	function addkode()
+	{
+		$kode = trim($this->input->post('kode'));
+		$nama = trim($this->input->post('nama'));
+		$retensi = trim($this->input->post('retensi'));
+		$q = "insert into kode_klas (kode,nama,retensi) values ('$kode','$nama',$retensi)";
+		$hsl = $this->db->query($q);
+	}
+
+	function edkode()
+	{
+		$kode = trim($this->input->post('kode'));
+		$nama = trim($this->input->post('nama'));
+		$retensi = trim($this->input->post('retensi'));
+		$id = trim($this->input->post('id'));
+		$q = "update kode_klas set kode='$kode'";
+		$q .= ",nama='$nama'";
+		$q .= ",retensi=$retensi where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function delkode()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "delete from kode_klas where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function akode()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "select * from kode_klas where id=$id";
+		$hsl = $this->db->query($q);
+		$row = $hsl->row_array();
+		if($row) {
+			echo json_encode($row);
+		}
+	}
+
+	function reloadkode()
+	{
+		$q = "select * from kode_klas order by kode asc";
+		$hsl = $this->db->query($q);
+		$row = $hsl->result_array();
+		if($row) {
+			echo "<table class='table table-bordered' name='vkode' id='vkode'>
+			<thead>
+				<th>Kode</th>
+				<th>Nama</th>
+				<th>Retensi</th>
+				<th></th>
+				<th></th>
+			</thead>";
+			$no=1;
+			foreach($row as $u) {
+				echo "<tr>";
+                echo "<td>".$u['kode']."</td>";
+                echo "<td>".$u['nama']."</td>";
+                echo "<td>".$u['retensi']." Tahun</td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editkode\" class='edkode' href='#' id='".$u['id']."' >edit</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delkode\" class='delkode' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "</tr>";
+                $no++;
+			}
+			echo "</table>";
+		}
+	}
+
+	function vuser()
+	{
+		$q = "select * from master_user";
+		$hsl = $this->db->query($q);
+		$data['user'] = $hsl->result_array();
+		$this->__output('vuser',$data);
+
+	}
+
+	function adduser()
+	{
+		$username = trim($this->input->post('username'));
+		$password = trim($this->input->post('password'));
+		$tipe = trim($this->input->post('tipe'));
+		$q = "insert into master_user (username,password,tipe) values ('$username',md5('$password'),'$tipe')";
+		$hsl = $this->db->query($q);
+
+	}
+
+	function eduser()
+	{
+		$username = trim($this->input->post('username'));
+		$password = trim($this->input->post('password'));
+		$tipe = trim($this->input->post('tipe'));
+		$id = trim($this->input->post('id'));
+		$q = "update master_user set username='$username'";
+		if($password!="") $q .= ",password=md5('$password')";
+		$q .= ",tipe='$tipe' where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function deluser()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "delete from master_user where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function auser()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "select * from master_user where id=$id";
+		$hsl = $this->db->query($q);
+		$row = $hsl->row_array();
+		if($row) {
+			echo json_encode($row);
+		}
+	}
+
+	function reloaduser()
+	{
+		$q = "select * from master_user";
+		$hsl = $this->db->query($q);
+		$row = $hsl->result_array();
+		if($row) {
+			echo "<table class='table table-bordered' name='vuser' id='vuser'>
+			<thead>
+				<th>No</th>
+				<th>Username</th>
+				<th>Tipe</th>
+				<th></th>
+				<th></th>
+			</thead>";
+			$no=1;
+			foreach($row as $u) {
+				echo "<tr>";
+                echo "<td>".$no."</td>";
+                echo "<td>".$u['username']."</td>";
+                echo "<td>".$u['tipe']."</td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#edituser\" class='eduser' href='#' id='".$u['id']."' >edit</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#deluser\" class='deluser' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "</tr>";
+                $no++;
+			}
+			echo "</table>";
+		}
+	}
+
+	function eximp()
+	{
+		$this->__output('eximp');
+	}
+
+	function exportdata()
+	{
+		include('dbimexport.php');
+		$db_config = Array
+					(
+						'dbtype' => "MYSQL",
+						'host' => "localhost",
+						'database' => "db1",
+						'user' => "root",
+						'password' => "",
+					);
+		$dbimexport = new dbimexport($db_config);
+		$dbimexport->download_path = "";
+		$dbimexport->download = true;
+		$dbimexport->file_name = "backup_data_".date("Y-m-d_H-i-s");
+		$dbimexport->export();
+	}
+
+	function importdata()
+	{
+		if($_FILES["up_file"]["name"])
+		{
+			include('dbimexport.php');
+			$db_config = Array
+						(
+							'dbtype' => "MYSQL",
+							'host' => "localhost",
+							'database' => "db1",
+							'user' => "root",
+							'password' => "",
+						);
+			$dbimexport = new dbimexport($db_config);
+			$filename = $_FILES["up_file"]["name"];
+			$source = $_FILES["up_file"]["tmp_name"];
+			$dbimexport->import_path = $source;
+			$dbimexport->import();
+			$this->session->set_flashdata('zz', "Data berhasil diimport");
+			redirect('/admin/eximp', 'refresh');
+		}else {
+			$this->session->set_flashdata('zz', "Tidak ada file yang diupload");
+			redirect('/admin/eximp', 'refresh');
+		}
+	}
+
+}
