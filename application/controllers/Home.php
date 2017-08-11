@@ -27,7 +27,6 @@ class Home extends CI_Controller {
     function src($srcdata=false)
     {
         $noarsip=trim($this->input->get('noarsip'));
-		$tahun=trim($this->input->get('tahun'));
 		$tanggal=trim($this->input->get('tanggal'));
 		$uraian=trim($this->input->get('uraian'));
 		$ket=trim($this->input->get('ket'));
@@ -37,9 +36,6 @@ class Home extends CI_Controller {
 		$w = [];
 		if($noarsip!="") {
 			$w[] = " noarsip like '%".$noarsip."%'";
-		}
-		if($tahun!="" && $tahun!="all") {
-			$w[] = " tahun=".$tahun."";
 		}
 		if($tanggal!="") {
 			$w[] = " tanggal like '%".$tanggal."%'";
@@ -58,13 +54,13 @@ class Home extends CI_Controller {
 		}
 
 		$q = "select a.*,k.retensi,date_add(a.tanggal,interval k.retensi year) b,
-		(if(date_add(a.tanggal,interval k.retensi year)<curdate(),'sudah','belum')) f from data_arsip a join kode_klas k on k.kode=a.kode";
+		(if(date_add(a.tanggal,interval k.retensi year)<curdate(),'sudah','belum')) f from data_arsip a join master_kode k on k.kode=a.kode";
 		if(count($w) > 0) {
 			$q .= " having".implode(" and ",$w);
 		}
         
         if($srcdata) {
-            $src = ["noarsip"=>$noarsip,"tahun"=>$tahun,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi];
+            $src = ["noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi];
             $qq = [$q,$src];
             return $qq;
         }else {
@@ -89,13 +85,10 @@ class Home extends CI_Controller {
 		$jmldata = $this->db->query($q2)->num_rows();
 		$data['jml']=$jmldata;
 
-		$q = "select distinct tahun from data_arsip order by tahun asc";
-		$hsl = $this->db->query($q);
-		$data['tahun'] = $hsl->result_array();
 		$q = "select distinct ket from data_arsip order by ket asc";
 		$hsl = $this->db->query($q);
 		$data['ket'] = $hsl->result_array();
-		$q = "select kode,nama from kode_klas order by kode asc";
+		$q = "select kode,nama from master_kode order by kode asc";
 		$hsl = $this->db->query($q);
 		$data['kode'] = $hsl->result_array();
 
@@ -147,7 +140,6 @@ class Home extends CI_Controller {
         $this->excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, 'No.Arsip');
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, 2, 'Tahun');
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, 2, 'Tanggal');
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, 2, 'Kode Klasifikasi');
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, 2, 'Uraian');
@@ -162,7 +154,6 @@ class Home extends CI_Controller {
                 'color' => array('rgb' => 'FF0000')));
         foreach($data as $d) {
             $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $d['noarsip']);
-            $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $d['tahun']);
             $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $d['tanggal']);
             $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $d['kode']);
             $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $d['uraian']);

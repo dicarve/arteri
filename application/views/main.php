@@ -10,17 +10,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<input id="uraian" name="uraian" class="form-control input-md" type="text" value="<?php echo $src['uraian'] ?>">
 			<span class = "input-group-addon">No Surat/Arsip</span>
 			<input id="noarsip" name="noarsip" class="form-control input-md" type="text" value="<?php echo $src['noarsip'] ?>">
-			<span class = "input-group-addon">Tahun</span>
-			<select class="form-control" name="tahun" id="tahun">
-				<option value="all" >Semua</option>
-				<?php
-					if(isset($tahun)) {
-						foreach($tahun as $p) {
-							echo "<option value=\"".$p['tahun']."\" ".($src['tahun']==$p['tahun']?"selected=selected":"").">".$p['tahun']."</option>";
-						}
-					}
-				?>
-			</select>
 			<span class = "input-group-addon">Retensi</span>
 			<select class="form-control" name="retensi" id="retensi">
 				<option value="all" >Semua</option>
@@ -89,7 +78,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						foreach($data as $a) {
 							echo "<tr>";
 							echo "<td>".$a['noarsip']."</td>";
-							echo "<td>".$a['tahun']."</td>";
 							echo "<td>".$a['tanggal']."</td>";
 							echo "<td>".$a['kode']."</td>";
 							echo "<td>".$a['uraian']."</td>";

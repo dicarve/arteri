@@ -16,19 +16,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 
 <div class="form-group">
-	<label class="col-md-4 control-label" for="tahun">Tahun</label>
-	<div class="col-md-4">
-	<input id="tahun" name="tahun" class="form-control input-md" type="text" value="<?php echo $tahun ?>">
-	</div>
-</div>
-
-<div class="form-group">
-	<label class="col-md-4 control-label" for="tanggal">Tanggal</label>
+	<label class="col-md-4 control-label" for="tanggal">Tanggal Penciptaan</label>
 	<div class="col-md-4">
   <div class="input-group">
     <div class="input-group-addon">(yyyy-mm-dd)</div>
     <input id="tanggal" name="tanggal" class="form-control input-md" type="text" value="<?php echo $tanggal ?>">
 	</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-md-4 control-label" for="pencipta">Pencipta Arsip</label>
+	<div class="col-md-4">
+	<select id="pencipta" name="pencipta" class="form-control input-md">
+	<?php
+		if(isset($pencipta2)){
+			foreach($pencipta2 as $k) {
+				echo "<option value='".$k['id']."'".($pencipta==$k['id']?"selected=selected":"")." >".$k['nama_pencipta']."</option>";
+			}
+		}
+	?>
+	</select>
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-md-4 control-label" for="unitpengolah">Unit Pengolah</label>
+	<div class="col-md-4">
+	<select id="unitpengolah" name="unitpengolah" class="form-control input-md">
+	<?php
+		if(isset($unitpengolah2)){
+			foreach($unitpengolah2 as $k) {
+				echo "<option value='".$k['id']."'".($unitpengolah==$k['id']?"selected=selected":"")." >".$k['nama_pengolah']."</option>";
+			}
+		}
+	?>
+	</select>
 	</div>
 </div>
 
@@ -51,6 +74,36 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<label class="col-md-4 control-label" for="uraian">Uraian</label>
 	<div class="col-md-4">
   <textarea id="uraian" name="uraian" class="form-control" rows="3"><?php echo $uraian ?></textarea>
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-md-4 control-label" for="lokasi">Lokasi Arsip</label>
+	<div class="col-md-4">
+	<select id="lokasi" name="lokasi" class="form-control input-md">
+	<?php
+		if(isset($lokasi2)){
+			foreach($lokasi2 as $k) {
+				echo "<option value='".$k['id']."'".($lokasi==$k['id']?"selected=selected":"")." >".$k['nama_lokasi']."</option>";
+			}
+		}
+	?>
+	</select>
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-md-4 control-label" for="media">Jenis Media</label>
+	<div class="col-md-4">
+	<select id="media" name="media" class="form-control input-md">
+	<?php
+		if(isset($media2)){
+			foreach($media2 as $k) {
+				echo "<option value='".$k['id']."'".($media==$k['id']?"selected=selected":"")." >".$k['nama_media']."</option>";
+			}
+		}
+	?>
+	</select>
 	</div>
 </div>
 

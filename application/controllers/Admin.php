@@ -18,20 +18,56 @@ class Admin extends CI_Controller {
 		$this->load->view($nview,$data);
 		$this->load->view('footer');
 	}
-
+	
+	function masterlist($tipe)
+	{
+		$data;
+		switch($tipe)
+		{
+			case "kode":
+			$q = "select * from master_kode order by kode asc";
+			$hsl = $this->db->query($q);
+			$data = $hsl->result_array();
+			break;
+			case "pencipta":
+			$q = "select * from master_pencipta order by nama_pencipta asc";
+			$hsl = $this->db->query($q);
+			$data = $hsl->result_array();
+			break;
+			case "unitpengolah":
+			$q = "select * from master_pengolah order by nama_pengolah asc";
+			$hsl = $this->db->query($q);
+			$data = $hsl->result_array();
+			break;
+			case "lokasi":
+			$q = "select * from master_lokasi order by nama_lokasi asc";
+			$hsl = $this->db->query($q);
+			$data = $hsl->result_array();
+			break;
+			case "media":
+			$q = "select * from master_media order by nama_media asc";
+			$hsl = $this->db->query($q);
+			$data = $hsl->result_array();
+			break;
+		}
+		
+		return $data;
+	}
+	
 	function entr()
 	{
-		$q = "select * from kode_klas order by kode asc";
-		$hsl = $this->db->query($q);
-		$data['kode'] = $hsl->result_array();
-
+		$data["kode"]=$this->masterlist("kode");
+		$data["pencipta"]=$this->masterlist("pencipta");
+		$data["unitpengolah"]=$this->masterlist("unitpengolah");
+		$data["lokasi"]=$this->masterlist("lokasi");
+		$data["media"]=$this->masterlist("media");
+		
 		$this->__output('entri1',$data);
 	}
 
 	function gentr()
 	{
 		$noarsip=trim($this->input->post('noarsip'));
-		$tahun=trim($this->input->post('tahun'));
 		$tanggal=trim($this->input->post('tanggal'));
 		$uraian=trim($this->input->post('uraian'));
 		$kode=trim($this->input->post('kode'));
@@ -51,7 +87,7 @@ class Admin extends CI_Controller {
 			//die();
 		}
 
-		$q = "insert into data_arsip (noarsip,tahun,tanggal,uraian,kode,ket,nobox,file) values ('$noarsip',$tahun,'$tanggal','$uraian','$kode','$ket','$nobox','$file');";
+		$q = "insert into data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file) values ('$noarsip','$tanggal','$uraian','$kode','$ket','$nobox','$file');";
 		$hsl = $this->db->query($q);
 		$q = "SELECT LAST_INSERT_ID() as vid;";
 		$hsl = $this->db->query($q);
@@ -72,9 +108,11 @@ class Admin extends CI_Controller {
 				$previous = $_SERVER['HTTP_REFERER'];
 				$row['previous'] = $previous;
 			}
-			$q = "select * from kode_klas order by kode asc";
-			$hsl = $this->db->query($q);
-			$row['kode2'] = $hsl->result_array();
+			$row["kode2"]=$this->masterlist("kode");
+			$row["pencipta2"]=$this->masterlist("pencipta");
+			$row["unitpengolah2"]=$this->masterlist("unitpengolah");
+			$row["lokasi2"]=$this->masterlist("lokasi");
+			$row["media2"]=$this->masterlist("media");
 			if(count($row)>0) {
 				$this->__output('edit1',$row);
 			}else{
@@ -89,7 +127,6 @@ class Admin extends CI_Controller {
 	function edit1()
 	{
 		$noarsip=trim($this->input->post('noarsip'));
-		$tahun=trim($this->input->post('tahun'));
 		$tanggal=trim($this->input->post('tanggal'));
 		$uraian=trim($this->input->post('uraian'));
 		$kode=trim($this->input->post('kode'));
@@ -112,7 +149,7 @@ class Admin extends CI_Controller {
 		}
 
 		if(isset($_POST)) {
-			$q = "update data_arsip set noarsip='$noarsip',tanggal='$tanggal',tahun=$tahun,uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file' where id=$id";
+			$q = "update data_arsip set noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file' where id=$id";
 			$hsl = $this->db->query($q);
 		}
 		if($previous=="") {
@@ -152,7 +189,7 @@ class Admin extends CI_Controller {
 
 	function klas()
 	{
-		$q = "select * from kode_klas order by kode asc";
+		$q = "select * from master_kode order by kode asc";
 		$hsl = $this->db->query($q);
 		$data['user'] = $hsl->result_array();
 		$this->__output('klas',$data);
@@ -163,7 +200,7 @@ class Admin extends CI_Controller {
 		$kode = trim($this->input->post('kode'));
 		$nama = trim($this->input->post('nama'));
 		$retensi = trim($this->input->post('retensi'));
-		$q = "insert into kode_klas (kode,nama,retensi) values ('$kode','$nama',$retensi)";
+		$q = "insert into master_kode (kode,nama,retensi) values ('$kode','$nama',$retensi)";
 		$hsl = $this->db->query($q);
 	}
 
@@ -173,7 +210,7 @@ class Admin extends CI_Controller {
 		$nama = trim($this->input->post('nama'));
 		$retensi = trim($this->input->post('retensi'));
 		$id = trim($this->input->post('id'));
-		$q = "update kode_klas set kode='$kode'";
+		$q = "update master_kode set kode='$kode'";
 		$q .= ",nama='$nama'";
 		$q .= ",retensi=$retensi where id=$id";
 		$hsl = $this->db->query($q);
@@ -182,14 +219,14 @@ class Admin extends CI_Controller {
 	function delkode()
 	{
 		$id = trim($this->input->post('id'));
-		$q = "delete from kode_klas where id=$id";
+		$q = "delete from master_kode where id=$id";
 		$hsl = $this->db->query($q);
 	}
 
 	function akode()
 	{
 		$id = trim($this->input->post('id'));
-		$q = "select * from kode_klas where id=$id";
+		$q = "select * from master_kode where id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
@@ -199,7 +236,7 @@ class Admin extends CI_Controller {
 
 	function reloadkode()
 	{
-		$q = "select * from kode_klas order by kode asc";
+		$q = "select * from master_kode order by kode asc";
 		$hsl = $this->db->query($q);
 		$row = $hsl->result_array();
 		if($row) {
