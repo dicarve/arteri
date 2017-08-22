@@ -16,12 +16,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <!-- Bootstrap Core CSS -->
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/flatly.bootstrap.min.css') ?>" />
-	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/dataTables.bootstrap.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/heroic-features.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/jquery-ui.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/jquery-ui.structure.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/jquery-ui.theme.min.css') ?>" />
-	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/select2.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/custom.css') ?>" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -55,8 +53,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<?php
 						if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') {
 							echo "<li><a href=\"".site_url('admin/entr')."\">Entri data</a></li>";
-							echo "<li><a href=\"".site_url('admin/klas')."\">Edit Klasifikasi</a></li>";
-							echo "<li><a href=\"".site_url('admin/vuser')."\">Edit User</a></li>";
+							echo "<li><a href=\"".site_url('admin/klas')."\">Klasifikasi</a></li>";
+							echo "<li><a href=\"".site_url('admin/penc')."\">Pencipta arsip</a></li>";
+							echo "<li><a href=\"".site_url('admin/pengolah')."\">Unit Pengolah</a></li>";
+							echo "<li><a href=\"".site_url('admin/lokasi')."\">Lokasi</a></li>";
+							echo "<li><a href=\"".site_url('admin/media')."\">Media</a></li>";
+							echo "<li><a href=\"".site_url('admin/vuser')."\">User</a></li>";
 						}
 					?>
                 </ul>

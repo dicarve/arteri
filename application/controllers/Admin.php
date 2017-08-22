@@ -262,6 +262,282 @@ class Admin extends CI_Controller {
 			echo "</table>";
 		}
 	}
+	
+	function penc()
+	{
+		$q = "select * from master_pencipta order by nama_pencipta asc";
+		$hsl = $this->db->query($q);
+		$data['penc'] = $hsl->result_array();
+		$this->__output('pencipta',$data);
+	}
+	
+	function addpenc()
+	{
+		$nama = trim($this->input->post('nama'));
+		$q = "insert into master_pencipta (nama_pencipta) values ('$nama')";
+		$hsl = $this->db->query($q);
+	}
+
+	function edpenc()
+	{
+		$nama = trim($this->input->post('nama'));
+		$id = trim($this->input->post('id'));
+		$q = "update master_pencipta set nama_pencipta='$nama'";
+		$q .= " where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function delpenc()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "delete from master_pencipta where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function apenc()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "select * from master_pencipta where id=$id";
+		$hsl = $this->db->query($q);
+		$row = $hsl->row_array();
+		if($row) {
+			echo json_encode($row);
+		}
+	}
+
+	function reloadpenc()
+	{
+		$q = "select * from master_pencipta order by nama_pencipta asc";
+		$hsl = $this->db->query($q);
+		$row = $hsl->result_array();
+		if($row) {
+			echo "<table class='table table-bordered' name='vpenc' id='vpenc'>
+			<thead>
+				<th>No</th>
+				<th>Nama</th>
+				<th></th>
+				<th></th>
+			</thead>";
+			$no=1;
+			foreach($row as $u) {
+				echo "<tr>";
+                echo "<td>".$no."</td>";
+                echo "<td>".$u['nama_pencipta']."</td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editpenc\" class='edpenc' href='#' id='".$u['id']."' >edit</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delpenc\" class='delpenc' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "</tr>";
+                $no++;
+			}
+			echo "</table>";
+		}
+	}
+	
+	function pengolah()
+	{
+		$q = "select * from master_pengolah order by nama_pengolah asc";
+		$hsl = $this->db->query($q);
+		$data['peng'] = $hsl->result_array();
+		$this->__output('pengolah',$data);
+	}
+	
+	function addpeng()
+	{
+		$nama = trim($this->input->post('nama'));
+		$q = "insert into master_pengolah (nama_pengolah) values ('$nama')";
+		$hsl = $this->db->query($q);
+	}
+
+	function edpeng()
+	{
+		$nama = trim($this->input->post('nama'));
+		$id = trim($this->input->post('id'));
+		$q = "update master_pengolah set nama_pengolah='$nama'";
+		$q .= " where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function delpeng()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "delete from master_pengolah where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function apeng()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "select * from master_pengolah where id=$id";
+		$hsl = $this->db->query($q);
+		$row = $hsl->row_array();
+		if($row) {
+			echo json_encode($row);
+		}
+	}
+
+	function reloadpeng()
+	{
+		$q = "select * from master_pengolah order by nama_pengolah asc";
+		$hsl = $this->db->query($q);
+		$row = $hsl->result_array();
+		if($row) {
+			echo "<table class='table table-bordered' name='vpeng' id='vpeng'>
+			<thead>
+				<th>No</th>
+				<th>Nama</th>
+				<th></th>
+				<th></th>
+			</thead>";
+			$no=1;
+			foreach($row as $u) {
+				echo "<tr>";
+                echo "<td>".$no."</td>";
+                echo "<td>".$u['nama_pengolah']."</td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editpeng\" class='edpeng' href='#' id='".$u['id']."' >edit</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delpeng\" class='delpeng' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "</tr>";
+                $no++;
+			}
+			echo "</table>";
+		}
+	}
+	
+	function lokasi()
+	{
+		$q = "select * from master_lokasi order by nama_lokasi asc";
+		$hsl = $this->db->query($q);
+		$data['lok'] = $hsl->result_array();
+		$this->__output('lokasi',$data);
+	}
+	
+	function addlok()
+	{
+		$nama = trim($this->input->post('nama'));
+		$q = "insert into master_lokasi (nama_lokasi) values ('$nama')";
+		$hsl = $this->db->query($q);
+	}
+
+	function edlok()
+	{
+		$nama = trim($this->input->post('nama'));
+		$id = trim($this->input->post('id'));
+		$q = "update master_lokasi set nama_lokasi='$nama'";
+		$q .= " where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function dellok()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "delete from master_lokasi where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function alok()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "select * from master_lokasi where id=$id";
+		$hsl = $this->db->query($q);
+		$row = $hsl->row_array();
+		if($row) {
+			echo json_encode($row);
+		}
+	}
+
+	function reloadlok()
+	{
+		$q = "select * from master_lokasi order by nama_lokasi asc";
+		$hsl = $this->db->query($q);
+		$row = $hsl->result_array();
+		if($row) {
+			echo "<table class='table table-bordered' name='vlok' id='vlok'>
+			<thead>
+				<th>No</th>
+				<th>Nama</th>
+				<th></th>
+				<th></th>
+			</thead>";
+			$no=1;
+			foreach($row as $u) {
+				echo "<tr>";
+                echo "<td>".$no."</td>";
+                echo "<td>".$u['nama_lokasi']."</td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editlok\" class='edlok' href='#' id='".$u['id']."' >edit</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#dellok\" class='dellok' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "</tr>";
+                $no++;
+			}
+			echo "</table>";
+		}
+	}
+	
+	function media()
+	{
+		$q = "select * from master_media order by nama_media asc";
+		$hsl = $this->db->query($q);
+		$data['med'] = $hsl->result_array();
+		$this->__output('media',$data);
+	}
+	
+	function addmed()
+	{
+		$nama = trim($this->input->post('nama'));
+		$q = "insert into master_media (nama_media) values ('$nama')";
+		$hsl = $this->db->query($q);
+	}
+
+	function edmed()
+	{
+		$nama = trim($this->input->post('nama'));
+		$id = trim($this->input->post('id'));
+		$q = "update master_media set nama_media='$nama'";
+		$q .= " where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function delmed()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "delete from master_media where id=$id";
+		$hsl = $this->db->query($q);
+	}
+
+	function amed()
+	{
+		$id = trim($this->input->post('id'));
+		$q = "select * from master_media where id=$id";
+		$hsl = $this->db->query($q);
+		$row = $hsl->row_array();
+		if($row) {
+			echo json_encode($row);
+		}
+	}
+
+	function reloadmed()
+	{
+		$q = "select * from master_media order by nama_media asc";
+		$hsl = $this->db->query($q);
+		$row = $hsl->result_array();
+		if($row) {
+			echo "<table class='table table-bordered' name='vmed' id='vmed'>
+			<thead>
+				<th>No</th>
+				<th>Nama</th>
+				<th></th>
+				<th></th>
+			</thead>";
+			$no=1;
+			foreach($row as $u) {
+				echo "<tr>";
+                echo "<td>".$no."</td>";
+                echo "<td>".$u['nama_media']."</td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editmed\" class='edmed' href='#' id='".$u['id']."' >edit</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delmed\" class='delmed' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "</tr>";
+                $no++;
+			}
+			echo "</table>";
+		}
+	}
 
 	function vuser()
 	{

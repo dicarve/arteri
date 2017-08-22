@@ -60,7 +60,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<thead>
 					<tr>
 						<th>No Arsip</th>
-						<th>Tahun</th>
 						<th>Tanggal</th>
 						<th>Kode Klasifikasi</th>
 						<th>Uraian</th>

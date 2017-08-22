@@ -1,7 +1,8 @@
 $(document).ready(function () {
-	var dir_site = "/arsip/index.php";
-	var dir_site2 = "/arsip";
+	var dir_site = "/arteri/index.php";
+	var dir_site2 = "/arteri";
 	var cur_dir = window.location.href;
+	var myurl = document.location.protocol + "//" + document.location.hostname + "" + dir_site
 	cur_dir = cur_dir.split('/');
 
 	var url = $(location).attr('href');
@@ -157,7 +158,235 @@ $(document).ready(function () {
 			}
 		})
 	}));
-	//////////////////////
+	////////////////////// penc
+	function reloadpenc() {
+		$.ajax({
+			type: "POST",
+			url: myurl + "/admin/reloadpenc",
+			cache: false,
+			success: function (html) {
+				$("#divtabelpenc").html(html);
+			}
+		});
+	}
+	$("#divtabelpenc").on('click','.delpenc',function () {
+		var d = $(this).attr("id");
+		$("#delidpenc").val(d);
+	});
+	$('#delpencgo').click(function () {
+		$('#fdelpenc').submit();
+	});
+	$('#fdelpenc').ajaxForm({ success: delpenc });
+	function delpenc() {
+		alert("Data telah sukses dihapus");
+		$('#delpenc').modal('hide');
+		reloadpenc();
+	}
+	$('#editpencgo').click(function () {
+		$('#fedpenc').submit();
+	});
+	$('#fedpenc').ajaxForm({ success: edpenc });
+	function edpenc() {
+		alert("Data telah sukses disimpan");
+		$('#editpenc').modal('hide');
+		reloadpenc();
+	}
+	$('#addpencgo').click(function () {
+		$('#faddpenc').submit();
+	});
+	$('#faddpenc').ajaxForm({ success: addpenc });
+	function addpenc() {
+		alert("Data telah sukses disimpan");
+		$('#addpenc').modal('hide');
+		$("#faddpenc")[0].reset();
+		reloadpenc();
+	}
+	$("#divtabelpenc").on('click','.edpenc',(function () {
+		var d = $(this).attr("id");
+		$.ajax({
+			type: "POST",
+			url: myurl + "/admin/apenc/",
+			data: "id=" + d,
+			cache: false,
+			success: function (ahtml) {
+				html = jQuery.parseJSON(ahtml);
+				$("#enama").val(html.nama_pencipta);
+				$("#edidpenc").val(html.id);
+			}
+		})
+	}));
+	////////////////////// penG
+	function reloadpeng() {
+		$.ajax({
+			type: "POST",
+			url: myurl + "/admin/reloadpeng",
+			cache: false,
+			success: function (html) {
+				$("#divtabelpeng").html(html);
+			}
+		});
+	}
+	$("#divtabelpeng").on('click','.delpeng',function () {
+		var d = $(this).attr("id");
+		$("#delidpeng").val(d);
+	});
+	$('#delpenggo').click(function () {
+		$('#fdelpeng').submit();
+	});
+	$('#fdelpeng').ajaxForm({ success: delpeng });
+	function delpeng() {
+		alert("Data telah sukses dihapus");
+		$('#delpeng').modal('hide');
+		reloadpeng();
+	}
+	$('#editpenggo').click(function () {
+		$('#fedpeng').submit();
+	});
+	$('#fedpeng').ajaxForm({ success: edpeng });
+	function edpeng() {
+		alert("Data telah sukses disimpan");
+		$('#editpeng').modal('hide');
+		reloadpeng();
+	}
+	$('#addpenggo').click(function () {
+		$('#faddpeng').submit();
+	});
+	$('#faddpeng').ajaxForm({ success: addpeng });
+	function addpeng() {
+		alert("Data telah sukses disimpan");
+		$('#addpeng').modal('hide');
+		$("#faddpeng")[0].reset();
+		reloadpeng();
+	}
+	$("#divtabelpeng").on('click','.edpeng',(function () {
+		var d = $(this).attr("id");
+		$.ajax({
+			type: "POST",
+			url: myurl + "/admin/apeng/",
+			data: "id=" + d,
+			cache: false,
+			success: function (ahtml) {
+				html = jQuery.parseJSON(ahtml);
+				$("#enama").val(html.nama_pengolah);
+				$("#edidpeng").val(html.id);
+			}
+		})
+	}));
+	////////////////////// lok
+	function reloadlok() {
+		$.ajax({
+			type: "POST",
+			url: myurl + "/admin/reloadlok",
+			cache: false,
+			success: function (html) {
+				$("#divtabellok").html(html);
+			}
+		});
+	}
+	$("#divtabellok").on('click','.dellok',function () {
+		var d = $(this).attr("id");
+		$("#delidlok").val(d);
+	});
+	$('#dellokgo').click(function () {
+		$('#fdellok').submit();
+	});
+	$('#fdellok').ajaxForm({ success: dellok });
+	function dellok() {
+		alert("Data telah sukses dihapus");
+		$('#dellok').modal('hide');
+		reloadlok();
+	}
+	$('#editlokgo').click(function () {
+		$('#fedlok').submit();
+	});
+	$('#fedlok').ajaxForm({ success: edlok });
+	function edlok() {
+		alert("Data telah sukses disimpan");
+		$('#editlok').modal('hide');
+		reloadlok();
+	}
+	$('#addlokgo').click(function () {
+		$('#faddlok').submit();
+	});
+	$('#faddlok').ajaxForm({ success: addlok });
+	function addlok() {
+		alert("Data telah sukses disimpan");
+		$('#addlok').modal('hide');
+		$("#faddlok")[0].reset();
+		reloadlok();
+	}
+	$("#divtabellok").on('click','.edlok',(function () {
+		var d = $(this).attr("id");
+		$.ajax({
+			type: "POST",
+			url: myurl + "/admin/alok/",
+			data: "id=" + d,
+			cache: false,
+			success: function (ahtml) {
+				html = jQuery.parseJSON(ahtml);
+				$("#enama").val(html.nama_lokasi);
+				$("#edidlok").val(html.id);
+			}
+		})
+	}));
+	////////////////////// med
+	function reloadmed() {
+		$.ajax({
+			type: "POST",
+			url: myurl + "/admin/reloadmed",
+			cache: false,
+			success: function (html) {
+				$("#divtabelmed").html(html);
+			}
+		});
+	}
+	$("#divtabelmed").on('click','.delmed',function () {
+		var d = $(this).attr("id");
+		$("#delidmed").val(d);
+	});
+	$('#delmedgo').click(function () {
+		$('#fdelmed').submit();
+	});
+	$('#fdelmed').ajaxForm({ success: delmed });
+	function delmed() {
+		alert("Data telah sukses dihapus");
+		$('#delmed').modal('hide');
+		reloadmed();
+	}
+	$('#editmedgo').click(function () {
+		$('#fedmed').submit();
+	});
+	$('#fedmed').ajaxForm({ success: edmed });
+	function edmed() {
+		alert("Data telah sukses disimpan");
+		$('#editmed').modal('hide');
+		reloadmed();
+	}
+	$('#addmedgo').click(function () {
+		$('#faddmed').submit();
+	});
+	$('#faddmed').ajaxForm({ success: addmed });
+	function addmed() {
+		alert("Data telah sukses disimpan");
+		$('#addmed').modal('hide');
+		$("#faddmed")[0].reset();
+		reloadmed();
+	}
+	$("#divtabelmed").on('click','.edmed',(function () {
+		var d = $(this).attr("id");
+		$.ajax({
+			type: "POST",
+			url: myurl + "/admin/amed/",
+			data: "id=" + d,
+			cache: false,
+			success: function (ahtml) {
+				html = jQuery.parseJSON(ahtml);
+				$("#enama").val(html.nama_media);
+				$("#edidmed").val(html.id);
+			}
+		})
+	}));
+	////////////
 	function formatnumber(x) {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 	}
