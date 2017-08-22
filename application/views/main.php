@@ -19,6 +19,53 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 		<br/>
 		<div class = "input-group">
+			<span class = "input-group-addon">Pencipta arsip</span>
+			<select class="form-control" name="penc" id="penc">
+				<option value="all" >Semua</option>
+				<?php
+					if(isset($penc)) {
+						foreach($penc as $p) {
+							echo "<option value=\"".$p['id']."\" ".($src['penc']==$p['id']?"selected=selected":"").">"." - ".$p['nama_pencipta']."</option>";
+						}
+					}
+				?>
+			</select>
+			<span class = "input-group-addon">Unit pengolah</span>
+			<select class="form-control" name="peng" id="peng">
+				<option value="all" >Semua</option>
+				<?php
+					if(isset($peng)) {
+						foreach($peng as $p) {
+							echo "<option value=\"".$p['id']."\" ".($src['peng']==$p['id']?"selected=selected":"").">"." - ".$p['nama_pengolah']."</option>";
+						}
+					}
+				?>
+			</select>
+			<span class = "input-group-addon">Lokasi</span>
+			<select class="form-control" name="lok" id="lok">
+				<option value="all" >Semua</option>
+				<?php
+					if(isset($lok)) {
+						foreach($lok as $p) {
+							echo "<option value=\"".$p['id']."\" ".($src['lok']==$p['id']?"selected=selected":"").">"." - ".$p['nama_lokasi']."</option>";
+						}
+					}
+				?>
+			</select>
+			<span class = "input-group-addon">Media</span>
+			<select class="form-control" name="med" id="med">
+				<option value="all" >Semua</option>
+				<?php
+					if(isset($med)) {
+						foreach($med as $p) {
+							echo "<option value=\"".$p['id']."\" ".($src['med']==$p['id']?"selected=selected":"").">"." - ".$p['nama_media']."</option>";
+						}
+					}
+				?>
+			</select>
+		</div>
+		<br/>
+		<div class = "input-group">
 			<span class = "input-group-addon">Tanggal (yyyy-mm-dd)</span>
 			<input id="tanggal" name="tanggal" class="form-control input-md" type="text" value="<?php echo $src['tanggal'] ?>">
 			<span class = "input-group-addon">Ket</span>

@@ -32,6 +32,10 @@ class Home extends CI_Controller {
 		$ket=trim($this->input->get('ket'));
 		$kode=trim($this->input->get('kode'));
 		$retensi=trim($this->input->get('retensi'));
+		$penc=trim($this->input->get('penc'));
+		$peng=trim($this->input->get('peng'));
+		$lok=trim($this->input->get('lok'));
+		$med=trim($this->input->get('med'));
 
 		$w = [];
 		if($noarsip!="") {
@@ -52,6 +56,18 @@ class Home extends CI_Controller {
 		if($retensi!="" && $retensi!="all") {
 			$w[] = " f='".$retensi."'";
 		}
+		if($penc!="" && $penc!="all") {
+			$w[] = " pencipta ='".$penc."'";
+		}
+		if($peng!="" && $peng!="all") {
+			$w[] = " unit_pengolah ='".$peng."'";
+		}
+		if($lok!="" && $lok!="all") {
+			$w[] = " lokasi ='".$lok."'";
+		}
+		if($med!="" && $med!="all") {
+			$w[] = " media ='".$med."'";
+		}
 
 		$q = "select a.*,k.retensi,date_add(a.tanggal,interval k.retensi year) b,
 		(if(date_add(a.tanggal,interval k.retensi year)<curdate(),'sudah','belum')) f from data_arsip a join master_kode k on k.kode=a.kode";
@@ -60,7 +76,7 @@ class Home extends CI_Controller {
 		}
         
         if($srcdata) {
-            $src = ["noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi];
+            $src = ["noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med];
             $qq = [$q,$src];
             return $qq;
         }else {
@@ -91,6 +107,18 @@ class Home extends CI_Controller {
 		$q = "select kode,nama from master_kode order by kode asc";
 		$hsl = $this->db->query($q);
 		$data['kode'] = $hsl->result_array();
+		$q = "select * from master_pencipta order by nama_pencipta asc";
+		$hsl = $this->db->query($q);
+		$data['penc'] = $hsl->result_array();
+		$q = "select * from master_pengolah order by nama_pengolah asc";
+		$hsl = $this->db->query($q);
+		$data['peng'] = $hsl->result_array();
+		$q = "select * from master_lokasi order by nama_lokasi asc";
+		$hsl = $this->db->query($q);
+		$data['lok'] = $hsl->result_array();
+		$q = "select * from master_media order by nama_media asc";
+		$hsl = $this->db->query($q);
+		$data['med'] = $hsl->result_array();
 
 		$this->load->library('pagination');
 		$config['base_url'] = site_url('/home/search');
