@@ -1,25 +1,30 @@
-#login_mp3 {
-	display:block;
-	position:fixed;
-	bottom:0;
-	left:0;
+/* latin */
+@font-face {
+  font-family: 'Droid Serif';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Droid Serif Regular'), local('DroidSerif-Regular'), url(./fonts/DroidSerif-Regular.ttf) format('truetype');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
-#logindiv.container
+body 
 {
-	/*left: 20%;
-	top: 10%;
-	bottom: 10%;
-	*/
+	font-family: 'Droid Serif', serif;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	background-color: #931313;
+	background-size: 850px;
+	background-repeat: no-repeat;
+	background-position: top right;
 }
-body {
-	  padding-top: 40px;
-	  padding-bottom: 40px;
-	  background-color: #3e4a7d;
-	  background-size: 850px;
-		background-repeat: no-repeat;
-		background-position: top right;
-	}
-
+.btn-primary:hover {
+    background-color: #de0f0f;
+	border-color: #6b0505;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #931313;
+    border-color: #6b0505;
+}
 	.form-signin {
 	  max-width: 330px;
 	  padding: 15px;

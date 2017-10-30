@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Arsip Digital</title>
+    <title>ARTERI<?php if(isset($title)) echo " - ".$title ?></title>
 
     <!-- Bootstrap Core CSS -->
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/flatly.bootstrap.min.css') ?>" />
@@ -45,7 +45,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?php echo site_url('/home'); ?>">Arsip Digital</a>
+                <a style="padding-top: 13px;" class="navbar-brand" href="<?php echo site_url('/home'); ?>"><img src="<?php echo base_url('/images/logo3-white-min.png'); ?>" alt="ARTERI" height="35"></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -53,12 +53,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<?php
 						if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') {
 							echo "<li><a href=\"".site_url('admin/entr')."\">Entri data</a></li>";
+							echo '<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data Master <span class="caret"></span></a><ul class="dropdown-menu">';
 							echo "<li><a href=\"".site_url('admin/klas')."\">Klasifikasi</a></li>";
 							echo "<li><a href=\"".site_url('admin/penc')."\">Pencipta arsip</a></li>";
 							echo "<li><a href=\"".site_url('admin/pengolah')."\">Unit Pengolah</a></li>";
 							echo "<li><a href=\"".site_url('admin/lokasi')."\">Lokasi</a></li>";
 							echo "<li><a href=\"".site_url('admin/media')."\">Media</a></li>";
 							echo "<li><a href=\"".site_url('admin/vuser')."\">User</a></li>";
+							echo "</ul>
+							</li>";
 						}
 					?>
                 </ul>

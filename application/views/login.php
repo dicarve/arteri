@@ -17,7 +17,7 @@
     	<div class="container" id="formContainer">
 
           <form class="form-signin" id="login" role="form" method="post" action="<?php echo site_url('home/gologin'); ?>">
-		  <p align="center"><img src="<?php echo base_url("images/logo.png");?>" width="220px"></p><br>
+		  <p align="center"><img src="<?php echo base_url("images/logo3-min.png");?>" width="270"></p>
             <h5 class="form-signin-heading"><p align="center">Masukkan username dan password anda</p></h5>
 			<?php
 				if($this->session->flashdata('erorlogin')) {
@@ -28,7 +28,7 @@
             <input type="text" class="form-control" name="username" id="loginEmail" placeholder="username" required autofocus>
             <input type="password" class="form-control" name="password" id="loginPass" placeholder="Sandi" required>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-            <br><p align="center">&copy; 2017 Arteri</p>
+            <br><p align="center">&copy; <?php echo date("Y"); ?> Arteri</p>
           </form>
 
         </div>

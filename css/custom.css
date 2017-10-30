@@ -1,3 +1,16 @@
+/* latin */
+@font-face {
+  font-family: 'Droid Serif';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Droid Serif Regular'), local('DroidSerif-Regular'), url(./fonts/DroidSerif-Regular.ttf) format('truetype');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+body 
+{
+	font-family: 'Droid Serif', serif;
+}
+
 .media{width:23%;background-color:#074f9f;;float:left;margin:5px 3px;border-radius: 5px;height:auto;}
 .media:first-child{margin: 6px 3px;}
 .media-object{width:100%;padding:5px;}
@@ -10,8 +23,8 @@
     width: 1%;
 }
 .navbar-inverse {
-    background-color: #104d90;
-    border-color: #1967be;
+    background-color: #931313;
+    border-color: #6b0505;
 }
 .btn {
 	border-radius: 20px;
@@ -24,5 +37,37 @@
 }
 .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus,.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
     color: #e2feff;
-    background-color: #2f81de;
+    background-color: #f63939;
+}
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #db4028;
+    color: #ffffff;
+}
+.pagination > li > a, .pagination > li > span, .pagination > li > a, .pagination > li > span {
+    z-index: 2;
+    color: #ffffff;
+    background-color: #e32c2c;
+    border-color: transparent;
+}
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
+    z-index: 2;
+    color: #ffffff;
+    background-color: #981b07;
+    border-color: transparent;
+}
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    z-index: 3;
+    color: #ffffff;
+    background-color: #660b0b;
+    border-color: transparent;
+    cursor: default;
+}
+.btn-success {
+    color: #ffffff;
+    background-color: #931313;
+    border-color: #6b0505;
+}
+a {
+    color: #ae0404;
+    text-decoration: none;
 }
