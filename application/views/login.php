@@ -28,7 +28,7 @@
             <input type="text" class="form-control" name="username" id="loginEmail" placeholder="username" required autofocus>
             <input type="password" class="form-control" name="password" id="loginPass" placeholder="Sandi" required>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-            <br><p align="center">&copy; 2017 Arsip Digital</p>
+            <br><p align="center">&copy; 2017 Arteri</p>
           </form>
 
         </div>
