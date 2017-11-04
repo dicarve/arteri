@@ -15,12 +15,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <title>ARTERI<?php if(isset($title)) echo " - ".$title ?></title>
 
     <!-- Bootstrap Core CSS -->
-	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/flatly.bootstrap.min.css') ?>" />
-	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/heroic-features.css') ?>" />
-	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/jquery-ui.min.css') ?>" />
-	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/jquery-ui.structure.min.css') ?>" />
-	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/jquery-ui.theme.min.css') ?>" />
-	<link type="text/css" rel="stylesheet" href="<?php echo base_url('css/custom.css') ?>" />
+	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/flatly.bootstrap.min.css') ?>" />
+	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/heroic-features.css') ?>" />
+	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/custom.css') ?>" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -39,16 +36,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#arteri-main-menu">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a style="padding-top: 13px;" class="navbar-brand" href="<?php echo site_url('/home'); ?>"><img src="<?php echo base_url('/images/logo3-white-min.png'); ?>" alt="ARTERI" height="35"></a>
+                <a style="padding-top: 13px;" class="navbar-brand" href="<?php echo site_url('/home'); ?>"><img src="<?php echo base_url('/public/images/logo3-white-min.png'); ?>" alt="ARTERI" height="35"></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse" id="arteri-main-menu">
                 <ul class="nav navbar-nav">
 					<?php
 						if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') {

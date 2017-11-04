@@ -2,26 +2,21 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
-<hr>
+</div>
+<!-- /.container -->
 
 <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; ARTERI 2017</p>
-                </div>
-            </div>
-        </footer>
-</div>
-    <!-- /.container -->
+<footer>
+  <p>ARTERI Arsip Elektronik Terintegrasi</p>
+</footer>
+<!-- /.Footer -->
 
-    <!-- jQuery -->
-	<script src="<?php echo base_url('js/jquery-2.2.2.min.js')?>"></script>
-	<script src="<?php echo base_url('js/bootstrap.min.js')?>"></script>
-	<script src="<?php echo base_url('js/jquery-ui.min.js')?>"></script>
-	<script src="<?php echo base_url('js/jquery.form.min.js')?>"></script>
-	<script src="<?php echo base_url('js/custom.js')?>"></script>
+<!-- jQuery -->
+<script src="<?php echo base_url('/public/js/jquery-2.2.2.min.js')?>"></script>
+<script src="<?php echo base_url('/public/js/bootstrap.min.js')?>"></script>
+<script src="<?php echo base_url('/public/js/jquery-ui.min.js')?>"></script>
+<script src="<?php echo base_url('/public/js/jquery.form.min.js')?>"></script>
+<script src="<?php echo base_url('/public/js/custom.js')?>"></script>
 
 </body>
-
 </html>

@@ -1,16 +1,21 @@
 /* latin */
 @font-face {
-  font-family: 'Droid Serif';
+  font-family: 'Actor';
   font-style: normal;
   font-weight: 400;
-  src: local('Droid Serif Regular'), local('DroidSerif-Regular'), url(./fonts/DroidSerif-Regular.ttf) format('truetype');
+  src: local('Actor-Regular'), local('Actor-Regular'), url(./fonts/Actor-Regular.ttf) format('truetype');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
 body 
 {
-	font-family: 'Droid Serif', serif;
+  min-height: 100%;
+  font-family: 'Actor', serif;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: middle center;
+  background-image: url('../images/bg2.jpg');
+  padding-bottom: 50px;
 }
-
 .media{width:23%;background-color:#074f9f;;float:left;margin:5px 3px;border-radius: 5px;height:auto;}
 .media:first-child{margin: 6px 3px;}
 .media-object{width:100%;padding:5px;}
@@ -18,6 +23,9 @@ body
 .bottomaligned {position:absolute; bottom:0;  margin-bottom:7px; left: 0;}
 .bottomright {position:absolute; bottom:0;  margin-bottom:7px; margin:7px; right: 0;}
 .bottomleft {position:absolute; bottom:0;  margin-bottom:7px; left: 100px;}
+.table {
+  background: #fff;
+}
 .table td.fit, .table th.fit {
     white-space: nowrap;
     width: 1%;
@@ -27,13 +35,13 @@ body
     border-color: #6b0505;
 }
 .btn {
-	border-radius: 20px;
+	border-radius: 10px;
 }
 .input-group-addon {
-	border-radius: 20px;
+	border-radius: 10px;
 }
 .form-control {
-	border-radius: 10px;
+    border-radius: 10px;
 }
 .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus,.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
     color: #e2feff;
@@ -70,4 +78,16 @@ body
 a {
     color: #ae0404;
     text-decoration: none;
+}
+footer 
+{
+  text-align: center;
+  min-width: 100%;
+  min-height: 30px;
+  color: #fff;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 0;
+  background-color: #931313;
 }
