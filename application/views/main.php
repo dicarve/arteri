@@ -32,7 +32,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <?php endif; ?>
 			<li><a href="#" role="button" data-toggle="collapse" data-target="#advanced-search" 
 			  aria-expanded="false" aria-controls="advanced-search" 
-			  class="open-advanced-search"><i class="glyphicon glyphicon-search"></i> Pencarian Lanjut</a>
+			  class="open-advanced-search"><i class="glyphicon glyphicon-search"></i> Pencarian Lanjut</a></li>
+			<li><a href="<?php echo site_url('/home/dl').($_SERVER['QUERY_STRING']? '?'.$_SERVER['QUERY_STRING'] : '') ?>"><i class="glyphicon glyphicon-download"></i> Download Data</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -137,7 +138,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="well well-sm">
 		  <div class="row">
             <div class="col-xs-9">Ditemukan data sebanyak : <em class='small'>(<?php echo number_format($jml); ?>)</em> arsip</div>
-		    <div class="col-xs-3 text-right"><a class="btn btn-primary" href="<?php echo site_url('/home/dl').($_SERVER['QUERY_STRING']? '?'.$_SERVER['QUERY_STRING'] : '') ?>">Download Data</a></div>
+		    <div class="col-xs-3 text-right"></div>
 		  </div>
         </div>
         <!-- /.row -->
@@ -155,8 +156,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<th>Jumlah</th>
 						<th>No. Box</th>
 						<th>Retensi</th>
-						<th></th>
-						<th></th>
+						<th class="width-sm"></th>
+						<th class="width-sm"></th>
 					</tr>
 				</thead>
 				<tbody>

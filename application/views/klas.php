@@ -1,9 +1,38 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<h2 class="text-center breadcrumb">Data Klasifikasi
-<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addkode">Tambah</button>
-</h2>
+<nav class="navbar navbar-inverse navbar-submenu">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#module-submenu" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Data Klasifikasi</a>
+    </div>
+    <form class="navbar-form navbar-left" method="get" action="<?php echo site_url('/admin/klas'); ?>">
+      <div class="form-group">
+    	  <div class = "input-group">
+    	  <input type="text" name="katakunci" class="form-control" placeholder="kata kunci nama/kode" /><span class="input-group-btn">
+    	  	<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button></span>
+        </div>
+      </div>
+    </form>
+  
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="module-submenu">
+      <ul class="nav navbar-nav navbar-right">
+	       <?php if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') : ?>
+	       <li><a href="#" data-toggle="modal" data-target="#addkode"><i class="glyphicon glyphicon-plus"></i> Entry Data Baru</a></li>
+        <?php endif; ?>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
 <div class="row">
     <div class="col-md-12" id="divtabelkode">
     <table class="table table-bordered" name="vkode" id="vkode">
@@ -11,8 +40,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <th>Kode</th>
         <th>Nama</th>
         <th>Retensi</th>
-        <th></th>
-        <th></th>
+        <th class="width-sm"></th>
+        <th class="width-sm"></th>
     </thead>
     <?php
         if(isset($user)){

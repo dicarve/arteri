@@ -12,14 +12,14 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function __output($nview,$data=null)
+	public function __output($nview,$data=null)
 	{
 		$this->load->view('header',$data);
 		$this->load->view($nview,$data);
 		$this->load->view('footer');
 	}
 	
-	function masterlist($tipe)
+	public function masterlist($tipe)
 	{
 		$data;
 		switch($tipe)
@@ -54,7 +54,7 @@ class Admin extends CI_Controller {
 		return $data;
 	}
 	
-	function entr()
+	public function entr()
 	{
 		$data["kode"]=$this->masterlist("kode");
 		$data["pencipta"]=$this->masterlist("pencipta");
@@ -65,7 +65,7 @@ class Admin extends CI_Controller {
 		$this->__output('entri1',$data);
 	}
 
-	function gentr()
+	public function gentr()
 	{
 		$noarsip=trim($this->input->post('noarsip'));
 		$tanggal=trim($this->input->post('tanggal'));
@@ -97,7 +97,7 @@ class Admin extends CI_Controller {
 		redirect('/home/', 'refresh');
 	}
 
-	function vedit($id)
+	public function vedit($id)
 	{
 		if($id!=""){
 			$q = "select * from data_arsip where id=$id";
@@ -124,7 +124,7 @@ class Admin extends CI_Controller {
 
 	}
 
-	function edit1()
+	public function edit1()
 	{
 		$noarsip=trim($this->input->post('noarsip'));
 		$tanggal=trim($this->input->post('tanggal'));
@@ -159,7 +159,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function delfile()
+	public function delfile()
 	{
 		$id=trim($this->input->post('id'));
 		$q = "select file from data_arsip where id=$id";
@@ -173,7 +173,7 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 	}
 
-	function del1()
+	public function del1()
 	{
 		$id=trim($this->input->post('id'));
 		$q = "select file from data_arsip where id=$id";
@@ -187,15 +187,21 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 	}
 
-	function klas()
+	public function klas()
 	{
-		$q = "select * from master_kode order by kode asc";
+		$katakunci = trim($this->input->get('katakunci'));
+
+		$q = "SELECT * FROM master_kode "; 
+		if ($katakunci) {
+          $q .= ' WHERE kode LIKE \'%'.$katakunci.'%\' OR nama LIKE \'%'.$katakunci.'%\' ';
+		}
+		$q .= " ORDER BY kode ASC";
 		$hsl = $this->db->query($q);
 		$data['user'] = $hsl->result_array();
 		$this->__output('klas',$data);
 	}
 
-	function addkode()
+	public function addkode()
 	{
 		$kode = trim($this->input->post('kode'));
 		$nama = trim($this->input->post('nama'));
@@ -204,7 +210,7 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 	}
 
-	function edkode()
+	public function edkode()
 	{
 		$kode = trim($this->input->post('kode'));
 		$nama = trim($this->input->post('nama'));
@@ -216,14 +222,14 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 	}
 
-	function delkode()
+	public function delkode()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "delete from master_kode where id=$id";
 		$hsl = $this->db->query($q);
 	}
 
-	function akode()
+	public function akode()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "select * from master_kode where id=$id";
@@ -234,7 +240,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function reloadkode()
+	public function reloadkode()
 	{
 		$q = "select * from master_kode order by kode asc";
 		$hsl = $this->db->query($q);
@@ -263,7 +269,7 @@ class Admin extends CI_Controller {
 		}
 	}
 	
-	function penc()
+	public function penc()
 	{
 		$q = "select * from master_pencipta order by nama_pencipta asc";
 		$hsl = $this->db->query($q);
@@ -271,14 +277,14 @@ class Admin extends CI_Controller {
 		$this->__output('pencipta',$data);
 	}
 	
-	function addpenc()
+	public function addpenc()
 	{
 		$nama = trim($this->input->post('nama'));
 		$q = "insert into master_pencipta (nama_pencipta) values ('$nama')";
 		$hsl = $this->db->query($q);
 	}
 
-	function edpenc()
+	public function edpenc()
 	{
 		$nama = trim($this->input->post('nama'));
 		$id = trim($this->input->post('id'));
@@ -287,14 +293,14 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 	}
 
-	function delpenc()
+	public function delpenc()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "delete from master_pencipta where id=$id";
 		$hsl = $this->db->query($q);
 	}
 
-	function apenc()
+	public function apenc()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "select * from master_pencipta where id=$id";
@@ -305,7 +311,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function reloadpenc()
+	public function reloadpenc()
 	{
 		$q = "select * from master_pencipta order by nama_pencipta asc";
 		$hsl = $this->db->query($q);
@@ -332,7 +338,7 @@ class Admin extends CI_Controller {
 		}
 	}
 	
-	function pengolah()
+	public function pengolah()
 	{
 		$q = "select * from master_pengolah order by nama_pengolah asc";
 		$hsl = $this->db->query($q);
@@ -340,14 +346,14 @@ class Admin extends CI_Controller {
 		$this->__output('pengolah',$data);
 	}
 	
-	function addpeng()
+	public function addpeng()
 	{
 		$nama = trim($this->input->post('nama'));
 		$q = "insert into master_pengolah (nama_pengolah) values ('$nama')";
 		$hsl = $this->db->query($q);
 	}
 
-	function edpeng()
+	public function edpeng()
 	{
 		$nama = trim($this->input->post('nama'));
 		$id = trim($this->input->post('id'));
@@ -356,14 +362,14 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 	}
 
-	function delpeng()
+	public function delpeng()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "delete from master_pengolah where id=$id";
 		$hsl = $this->db->query($q);
 	}
 
-	function apeng()
+	public function apeng()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "select * from master_pengolah where id=$id";
@@ -374,7 +380,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function reloadpeng()
+	public function reloadpeng()
 	{
 		$q = "select * from master_pengolah order by nama_pengolah asc";
 		$hsl = $this->db->query($q);
@@ -401,7 +407,7 @@ class Admin extends CI_Controller {
 		}
 	}
 	
-	function lokasi()
+	public function lokasi()
 	{
 		$q = "select * from master_lokasi order by nama_lokasi asc";
 		$hsl = $this->db->query($q);
@@ -409,14 +415,14 @@ class Admin extends CI_Controller {
 		$this->__output('lokasi',$data);
 	}
 	
-	function addlok()
+	public function addlok()
 	{
 		$nama = trim($this->input->post('nama'));
 		$q = "insert into master_lokasi (nama_lokasi) values ('$nama')";
 		$hsl = $this->db->query($q);
 	}
 
-	function edlok()
+	public function edlok()
 	{
 		$nama = trim($this->input->post('nama'));
 		$id = trim($this->input->post('id'));
@@ -425,14 +431,14 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 	}
 
-	function dellok()
+	public function dellok()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "delete from master_lokasi where id=$id";
 		$hsl = $this->db->query($q);
 	}
 
-	function alok()
+	public function alok()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "select * from master_lokasi where id=$id";
@@ -443,7 +449,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function reloadlok()
+	public function reloadlok()
 	{
 		$q = "select * from master_lokasi order by nama_lokasi asc";
 		$hsl = $this->db->query($q);
@@ -470,7 +476,7 @@ class Admin extends CI_Controller {
 		}
 	}
 	
-	function media()
+	public function media()
 	{
 		$q = "select * from master_media order by nama_media asc";
 		$hsl = $this->db->query($q);
@@ -478,14 +484,14 @@ class Admin extends CI_Controller {
 		$this->__output('media',$data);
 	}
 	
-	function addmed()
+	public function addmed()
 	{
 		$nama = trim($this->input->post('nama'));
 		$q = "insert into master_media (nama_media) values ('$nama')";
 		$hsl = $this->db->query($q);
 	}
 
-	function edmed()
+	public function edmed()
 	{
 		$nama = trim($this->input->post('nama'));
 		$id = trim($this->input->post('id'));
@@ -494,14 +500,14 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 	}
 
-	function delmed()
+	public function delmed()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "delete from master_media where id=$id";
 		$hsl = $this->db->query($q);
 	}
 
-	function amed()
+	public function amed()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "select * from master_media where id=$id";
@@ -512,7 +518,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function reloadmed()
+	public function reloadmed()
 	{
 		$q = "select * from master_media order by nama_media asc";
 		$hsl = $this->db->query($q);
@@ -539,7 +545,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function vuser()
+	public function vuser()
 	{
 		$q = "select * from master_user";
 		$hsl = $this->db->query($q);
@@ -548,7 +554,7 @@ class Admin extends CI_Controller {
 
 	}
 
-	function adduser()
+	public function adduser()
 	{
 		$username = trim($this->input->post('username'));
 		$password = trim($this->input->post('password'));
@@ -558,7 +564,7 @@ class Admin extends CI_Controller {
 
 	}
 
-	function eduser()
+	public function eduser()
 	{
 		$username = trim($this->input->post('username'));
 		$password = trim($this->input->post('password'));
@@ -570,14 +576,14 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 	}
 
-	function deluser()
+	public function deluser()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "delete from master_user where id=$id";
 		$hsl = $this->db->query($q);
 	}
 
-	function auser()
+	public function auser()
 	{
 		$id = trim($this->input->post('id'));
 		$q = "select * from master_user where id=$id";
@@ -588,7 +594,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function reloaduser()
+	public function reloaduser()
 	{
 		$q = "select * from master_user";
 		$hsl = $this->db->query($q);
@@ -617,12 +623,12 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function eximp()
+	public function eximp()
 	{
 		$this->__output('eximp');
 	}
 
-	function exportdata()
+	public function exportdata()
 	{
 		include('dbimexport.php');
 		$db_config = Array
@@ -640,7 +646,7 @@ class Admin extends CI_Controller {
 		$dbimexport->export();
 	}
 
-	function importdata()
+	public function importdata()
 	{
 		if($_FILES["up_file"]["name"])
 		{
