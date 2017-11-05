@@ -49,15 +49,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <ul class="nav navbar-nav">
 					<?php
 						if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') {
-							echo "<li><a href=\"".site_url('admin/entr')."\">Entri data</a></li>";
 							echo '<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data Master <span class="caret"></span></a><ul class="dropdown-menu">';
-							echo "<li><a href=\"".site_url('admin/klas')."\">Klasifikasi</a></li>";
-							echo "<li><a href=\"".site_url('admin/penc')."\">Pencipta arsip</a></li>";
-							echo "<li><a href=\"".site_url('admin/pengolah')."\">Unit Pengolah</a></li>";
-							echo "<li><a href=\"".site_url('admin/lokasi')."\">Lokasi</a></li>";
-							echo "<li><a href=\"".site_url('admin/media')."\">Media</a></li>";
-							echo "<li><a href=\"".site_url('admin/vuser')."\">User</a></li>";
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="glyphicon glyphicon-th-large"></i> Data Master <span class="caret"></span></a><ul class="dropdown-menu">';
+							echo "<li><a href=\"".site_url('admin/klas')."\"><i class=\"glyphicon glyphicon-tag\"></i> Klasifikasi</a></li>";
+							echo "<li><a href=\"".site_url('admin/penc')."\"><i class=\"glyphicon glyphicon-home\"></i> Pencipta arsip</a></li>";
+							echo "<li><a href=\"".site_url('admin/pengolah')."\"><i class=\"glyphicon glyphicon-home\"></i> Unit Pengolah</a></li>";
+							echo "<li><a href=\"".site_url('admin/lokasi')."\"><i class=\"glyphicon glyphicon-map-marker\"></i> Lokasi</a></li>";
+							echo "<li><a href=\"".site_url('admin/media')."\"><i class=\"glyphicon glyphicon-film\"></i> Media</a></li>";
+							echo "<li><a href=\"".site_url('admin/vuser')."\"><i class=\"glyphicon glyphicon-user\"></i> User</a></li>";
 							echo "</ul>
 							</li>";
 						}

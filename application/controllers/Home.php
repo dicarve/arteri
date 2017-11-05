@@ -17,15 +17,18 @@ class Home extends CI_Controller {
 		$this->search();
 	}
 
-	function __output($nview,$data=null)
+	protected function __output($nview,$data=null)
 	{
 		$this->load->view('header',$data);
 		$this->load->view($nview,$data);
 		$this->load->view('footer');
 	}
     
-    function src($srcdata=false)
+    protected function src($srcdata=false)
     {
+		// simple search
+		$katakunci=trim($this->input->get('katakunci'));
+		// advanced search
         $noarsip=trim($this->input->get('noarsip'));
 		$tanggal=trim($this->input->get('tanggal'));
 		$uraian=trim($this->input->get('uraian'));
@@ -37,47 +40,64 @@ class Home extends CI_Controller {
 		$lok=trim($this->input->get('lok'));
 		$med=trim($this->input->get('med'));
 
-		$w = [];
-		if($noarsip!="") {
-			$w[] = " noarsip like '%".$noarsip."%'";
-		}
-		if($tanggal!="") {
-			$w[] = " tanggal like '%".$tanggal."%'";
-		}
-		if($kode!="" && $kode!="all") {
-			$w[] = " kode like '%".$kode."%'";
-		}
-		if($ket!="" && $ket!="all") {
-			$w[] = " ket='".$ket."'";
-		}
-		if($uraian!="") {
-			$w[] = " uraian like '%".$uraian."%'";
-		}
-		if($retensi!="" && $retensi!="all") {
-			$w[] = " f='".$retensi."'";
-		}
-		if($penc!="" && $penc!="all") {
-			$w[] = " pencipta ='".$penc."'";
-		}
-		if($peng!="" && $peng!="all") {
-			$w[] = " unit_pengolah ='".$peng."'";
-		}
-		if($lok!="" && $lok!="all") {
-			$w[] = " lokasi ='".$lok."'";
-		}
-		if($med!="" && $med!="all") {
-			$w[] = " media ='".$med."'";
+		$w = array();
+		if ($katakunci) {
+		  // simple search
+		  $w[] = " noarsip like '%".$katakunci."%'";
+		  $w[] = " uraian like '%".$katakunci."%'";
+		} else {
+			// advanced search
+			if($noarsip!="") {
+				$w[] = " noarsip like '%".$noarsip."%'";
+			}
+			if($tanggal!="") {
+				$w[] = " tanggal like '%".$tanggal."%'";
+			}
+			if($kode!="" && $kode!="all") {
+				$w[] = " kode like '%".$kode."%'";
+			}
+			if($ket!="" && $ket!="all") {
+				$w[] = " ket='".$ket."'";
+			}
+			if($uraian!="") {
+				$w[] = " uraian like '%".$uraian."%'";
+			}
+			if($retensi!="" && $retensi!="all") {
+				$w[] = " f='".$retensi."'";
+			}
+			if($penc!="" && $penc!="all") {
+				$w[] = " pencipta ='".$penc."'";
+			}
+			if($peng!="" && $peng!="all") {
+				$w[] = " unit_pengolah ='".$peng."'";
+			}
+			if($lok!="" && $lok!="all") {
+				$w[] = " lokasi ='".$lok."'";
+			}
+			if($med!="" && $med!="all") {
+				$w[] = " media ='".$med."'";
+			}
 		}
 
-		$q = "select a.*,k.retensi,date_add(a.tanggal,interval k.retensi year) b,
-		(if(date_add(a.tanggal,interval k.retensi year)<curdate(),'sudah','belum')) f from data_arsip a join master_kode k on k.kode=a.kode";
-		if(count($w) > 0) {
-			$q .= " having".implode(" and ",$w);
+		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
+		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
+		  FROM data_arsip AS a JOIN master_kode AS k ON k.kode=a.kode";
+		// die($q);
+
+		if ($katakunci) {
+			$q .= " WHERE".implode(" OR ",$w);
+            $src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'');
+            $qq = array($q, $src);
+			return $qq;
+		} else {
+			if(count($w) > 0) {
+				$q .= " WHERE".implode(" AND ",$w);
+			}
 		}
-        
+
         if($srcdata) {
-            $src = ["noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med];
-            $qq = [$q,$src];
+            $src = array("noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med);
+            $qq = array($q, $src);
             return $qq;
         }else {
             return $q;
@@ -85,16 +105,16 @@ class Home extends CI_Controller {
         
     }
     
-	function search($offset=0)
+	public function search($offset=0)
 	{
-		$qq = $this->src(true);
-        $q = $qq[0];
+		$qq = $this->src(true); // var_dump($qq); die();
+		$q = $qq[0];
         $data['src']=$qq[1];
         
 		//echo $q;
 		$q2 = $q;
-		$q .= " limit 20 ";
-		if($offset>0) $q .= "offset $offset";
+		$q .= " LIMIT 20 ";
+		if($offset>0) $q .= "OFFSET $offset";
 		$hsl = $this->db->query($q);
 		$data['data'] = $hsl->result_array();
 		//$this->session->set_flashdata('zz', $q);
@@ -145,7 +165,7 @@ class Home extends CI_Controller {
 		$this->__output('main',$data);
 	}
     
-    function dl()
+    public function dl()
     {
         $q = $this->src();
         $hsl = $this->db->query($q);
@@ -204,7 +224,7 @@ class Home extends CI_Controller {
         $objWriter->save('php://output');
     }
 
-	function login()
+	public function login()
 	{
 		$data=[];
 		if(isset($_SERVER['HTTP_REFERER'])) {
@@ -214,7 +234,7 @@ class Home extends CI_Controller {
 		$this->load->view('login',$data);
 	}
 
-	function gologin()
+	public function gologin()
 	{
 		$username=trim($this->input->post('username'));
         $password=md5($this->input->post('password'));
@@ -238,13 +258,12 @@ class Home extends CI_Controller {
         }
 	}
 
-	function logout()
+	public function logout()
 	{
 		unset($_SESSION['username']);
 		unset($_SESSION['id_user']);
 		redirect('/home', 'refresh');
 	}
-
 }
 
 

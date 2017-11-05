@@ -26,9 +26,13 @@ body
 .table {
   background: #fff;
 }
+.table thead th {
+  background-color: #931313;
+  color: #fff;
+}
 .table td.fit, .table th.fit {
-    white-space: nowrap;
-    width: 1%;
+  white-space: nowrap;
+  width: 1%;
 }
 .navbar-inverse {
     background-color: #931313;
@@ -50,6 +54,9 @@ body
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
     background-color: #db4028;
     color: #ffffff;
+}
+.panel-hidden {
+    display: none;
 }
 .pagination > li > a, .pagination > li > span, .pagination > li > a, .pagination > li > span {
     z-index: 2;

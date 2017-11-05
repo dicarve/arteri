@@ -390,4 +390,5 @@ $(document).ready(function () {
 	function formatnumber(x) {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 	}
+
 });

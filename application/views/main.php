@@ -1,9 +1,47 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-	<h2>Pencarian Data</h2>
-	<hr>
+    <nav class="navbar navbar-inverse navbar-submenu">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#module-submenu" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Data Arsip</a>
+        </div>
+
+		<form class="navbar-form navbar-left" method="get" action="<?php echo site_url('/home/search'); ?>">
+            <div class="form-group">
+			  <div class = "input-group">
+			  <input type="text" name="katakunci" class="form-control" placeholder="nomor arsip/kata kunci uraian" /><span class="input-group-btn">
+			  	<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+			  </span>
+		      </div>
+            </div>
+		</form>
+		  
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="module-submenu">
+          <ul class="nav navbar-nav navbar-right">
+			<?php if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') : ?>
+			<li><a href="<?php echo site_url('/admin/entr'); ?>"><i class="glyphicon glyphicon-plus"></i> Entry Data Baru</a></li>
+            <?php endif; ?>
+			<li><a href="#" role="button" data-toggle="collapse" data-target="#advanced-search" 
+			  aria-expanded="false" aria-controls="advanced-search" 
+			  class="open-advanced-search"><i class="glyphicon glyphicon-search"></i> Pencarian Lanjut</a>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
 	<?php echo $this->session->flashdata('zz'); ?>
+	<div class="panel panel-default panel-hidden collapse" id="advanced-search">
+	<div class="panel-heading"><h3 class="panel-title">Pencarian Lanjut</h3></div>
+	<div class="panel-body">
 	<form action="<?php echo site_url('/home/search'); ?>" method="get" id="srcmain">
 		<div class = "input-group">
 			<span class = "input-group-addon">Uraian</span>
@@ -86,19 +124,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				?>
 			</select>
 			<span class="input-group-btn">
-				<button class="btn btn-primary" type="submit" id="go">Mencari</button>
+				<button class="btn btn-primary" type="submit" id="go"> Cari</button>
 			</span>
 		</div>
 	</form>
+	</div>
+	<!-- ./panel body -->
+	</div>
+	<!-- ./panel -->
 
         <!-- Title -->
-        <div class="row">
-            <div class="col-lg-12">
-                <h3>Hasil Pencarian <span class='small'>(<?php echo number_format($jml); ?> data)</span>
-                <a class="btn btn-primary" href="<?php echo site_url('/home/dl').($_SERVER['QUERY_STRING']? '?'.$_SERVER['QUERY_STRING'] : '') ?>
-                                                 ">Download Data</a>
-                </h3>
-            </div>
+        <div class="well well-sm">
+		  <div class="row">
+            <div class="col-xs-9">Ditemukan data sebanyak : <em class='small'>(<?php echo number_format($jml); ?>)</em> arsip</div>
+		    <div class="col-xs-3 text-right"><a class="btn btn-primary" href="<?php echo site_url('/home/dl').($_SERVER['QUERY_STRING']? '?'.$_SERVER['QUERY_STRING'] : '') ?>">Download Data</a></div>
+		  </div>
         </div>
         <!-- /.row -->
         <!-- Page Features -->
