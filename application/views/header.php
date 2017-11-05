@@ -17,6 +17,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Bootstrap Core CSS -->
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/flatly.bootstrap.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/heroic-features.css') ?>" />
+	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery-ui.min.css') ?>" />
+	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery-ui.structure.min.css') ?>" />
+	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery-ui.theme.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/custom.css') ?>" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
