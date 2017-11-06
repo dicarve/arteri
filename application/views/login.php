@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/bootstrap.min.css') ?>" />
     <link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/login.css') ?>" />
+    <link href="<?php echo base_url('/public/logo.png') ?>" rel="icon" />
 </head>
 <body>
 
