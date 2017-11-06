@@ -14,12 +14,12 @@
     	<div class="container" id="formContainer">
 
           <form class="form-signin" id="login" role="form" method="post" action="<?php echo site_url('/home/gologin'); ?>">
-		  <p align="center"><img src="<?php echo base_url("/public/images/logo3-min.png");?>" width="270"></p>
+		  <p align="center"><img src="<?php echo base_url("/public/logo4.png");?>" class="img-responsive"></p>
             <h5 class="form-signin-heading"><p align="center">Masukkan username dan password anda</p></h5>
 			<?php
-				if($this->session->flashdata('erorlogin')) {
-					echo "<div style=\"color:red; text-align:center;\">".$this->session->flashdata('erorlogin')."</div>";
-				}
+			if($this->session->flashdata('erorlogin')) {
+				echo "<div style=\"color:red; text-align:center;\">".$this->session->flashdata('erorlogin')."</div>";
+			}
 			?>
             <input type="hidden" name="previous" value="<?php echo (isset($previous)?$previous:"") ?>">
             <input type="text" class="form-control" name="username" id="loginEmail" placeholder="username" required autofocus>

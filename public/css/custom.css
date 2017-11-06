@@ -85,6 +85,12 @@ body
 .width-sm {
     width: 2%;
 }
+.width-half-full {
+    width: 49.5%;
+}
+.width-full {
+    width: 99.5%;
+}
 a {
     color: #ae0404;
     text-decoration: none;

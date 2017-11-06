@@ -14,14 +14,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <a class="navbar-brand" href="#">Data Arsip</a>
         </div>
 
-		<form class="navbar-form navbar-left" method="get" action="<?php echo site_url('/home/search'); ?>">
-            <div class="form-group">
-			  <div class = "input-group">
-			  <input type="text" name="katakunci" class="form-control" placeholder="nomor arsip/kata kunci uraian" /><span class="input-group-btn">
-			  	<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-			  </span>
-		      </div>
-            </div>
+		<form class="navbar-form navbar-left width-half-full" method="get" action="<?php echo site_url('/home/search'); ?>">
+			<div class="input-group width-full">
+			<input type="text" name="katakunci" class="form-control" placeholder="nomor arsip/kata kunci uraian" /><span class="input-group-btn">
+				<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button></span>
+		    </div>
 		</form>
 		  
         <!-- Collect the nav links, forms, and other content for toggling -->

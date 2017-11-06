@@ -1,17 +1,44 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<h2 class="text-center breadcrumb">Data Unit Pengolah Arsip
-<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addpeng">Tambah</button>
-</h2>
+<nav class="navbar navbar-inverse navbar-submenu">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#module-submenu" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<?php echo site_url('/admin/pengolah'); ?>">Data Unit Pengolah Arsip</a>
+    </div>
+    <form class="navbar-form navbar-left width-half-full" method="get" action="<?php echo site_url('/admin/pengolah'); ?>">
+    	  <div class="input-group width-full">
+    	  <input type="text" name="katakunci" class="form-control" placeholder="kata kunci nama/kode" /><span class="input-group-btn">
+    	  	<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button></span>
+        </div>
+    </form>
+  
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="module-submenu">
+      <ul class="nav navbar-nav navbar-right">
+	       <?php if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') : ?>
+	       <li><a href="#" data-toggle="modal" data-target="#addpeng"><i class="glyphicon glyphicon-plus"></i> Entry Data Baru</a></li>
+        <?php endif; ?>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
 <div class="row">
     <div class="col-md-12" id="divtabelpeng">
     <table class="table table-bordered" name="vpeng" id="vpeng">
     <thead>
-        <th>No</th>
+        <th class="width-sm">No</th>
         <th>Nama Unit Pengolah</th>
-        <th></th>
-        <th></th>
+        <th class="width-sm"></th>
+        <th class="width-sm"></th>
     </thead>
     <?php
         if(isset($peng)){
@@ -20,8 +47,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 echo "<tr>";
                 echo "<td>".$no."</td>";
                 echo "<td>".$u['nama_pengolah']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editpeng\" class='edpeng' href='#' id='".$u['id']."' >edit</a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delpeng\" class='delpeng' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editpeng\" class='edpeng' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delpeng\" class='delpeng' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";
                 $no++;
             }

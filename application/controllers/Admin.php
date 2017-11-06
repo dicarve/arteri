@@ -271,7 +271,13 @@ class Admin extends CI_Controller {
 	
 	public function penc()
 	{
-		$q = "select * from master_pencipta order by nama_pencipta asc";
+		$katakunci = trim($this->input->get('katakunci'));
+
+		$q = "SELECT * FROM master_pencipta ";
+		if ($katakunci) {
+		  $q .= ' WHERE nama_pencipta LIKE \'%'.$katakunci.'%\' OR id LIKE \'%'.$katakunci.'%\' ';
+		}
+		$q .= " ORDER BY nama_pencipta ASC";
 		$hsl = $this->db->query($q);
 		$data['penc'] = $hsl->result_array();
 		$this->__output('pencipta',$data);
@@ -340,7 +346,13 @@ class Admin extends CI_Controller {
 	
 	public function pengolah()
 	{
-		$q = "select * from master_pengolah order by nama_pengolah asc";
+		$katakunci = trim($this->input->get('katakunci'));
+
+		$q = "SELECT * FROM master_pengolah ";
+		if ($katakunci) {
+		  $q .= ' WHERE nama_pengolah LIKE \'%'.$katakunci.'%\' OR id LIKE \'%'.$katakunci.'%\' ';
+		}
+		$q .= " ORDER BY nama_pengolah ASC";
 		$hsl = $this->db->query($q);
 		$data['peng'] = $hsl->result_array();
 		$this->__output('pengolah',$data);
@@ -409,7 +421,13 @@ class Admin extends CI_Controller {
 	
 	public function lokasi()
 	{
-		$q = "select * from master_lokasi order by nama_lokasi asc";
+		$katakunci = trim($this->input->get('katakunci'));
+		
+		$q = "SELECT * FROM master_lokasi ";
+		if ($katakunci) {
+		  $q .= ' WHERE nama_lokasi LIKE \'%'.$katakunci.'%\' OR id LIKE \'%'.$katakunci.'%\' ';
+		}
+		$q .= " ORDER BY nama_lokasi ASC";
 		$hsl = $this->db->query($q);
 		$data['lok'] = $hsl->result_array();
 		$this->__output('lokasi',$data);
@@ -478,7 +496,13 @@ class Admin extends CI_Controller {
 	
 	public function media()
 	{
-		$q = "select * from master_media order by nama_media asc";
+		$katakunci = trim($this->input->get('katakunci'));
+		
+		$q = "SELECT * FROM master_media ";
+		if ($katakunci) {
+		  $q .= ' WHERE nama_media LIKE \'%'.$katakunci.'%\' OR id LIKE \'%'.$katakunci.'%\' ';
+		}
+		$q .= " ORDER BY nama_media ASC";
 		$hsl = $this->db->query($q);
 		$data['med'] = $hsl->result_array();
 		$this->__output('media',$data);
@@ -547,7 +571,13 @@ class Admin extends CI_Controller {
 
 	public function vuser()
 	{
-		$q = "select * from master_user";
+		$katakunci = trim($this->input->get('katakunci'));
+		
+		$q = "SELECT * FROM master_user ";
+		if ($katakunci) {
+		  $q .= ' WHERE username LIKE \'%'.$katakunci.'%\' OR tipe LIKE \'%'.$katakunci.'%\' ';
+		}
+		$q .= " ORDER BY username ASC";
 		$hsl = $this->db->query($q);
 		$data['user'] = $hsl->result_array();
 		$this->__output('vuser',$data);

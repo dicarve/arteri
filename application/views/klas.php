@@ -11,15 +11,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Data Klasifikasi</a>
+      <a class="navbar-brand" href="<?php echo site_url('/admin/klas'); ?>">Data Klasifikasi</a>
     </div>
-    <form class="navbar-form navbar-left" method="get" action="<?php echo site_url('/admin/klas'); ?>">
-      <div class="form-group">
-    	  <div class = "input-group">
+    <form class="navbar-form navbar-left width-half-full" method="get" action="<?php echo site_url('/admin/klas'); ?>">
+    	  <div class="input-group width-full">
     	  <input type="text" name="katakunci" class="form-control" placeholder="kata kunci nama/kode" /><span class="input-group-btn">
     	  	<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button></span>
         </div>
-      </div>
     </form>
   
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -52,8 +50,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 echo "<td>".$u['kode']."</td>";
                 echo "<td>".$u['nama']."</td>";
                 echo "<td>".$u['retensi']." Tahun</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editkode\" class='edkode' href='#' id='".$u['id']."' >edit</a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delkode\" class='delkode' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editkode\" class='edkode' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delkode\" class='delkode' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";
                 $no++;
             }
