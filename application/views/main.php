@@ -155,6 +155,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<th>Retensi</th>
 						<th class="width-sm"></th>
 						<th class="width-sm"></th>
+						<th class="width-sm"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -169,11 +170,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							if($a['file']=="") {
 								echo "<td></td>";
 							}else {
-								echo "<td><a href='".base_url('files/').$a['file']."'><span class='glyphicon glyphicon-save' aria-hidden='true'></span></a></td>";
+								echo "<td><a href='".base_url('files/'.$a['file'])."' target='_blank'><span class='glyphicon glyphicon-save' aria-hidden='true'></span></a></td>";
 							}
 							echo "<td>".$a['jumlah']."</td>";
 							echo "<td>".$a['nobox']."</td>";
 							echo "<td ".($a['f']=='sudah'?"class='danger'":"").">".$a['b']."</td>";
+							echo "<td><a href='".site_url('home/view/'.$a['id'])."' ><i class=\"glyphicon glyphicon-search\"></i></a></td>";
 							echo "<td>";
 							if($this->session->tipe=='admin') {
 								echo "<a href='".site_url('/admin/vedit/'.$a['id'])."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a>";
@@ -181,7 +183,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							echo "</td>";
 							echo "<td>";
 							if($this->session->tipe=='admin') {
-								echo "<a class='deldata' id='".$a['id']."' href='#' data-toggle=\"modal\" data-target=\"#deldata\"><span class='glyphicon glyphicon-remove ' style='color:red' aria-hidden='true'></span></a>";
+								echo "<a class='deldata' id='".$a['id']."' href='#' data-toggle=\"modal\" data-target=\"#deldata\"><i class=\"glyphicon glyphicon-trash\"></i></a>";
 							}
 							echo "</td>";
 							echo "</tr>";

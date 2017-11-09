@@ -264,6 +264,23 @@ class Home extends CI_Controller {
 		unset($_SESSION['id_user']);
 		redirect('/home', 'refresh');
 	}
+	
+	public function view($id)
+	{
+		$q="select a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,l.nama_lokasi,m.nama_media, 
+		DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
+		(IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
+		from data_arsip a
+		left join master_pencipta p on p.id=a.pencipta
+		left join master_pengolah p2 on p2.id=a.unit_pengolah
+		left join master_kode k on k.kode=a.kode
+		left join master_lokasi l on l.id=a.lokasi
+		left join master_media m on m.id=a.media
+		where a.id=$id";
+		$data=$this->db->query($q)->row_array();
+		
+		$this->__output('varsip',$data);
+	}
 }
 
 

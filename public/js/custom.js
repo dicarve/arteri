@@ -7,7 +7,10 @@ $(document).ready(function () {
 
 	var url = $(location).attr('href');
 	var segments = url.split('/');
-
+	
+	//console.log(base_url);
+	//console.log(site_url);
+	
 	$("#tanggal").datepicker({ maxDate: '0', changeMonth: true, changeYear: true, dateFormat: "yy-mm-dd" });
 	////////////////
 	$(".deldata").click(function(){
@@ -38,7 +41,7 @@ $(document).ready(function () {
 	function reloaduser() {
 		$.ajax({
 			type: "POST",
-			url: document.location.protocol + "//" + document.location.hostname + "" + dir_site + "/admin/reloaduser/",
+			url: site_url + "/admin/reloaduser/",
 			cache: false,
 			success: function (html) {
 				$("#divtabeluser").html(html);
@@ -84,7 +87,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$.ajax({
 			type: "POST",
-			url: document.location.protocol + "//" + document.location.hostname + "" + dir_site + "/admin/auser/",
+			url: site_url + "/admin/auser/",
 			data: "id=" + d,
 			cache: false,
 			success: function (ahtml) {
@@ -100,7 +103,7 @@ $(document).ready(function () {
 	function reloadkode() {
 		$.ajax({
 			type: "POST",
-			url: document.location.protocol + "//" + document.location.hostname + "" + dir_site + "/admin/reloadkode/",
+			url: site_url + "/admin/reloadkode/",
 			cache: false,
 			success: function (html) {
 				$("#divtabelkode").html(html);
@@ -146,7 +149,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$.ajax({
 			type: "POST",
-			url: document.location.protocol + "//" + document.location.hostname + "" + dir_site + "/admin/akode/",
+			url: site_url + "/admin/akode/",
 			data: "id=" + d,
 			cache: false,
 			success: function (ahtml) {
@@ -162,7 +165,7 @@ $(document).ready(function () {
 	function reloadpenc() {
 		$.ajax({
 			type: "POST",
-			url: myurl + "/admin/reloadpenc",
+			url: site_url + "/admin/reloadpenc",
 			cache: false,
 			success: function (html) {
 				$("#divtabelpenc").html(html);
@@ -205,7 +208,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$.ajax({
 			type: "POST",
-			url: myurl + "/admin/apenc/",
+			url: site_url + "/admin/apenc/",
 			data: "id=" + d,
 			cache: false,
 			success: function (ahtml) {
@@ -219,7 +222,7 @@ $(document).ready(function () {
 	function reloadpeng() {
 		$.ajax({
 			type: "POST",
-			url: myurl + "/admin/reloadpeng",
+			url: site_url + "/admin/reloadpeng",
 			cache: false,
 			success: function (html) {
 				$("#divtabelpeng").html(html);
@@ -262,7 +265,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$.ajax({
 			type: "POST",
-			url: myurl + "/admin/apeng/",
+			url: site_url + "/admin/apeng/",
 			data: "id=" + d,
 			cache: false,
 			success: function (ahtml) {
@@ -276,7 +279,7 @@ $(document).ready(function () {
 	function reloadlok() {
 		$.ajax({
 			type: "POST",
-			url: myurl + "/admin/reloadlok",
+			url: site_url + "/admin/reloadlok",
 			cache: false,
 			success: function (html) {
 				$("#divtabellok").html(html);
@@ -319,7 +322,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$.ajax({
 			type: "POST",
-			url: myurl + "/admin/alok/",
+			url: site_url + "/admin/alok/",
 			data: "id=" + d,
 			cache: false,
 			success: function (ahtml) {
@@ -333,7 +336,7 @@ $(document).ready(function () {
 	function reloadmed() {
 		$.ajax({
 			type: "POST",
-			url: myurl + "/admin/reloadmed",
+			url: site_url + "/admin/reloadmed",
 			cache: false,
 			success: function (html) {
 				$("#divtabelmed").html(html);
@@ -376,7 +379,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$.ajax({
 			type: "POST",
-			url: myurl + "/admin/amed/",
+			url: site_url + "/admin/amed/",
 			data: "id=" + d,
 			cache: false,
 			success: function (ahtml) {

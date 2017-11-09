@@ -136,7 +136,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div class="col-md-4">
 	<?php
 		if($file!="") {
-			echo "<span id='linkfile' class='form-control'><a href='".base_url('files/').$file."'>$file</a><span class='pull-right'><a href='#' data-toggle=\"modal\" data-target=\"#delfile\"><span class='glyphicon glyphicon-remove' style='color:red' aria-hidden='true'></span></a></span></span>";
+			echo "<span id='linkfile' class='form-control'><a href='".base_url('files/'.$file)."'>$file</a><span class='pull-right'><a href='#' data-toggle=\"modal\" data-target=\"#delfile\"><span class='glyphicon glyphicon-remove' style='color:red' aria-hidden='true'></span></a></span></span>";
 			echo "<div id='uplodfile' style='display:none;'>";
 		}else {
 			echo "<div id='uplodfile'>";

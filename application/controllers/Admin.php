@@ -61,6 +61,7 @@ class Admin extends CI_Controller {
 		$data["unitpengolah"]=$this->masterlist("unitpengolah");
 		$data["lokasi"]=$this->masterlist("lokasi");
 		$data["media"]=$this->masterlist("media");
+		$data["title"]="Tambah Arsip";
 		
 		$this->__output('entri1',$data);
 	}
@@ -71,8 +72,13 @@ class Admin extends CI_Controller {
 		$tanggal=trim($this->input->post('tanggal'));
 		$uraian=trim($this->input->post('uraian'));
 		$kode=trim($this->input->post('kode'));
+		$pencipta=trim($this->input->post('pencipta'));
+		$unitpengolah=trim($this->input->post('unitpengolah'));
+		$lokasi=trim($this->input->post('lokasi'));
+		$media=trim($this->input->post('media'));
 		$ket=trim($this->input->post('ket'));
 		$nobox=trim($this->input->post('nobox'));
+		$jumlah=trim($this->input->post('jumlah'));
 		$file="";
 		$config['upload_path'] = 'files/';
 		$config['allowed_types'] = 'pdf|docx|doc';
@@ -87,7 +93,7 @@ class Admin extends CI_Controller {
 			//die();
 		}
 
-		$q = "insert into data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file) values ('$noarsip','$tanggal','$uraian','$kode','$ket','$nobox','$file');";
+		$q = "insert into data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file,jumlah,pencipta,unit_pengolah,lokasi,media,tgl_input) values ('$noarsip','$tanggal','$uraian','$kode','$ket','$nobox','$file','$jumlah',$pencipta,$unitpengolah,$lokasi,$media,now());";
 		$hsl = $this->db->query($q);
 		$q = "SELECT LAST_INSERT_ID() as vid;";
 		$hsl = $this->db->query($q);
@@ -113,6 +119,7 @@ class Admin extends CI_Controller {
 			$row["unitpengolah2"]=$this->masterlist("unitpengolah");
 			$row["lokasi2"]=$this->masterlist("lokasi");
 			$row["media2"]=$this->masterlist("media");
+			$row["title"]="Ubah Arsip";
 			if(count($row)>0) {
 				$this->__output('edit1',$row);
 			}else{
@@ -131,7 +138,12 @@ class Admin extends CI_Controller {
 		$uraian=trim($this->input->post('uraian'));
 		$kode=trim($this->input->post('kode'));
 		$ket=trim($this->input->post('ket'));
+		$pencipta=trim($this->input->post('pencipta'));
+		$unitpengolah=trim($this->input->post('unitpengolah'));
+		$lokasi=trim($this->input->post('lokasi'));
+		$media=trim($this->input->post('media'));
 		$nobox=trim($this->input->post('nobox'));
+		$jumlah=trim($this->input->post('jumlah'));
 		$id=trim($this->input->post('id'));
 		$previous=trim($this->input->post('previous'));
 		$file="";
@@ -143,13 +155,13 @@ class Admin extends CI_Controller {
 			//$file = $datafile['full_path'];
 			$file = $datafile['file_name'];
 		}else {
-			//echo $this->upload->display_errors();
-			//echo $this->input->post('nobox');
-			//die();
+			$q = "select file from data_arsip where id=$id";
+			$d = $this->db->query($q)->row_array()['file'];
+			$file=$d;
 		}
 
 		if(isset($_POST)) {
-			$q = "update data_arsip set noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file' where id=$id";
+			$q = "update data_arsip set noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file',jumlah='$jumlah',pencipta=$pencipta,unit_pengolah=$unitpengolah,lokasi=$lokasi,media=$media where id=$id";
 			$hsl = $this->db->query($q);
 		}
 		if($previous=="") {
@@ -251,8 +263,8 @@ class Admin extends CI_Controller {
 				<th>Kode</th>
 				<th>Nama</th>
 				<th>Retensi</th>
-				<th></th>
-				<th></th>
+				<th class='width-sm'></th>
+				<th class='width-sm'></th>
 			</thead>";
 			$no=1;
 			foreach($row as $u) {
@@ -260,8 +272,8 @@ class Admin extends CI_Controller {
                 echo "<td>".$u['kode']."</td>";
                 echo "<td>".$u['nama']."</td>";
                 echo "<td>".$u['retensi']." Tahun</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editkode\" class='edkode' href='#' id='".$u['id']."' >edit</a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delkode\" class='delkode' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editkode\" class='edkode' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delkode\" class='delkode' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";
                 $no++;
 			}
@@ -325,18 +337,19 @@ class Admin extends CI_Controller {
 		if($row) {
 			echo "<table class='table table-bordered' name='vpenc' id='vpenc'>
 			<thead>
-				<th>No</th>
+				<th class='width-sm'>No</th>
 				<th>Nama</th>
-				<th></th>
-				<th></th>
+				<th class='width-sm'></th>
+				<th class='width-sm'></th>
 			</thead>";
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
                 echo "<td>".$no."</td>";
                 echo "<td>".$u['nama_pencipta']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editpenc\" class='edpenc' href='#' id='".$u['id']."' >edit</a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delpenc\" class='delpenc' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editpenc\" class='edpenc' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delpenc\" class='delpenc' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
+                echo "</tr>";
                 echo "</tr>";
                 $no++;
 			}
@@ -400,18 +413,18 @@ class Admin extends CI_Controller {
 		if($row) {
 			echo "<table class='table table-bordered' name='vpeng' id='vpeng'>
 			<thead>
-				<th>No</th>
+				<th class='width-sm'>No</th>
 				<th>Nama</th>
-				<th></th>
-				<th></th>
+				<th class='width-sm'></th>
+				<th class='width-sm'></th>
 			</thead>";
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
                 echo "<td>".$no."</td>";
                 echo "<td>".$u['nama_pengolah']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editpeng\" class='edpeng' href='#' id='".$u['id']."' >edit</a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delpeng\" class='delpeng' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editpeng\" class='edpeng' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delpeng\" class='delpeng' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";
                 $no++;
 			}
@@ -475,18 +488,18 @@ class Admin extends CI_Controller {
 		if($row) {
 			echo "<table class='table table-bordered' name='vlok' id='vlok'>
 			<thead>
-				<th>No</th>
+				<th class='width-sm'>No</th>
 				<th>Nama</th>
-				<th></th>
-				<th></th>
+				<th class='width-sm'></th>
+				<th class='width-sm'></th>
 			</thead>";
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
                 echo "<td>".$no."</td>";
                 echo "<td>".$u['nama_lokasi']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editlok\" class='edlok' href='#' id='".$u['id']."' >edit</a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#dellok\" class='dellok' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editlok\" class='edlok' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#dellok\" class='dellok' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";
                 $no++;
 			}
@@ -550,18 +563,18 @@ class Admin extends CI_Controller {
 		if($row) {
 			echo "<table class='table table-bordered' name='vmed' id='vmed'>
 			<thead>
-				<th>No</th>
+				<th class='width-sm'>No</th>
 				<th>Nama</th>
-				<th></th>
-				<th></th>
+				<th class='width-sm'></th>
+				<th class='width-sm'></th>
 			</thead>";
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
                 echo "<td>".$no."</td>";
                 echo "<td>".$u['nama_media']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editmed\" class='edmed' href='#' id='".$u['id']."' >edit</a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delmed\" class='delmed' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#editmed\" class='edmed' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#delmed\" class='delmed' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";
                 $no++;
 			}
@@ -632,11 +645,11 @@ class Admin extends CI_Controller {
 		if($row) {
 			echo "<table class='table table-bordered' name='vuser' id='vuser'>
 			<thead>
-				<th>No</th>
+				<th class='width-sm'>No</th>
 				<th>Username</th>
 				<th>Tipe</th>
-				<th></th>
-				<th></th>
+				<th class='width-sm'></th>
+				<th class='width-sm'></th>
 			</thead>";
 			$no=1;
 			foreach($row as $u) {
@@ -644,8 +657,8 @@ class Admin extends CI_Controller {
                 echo "<td>".$no."</td>";
                 echo "<td>".$u['username']."</td>";
                 echo "<td>".$u['tipe']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#edituser\" class='eduser' href='#' id='".$u['id']."' >edit</a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#deluser\" class='deluser' href='#' id='".$u['id']."' >delete</a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#edituser\" class='eduser' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+                echo "<td><a data-toggle=\"modal\" data-target=\"#deluser\" class='deluser' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";
                 $no++;
 			}
