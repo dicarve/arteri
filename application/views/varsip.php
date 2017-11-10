@@ -91,7 +91,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="view-group row">
 	<label class="col-md-6 control-label" for="nobox">File</label>
-	<label class="col-md-6 isi"><?php echo ($file==""?"":"<a href='".base_url('file/'.$file)."' target='_blank'>".$file."</a>"); ?></label>
+	<label class="col-md-6 isi"><?php echo ($file==""?"":"<a href='".base_url('files/'.$file)."' target='_blank'>".$file."</a>"); ?></label>
 </div>
 
 </div><!-- /2nd column -->
