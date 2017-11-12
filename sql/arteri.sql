@@ -100,8 +100,8 @@ CREATE TABLE `master_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `master_user` (`id`, `username`, `password`, `tipe`) VALUES
-(1,	'admin',	'21232f297a57a5a743894a0e4a801fc3',	'admin'),
-(2,	'user',	'ee11cbb19052e40b07aac0ca060c23ee',	'user');
+(1,	'admin',	'$2y$10$jMkQG1dAUFiYU5a3FhJjZOHEEjeYUKQ2KhFIFK3ZOxlJtcrOwcFOC',	'admin'),
+(2,	'user',	'$2y$10$mVPu.seT1X8.htSGFHOPEOulKJTDatFG6GeZIi9KdgZoXXZiyacCO',	'user');
 
 DROP TABLE IF EXISTS `sirkulasi`;
 CREATE TABLE `sirkulasi` (
@@ -109,11 +109,16 @@ CREATE TABLE `sirkulasi` (
   `noarsip` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `username_peminjam` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `keperluan` text COLLATE utf8_unicode_ci,
-  `tgl_pinjam` datetime NOT NULL,
+  `tgl_pinjam` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   `tgl_haruskembali` datetime NOT NULL,
-  `tgl_pengembalian` datetime NOT NULL,
-  `tgl_transaksi` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  `tgl_pengembalian` datetime DEFAULT NULL,
+  `tgl_transaksi` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `noarsip` (`noarsip`),
+  KEY `username_peminjam` (`username_peminjam`),
+  KEY `tgl_pinjam` (`tgl_pinjam`),
+  KEY `tgl_pengembalian` (`tgl_pengembalian`),
+  KEY `tgl_haruskembali` (`tgl_haruskembali`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -123,8 +128,11 @@ CREATE TABLE `system_log` (
   `kode_transaksi` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `username_transaksi` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `tgl_transaksi` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `kode_transaksi` (`kode_transaksi`),
+  KEY `username_transaksi` (`username_transaksi`),
+  KEY `tgl_transaksi` (`tgl_transaksi`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- 2017-11-06 00:39:59
+-- 2017-11-12 02:28:31

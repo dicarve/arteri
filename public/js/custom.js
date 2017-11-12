@@ -11,7 +11,7 @@ $(document).ready(function () {
 	//console.log(base_url);
 	//console.log(site_url);
 	
-	$("#tanggal").datepicker({ maxDate: '0', changeMonth: true, changeYear: true, dateFormat: "yy-mm-dd" });
+	$("#tanggal, .hasDatepicker, .hasDatePicker").datepicker({ maxDate: '0', changeMonth: true, changeYear: true, dateFormat: "yyyy-mm-dd" });
 	////////////////
 	$(".deldata").click(function(){
 		var d = $(this).attr('id')

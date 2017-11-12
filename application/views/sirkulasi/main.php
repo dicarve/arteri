@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Data Sirkulasi</a>
+          <a class="navbar-brand" href="<?php echo site_url('/sirkulasi/datalist'); ?>">Data Sirkulasi</a>
         </div>
 
 		<form class="navbar-form navbar-left width-half-full" method="get" action="<?php echo site_url('/sirkulasi/datalist'); ?>">

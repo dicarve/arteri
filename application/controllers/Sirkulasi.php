@@ -40,7 +40,9 @@ class Sirkulasi extends CI_Controller {
 
 		$sql = "SELECT s.*, u.username, 
 		  (IF(CURDATE()>s.tgl_haruskembali, 'Terlambat', 'Dipinjam')) AS status 
-		  FROM sirkulasi AS s JOIN master_user AS u ON s.username_peminjam=u.username";
+		  FROM sirkulasi AS s 
+          JOIN data_arsip AS a ON a.noarsip=s.noarsip
+          JOIN master_user AS u ON s.username_peminjam=u.username";
         // die($sql);
         // row count
 		$sql_row = "SELECT COUNT(*) AS total FROM sirkulasi AS s JOIN master_user AS u ON s.username_peminjam=u.username";
@@ -102,24 +104,26 @@ class Sirkulasi extends CI_Controller {
 	public function entr()
 	{
 		$data["title"]="Tambah Data Peminjaman";
-		
+        $date = new DateTime();
+        $data['now'] =$date->format('Y-m-d');
+        
 		$this->__output('sirkulasi/entri',$data);
 	}
 
 	public function gentr()
 	{
+        $date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
 		$noarsip=trim($this->input->post('noarsip'));
-		$tanggal=trim($this->input->post('tanggal'));
-		$uraian=trim($this->input->post('uraian'));
-		$kode=trim($this->input->post('kode'));
-		$pencipta=trim($this->input->post('pencipta'));
+		$username_peminjam=trim($this->input->post('username_peminjam'));
+		$keperluan=trim($this->input->post('keperluan'));
+		$tgl_pinjam=trim($this->input->post('tgl_pinjam'));
+		$tgl_haruskembali=trim($this->input->post('tgl_haruskembali'));
+		$tgl_transaksi=$now;
 
-		$q = "insert into data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file,jumlah,pencipta,unit_pengolah,lokasi,media,tgl_input) values ('$noarsip','$tanggal','$uraian','$kode','$ket','$nobox','$file','$jumlah',$pencipta,$unitpengolah,$lokasi,$media,now());";
+		$q = "INSERT INTO sirkulasi VALUES (NULL, '$noarsip','$username_peminjam','$keperluan','$tgl_pinjam',
+            '$tgl_haruskembali', NULL, NOW());";
 		$hsl = $this->db->query($q);
-		$q = "SELECT LAST_INSERT_ID() as vid;";
-		$hsl = $this->db->query($q);
-		$row = $hsl->row_array();
-		$v = $row['vid'];
 		//var_dump($row);
 		redirect('/sirkulasi/', 'refresh');
 	}
@@ -127,7 +131,7 @@ class Sirkulasi extends CI_Controller {
 	public function vedit($id)
 	{
 		if($id!=""){
-			$q = "select * from data_arsip where id=$id";
+			$q = "select * from sirkulasi where id=$id";
 			$hsl = $this->db->query($q);
 			$row = $hsl->row_array();
 			$previous = "";
@@ -135,19 +139,14 @@ class Sirkulasi extends CI_Controller {
 				$previous = $_SERVER['HTTP_REFERER'];
 				$row['previous'] = $previous;
 			}
-			$row["kode2"]=$this->masterlist("kode");
-			$row["pencipta2"]=$this->masterlist("pencipta");
-			$row["unitpengolah2"]=$this->masterlist("unitpengolah");
-			$row["lokasi2"]=$this->masterlist("lokasi");
-			$row["media2"]=$this->masterlist("media");
-			$row["title"]="Ubah Arsip";
+			$row["title"]="Update Data Peminjaman";
 			if(count($row)>0) {
-				$this->__output('edit1',$row);
+				$this->__output('sirkulasi/edit',$row);
 			}else{
-				redirect('/home/', 'refresh');
+				redirect('/sirkulasi/', 'refresh');
 			}
 		}else {
-			redirect('/home/', 'refresh');
+			redirect('/sirkulasi/', 'refresh');
 		}
 
 	}
@@ -176,13 +175,13 @@ class Sirkulasi extends CI_Controller {
 			//$file = $datafile['full_path'];
 			$file = $datafile['file_name'];
 		}else {
-			$q = "select file from data_arsip where id=$id";
+			$q = "select file from sirkulasi where id=$id";
 			$d = $this->db->query($q)->row_array()['file'];
 			$file=$d;
 		}
 
 		if(isset($_POST)) {
-			$q = "update data_arsip set noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file',jumlah='$jumlah',pencipta=$pencipta,unit_pengolah=$unitpengolah,lokasi=$lokasi,media=$media where id=$id";
+			$q = "update sirkulasi set noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file',jumlah='$jumlah',pencipta=$pencipta,unit_pengolah=$unitpengolah,lokasi=$lokasi,media=$media where id=$id";
 			$hsl = $this->db->query($q);
 		}
 		if($previous=="") {
@@ -195,14 +194,14 @@ class Sirkulasi extends CI_Controller {
 	public function del()
 	{
 		$id=trim($this->input->post('id'));
-		$q = "select file from data_arsip where id=$id";
+		$q = "select file from sirkulasi where id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array()['file'];
 		if($row!=""){
 			$alamat = ROOTPATH."/files/".$row;
 			unlink($alamat);
 		}
-		$q = "delete from data_arsip where id=$id";
+		$q = "delete from sirkulasi where id=$id";
 		$hsl = $this->db->query($q);
 	}
 }
