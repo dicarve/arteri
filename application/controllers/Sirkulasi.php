@@ -22,129 +22,55 @@ class Sirkulasi extends CI_Controller {
 
 	public function index()
 	{
-		$this->list();
+		$this->datalist();
     }
 
-    protected function src($srcdata=false)
+    protected function src()
     {
 		// simple search
 		$katakunci=trim($this->input->get('katakunci'));
-		// advanced search
-        $noarsip=trim($this->input->get('noarsip'));
-		$tanggal=trim($this->input->get('tanggal'));
-		$uraian=trim($this->input->get('uraian'));
-		$ket=trim($this->input->get('ket'));
-		$kode=trim($this->input->get('kode'));
-		$retensi=trim($this->input->get('retensi'));
-		$penc=trim($this->input->get('penc'));
-		$peng=trim($this->input->get('peng'));
-		$lok=trim($this->input->get('lok'));
-		$med=trim($this->input->get('med'));
 
 		$w = array();
 		if ($katakunci) {
 		  // simple search
 		  $w[] = " noarsip like '%".$katakunci."%'";
-		  $w[] = " uraian like '%".$katakunci."%'";
-		} else {
-			// advanced search
-			if($noarsip!="") {
-				$w[] = " noarsip like '%".$noarsip."%'";
-			}
-			if($tanggal!="") {
-				$w[] = " tanggal like '%".$tanggal."%'";
-			}
-			if($kode!="" && $kode!="all") {
-				$w[] = " kode like '%".$kode."%'";
-			}
-			if($ket!="" && $ket!="all") {
-				$w[] = " ket='".$ket."'";
-			}
-			if($uraian!="") {
-				$w[] = " uraian like '%".$uraian."%'";
-			}
-			if($retensi!="" && $retensi!="all") {
-				$w[] = " f='".$retensi."'";
-			}
-			if($penc!="" && $penc!="all") {
-				$w[] = " pencipta ='".$penc."'";
-			}
-			if($peng!="" && $peng!="all") {
-				$w[] = " unit_pengolah ='".$peng."'";
-			}
-			if($lok!="" && $lok!="all") {
-				$w[] = " lokasi ='".$lok."'";
-			}
-			if($med!="" && $med!="all") {
-				$w[] = " media ='".$med."'";
-			}
+		  $w[] = " username_peminjam like '%".$katakunci."%'";
+		  $w[] = " keperluan like '%".$katakunci."%'";
 		}
 
-		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
-		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
-		  FROM data_arsip AS a JOIN master_kode AS k ON k.kode=a.kode";
-		// die($q);
+		$sql = "SELECT s.*, u.username, 
+		  (IF(CURDATE()>s.tgl_haruskembali, 'Terlambat', 'Dipinjam')) AS status 
+		  FROM sirkulasi AS s JOIN master_user AS u ON s.username_peminjam=u.username";
+        // die($sql);
+        // row count
+		$sql_row = "SELECT COUNT(*) AS total FROM sirkulasi AS s JOIN master_user AS u ON s.username_peminjam=u.username";
+        // die($sql);
 
 		if ($katakunci) {
-			$q .= " WHERE".implode(" OR ",$w);
-            $src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'');
-            $qq = array($q, $src);
-			return $qq;
-		} else {
-			if(count($w) > 0) {
-				$q .= " WHERE".implode(" AND ",$w);
-			}
-		}
-
-        if($srcdata) {
-            $src = array("noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med);
-            $qq = array($q, $src);
-            return $qq;
-        }else {
-            return $q;
+		  $sql .= " WHERE".implode(" OR ",$w);
+		  $sql_row .= " WHERE".implode(" OR ",$w);
         }
-        
+        return array($sql, $sql_row);
     }
     
-	public function list($offset=0)
+	public function datalist($offset=0)
 	{
-		$qq = $this->src(true); // var_dump($qq); die();
-		$q = $qq[0];
-        $data['src']=$qq[1];
-        
-		//echo $q;
-		$q2 = $q;
-		$q .= " LIMIT 20 ";
-		if($offset>0) $q .= "OFFSET $offset";
-		$hsl = $this->db->query($q);
+		$qs = $this->src();
+		$sql = $qs[0];
+		$sql2 = $qs[1];
+
+		$sql .= " LIMIT 20 ";
+		if($offset>0) $sql .= "OFFSET $offset";
+		$hsl = $this->db->query($sql);
 		$data['data'] = $hsl->result_array();
 		//$this->session->set_flashdata('zz', $q);
-		$jmldata = $this->db->query($q2)->num_rows();
-		$data['jml']=$jmldata;
-
-		$q = "select distinct ket from data_arsip order by ket asc";
-		$hsl = $this->db->query($q);
-		$data['ket'] = $hsl->result_array();
-		$q = "select kode,nama from master_kode order by kode asc";
-		$hsl = $this->db->query($q);
-		$data['kode'] = $hsl->result_array();
-		$q = "select * from master_pencipta order by nama_pencipta asc";
-		$hsl = $this->db->query($q);
-		$data['penc'] = $hsl->result_array();
-		$q = "select * from master_pengolah order by nama_pengolah asc";
-		$hsl = $this->db->query($q);
-		$data['peng'] = $hsl->result_array();
-		$q = "select * from master_lokasi order by nama_lokasi asc";
-		$hsl = $this->db->query($q);
-		$data['lok'] = $hsl->result_array();
-		$q = "select * from master_media order by nama_media asc";
-		$hsl = $this->db->query($q);
-		$data['med'] = $hsl->result_array();
+		$jmldata = $this->db->query($sql2)->row();
+		$data['jml']=$jmldata->total;
 
 		$this->load->library('pagination');
 		$config['base_url'] = site_url('/home/search');
 		$config['reuse_query_string'] = true;
-		$config['total_rows'] = $jmldata;
+		$config['total_rows'] = $data['jml'];
 		$config['per_page'] = 20;
 		$config['num_tag_open'] = '<li>';
 		$config['num_tag_close'] = '</li>';
