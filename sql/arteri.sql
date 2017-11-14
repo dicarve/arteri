@@ -205,19 +205,16 @@ CREATE TABLE `master_user` (
 --
 
 INSERT INTO `master_user` (`id`, `username`, `password`, `tipe`) VALUES
-<<<<<<< HEAD
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin'),
-(2, 'user', 'ee11cbb19052e40b07aac0ca060c23ee', 'user');
+
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `sirkulasi`
 --
-=======
+
 (1,	'admin',	'$2y$10$jMkQG1dAUFiYU5a3FhJjZOHEEjeYUKQ2KhFIFK3ZOxlJtcrOwcFOC',	'admin'),
 (2,	'user',	'$2y$10$mVPu.seT1X8.htSGFHOPEOulKJTDatFG6GeZIi9KdgZoXXZiyacCO',	'user');
->>>>>>> 8e4ad0fc60c770b594f6aabf3ccde53a3b3541bc
 
 CREATE TABLE `sirkulasi` (
   `id` int(11) NOT NULL,
@@ -226,10 +223,6 @@ CREATE TABLE `sirkulasi` (
   `keperluan` text COLLATE utf8_unicode_ci,
   `tgl_pinjam` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   `tgl_haruskembali` datetime NOT NULL,
-<<<<<<< HEAD
-  `tgl_pengembalian` datetime NOT NULL,
-  `tgl_transaksi` datetime NOT NULL
-=======
   `tgl_pengembalian` datetime DEFAULT NULL,
   `tgl_transaksi` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -238,7 +231,6 @@ CREATE TABLE `sirkulasi` (
   KEY `tgl_pinjam` (`tgl_pinjam`),
   KEY `tgl_pengembalian` (`tgl_pengembalian`),
   KEY `tgl_haruskembali` (`tgl_haruskembali`)
->>>>>>> 8e4ad0fc60c770b594f6aabf3ccde53a3b3541bc
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -251,15 +243,11 @@ CREATE TABLE `system_log` (
   `id` int(11) NOT NULL,
   `kode_transaksi` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `username_transaksi` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-<<<<<<< HEAD
-  `tgl_transaksi` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
-=======
   `tgl_transaksi` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `kode_transaksi` (`kode_transaksi`),
   KEY `username_transaksi` (`username_transaksi`),
   KEY `tgl_transaksi` (`tgl_transaksi`)
->>>>>>> 8e4ad0fc60c770b594f6aabf3ccde53a3b3541bc
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -381,10 +369,4 @@ ALTER TABLE `sirkulasi`
 ALTER TABLE `system_log`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;COMMIT;
 
-<<<<<<< HEAD
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-=======
 -- 2017-11-12 02:28:31
->>>>>>> 8e4ad0fc60c770b594f6aabf3ccde53a3b3541bc
