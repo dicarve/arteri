@@ -1,4 +1,12 @@
 <?php
+/**
+ * This application is licensed under GNU General Public License version 3
+ * Developers:
+ * Syauqi Fuadi ( xfuadi@gmail.com )
+ * Arie Nugraha ( dicarve@gmail.com )
+ * 
+ */
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends CI_Controller {
@@ -237,23 +245,31 @@ class Home extends CI_Controller {
 	public function gologin()
 	{
 		$username=trim($this->input->post('username'));
-        $password=md5($this->input->post('password'));
+        // $password=md5($this->input->post('password'));
+        $password=$this->input->post('password');
         $previous=trim($this->input->post('previous'));
-		$q = "select * from master_user where username='$username' and password='$password'";
-		$hsl = $this->db->query($q);
-		$row = $hsl->row_array();
-        if($row) {
-            $_SESSION['username'] = $username;
-            $_SESSION['id_user'] = $row['id'];
-            $_SESSION['tipe'] = $row['tipe'];
-			if($previous=="") {
-				redirect('/home', 'refresh');
-			}else {
-				header('Location: ' . $previous);
+		// $q = "select * from master_user where username='$username' and password='$password'";
+		$q = "SELECT * FROM master_user WHERE username='$username'";
+		$user = $this->db->query($q)->row();
+        if($user) {
+			// check password
+			if (password_verify($password, $user->password)) {
+				$_SESSION['username'] = $username;
+				$_SESSION['id_user'] = $user->id;
+				$_SESSION['tipe'] = $user->tipe;
+				if($previous=="") {
+					redirect('/home', 'refresh');
+				}else {
+					header('Location: ' . $previous);
+				}
+			} else {
+              //echo "error login";
+			  $this->session->set_flashdata('erorlogin', 'Username atau password yang ada masukkan salah');
+			  redirect('/home/login', 'refresh');
 			}
         }else {
             //echo "error login";
-			$this->session->set_flashdata('erorlogin', 'salah password atau username');
+			$this->session->set_flashdata('erorlogin', 'Username atau password yang ada masukkan salah');
 			redirect('/home/login', 'refresh');
         }
 	}

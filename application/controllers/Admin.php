@@ -1,4 +1,12 @@
 <?php
+/**
+ * This application is licensed under GNU General Public License version 3
+ * Developers:
+ * Syauqi Fuadi ( xfuadi@gmail.com )
+ * Arie Nugraha ( dicarve@gmail.com )
+ * 
+ */
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin extends CI_Controller {
@@ -600,9 +608,9 @@ class Admin extends CI_Controller {
 	public function adduser()
 	{
 		$username = trim($this->input->post('username'));
-		$password = trim($this->input->post('password'));
+		$password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
 		$tipe = trim($this->input->post('tipe'));
-		$q = "insert into master_user (username,password,tipe) values ('$username',md5('$password'),'$tipe')";
+		$q = "insert into master_user (username,password,tipe) values ('$username', '$password','$tipe')";
 		$hsl = $this->db->query($q);
 
 	}
@@ -610,11 +618,11 @@ class Admin extends CI_Controller {
 	public function eduser()
 	{
 		$username = trim($this->input->post('username'));
-		$password = trim($this->input->post('password'));
+		$password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
 		$tipe = trim($this->input->post('tipe'));
 		$id = trim($this->input->post('id'));
 		$q = "update master_user set username='$username'";
-		if($password!="") $q .= ",password=md5('$password')";
+		if($password!="") $q .= ",password='$password'";
 		$q .= ",tipe='$tipe' where id=$id";
 		$hsl = $this->db->query($q);
 	}
@@ -674,14 +682,13 @@ class Admin extends CI_Controller {
 	public function exportdata()
 	{
 		include('dbimexport.php');
-		$db_config = Array
-					(
-						'dbtype' => "MYSQL",
-						'host' => "localhost",
-						'database' => "db1",
-						'user' => "root",
-						'password' => "",
-					);
+		$db_config = array(
+				'dbtype' => "MYSQL",
+				'host' => $this->db->hostname,
+				'database' => $this->db->database,
+				'user' => $this->db->username,
+				'password' => $this->db->password,
+			);
 		$dbimexport = new dbimexport($db_config);
 		$dbimexport->download_path = "";
 		$dbimexport->download = true;
@@ -694,14 +701,13 @@ class Admin extends CI_Controller {
 		if($_FILES["up_file"]["name"])
 		{
 			include('dbimexport.php');
-			$db_config = Array
-						(
-							'dbtype' => "MYSQL",
-							'host' => "localhost",
-							'database' => "db1",
-							'user' => "root",
-							'password' => "",
-						);
+			$db_config = array(
+					'dbtype' => "MYSQL",
+					'host' => $this->db->hostname,
+					'database' => $this->db->database,
+					'user' => $this->db->username,
+					'password' => $this->db->password,
+				);
 			$dbimexport = new dbimexport($db_config);
 			$filename = $_FILES["up_file"]["name"];
 			$source = $_FILES["up_file"]["tmp_name"];

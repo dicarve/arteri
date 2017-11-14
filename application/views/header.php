@@ -56,6 +56,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <ul class="nav navbar-nav">
 					<?php
 						if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') {
+                            echo '<li><a href="'.site_url('/sirkulasi').'"><i class="glyphicon glyphicon-refresh"></i> Sirkulasi</a></li>';
 							echo '<li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="glyphicon glyphicon-th-large"></i> Data Master <span class="caret"></span></a><ul class="dropdown-menu">';
