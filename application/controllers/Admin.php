@@ -677,6 +677,7 @@ class Admin extends CI_Controller {
 				<th>Username</th>
 				<th>Akses Klasifikasi</th>
 				<th>Akses Modul</th>
+				<th>Tipe</th>
 				<th class='width-sm'></th>
 				<th class='width-sm'></th>
 			</thead>";
@@ -697,6 +698,7 @@ class Admin extends CI_Controller {
 					}
 				}
 				echo "</td>";
+				echo "<td>".$u['tipe']."</td>";
                 echo "<td><a data-toggle=\"modal\" data-target=\"#edituser\" class='eduser' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
                 echo "<td><a data-toggle=\"modal\" data-target=\"#deluser\" class='deluser' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";
