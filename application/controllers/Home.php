@@ -35,24 +35,27 @@ class Home extends CI_Controller {
     protected function src($srcdata=false)
     {
 		// simple search
-		$katakunci=trim($this->input->get('katakunci'));
+		$katakunci=filter_var($this->input->get('katakunci'),FILTER_SANITIZE_STRING);
 		// advanced search
-        $noarsip=trim($this->input->get('noarsip'));
-		$tanggal=trim($this->input->get('tanggal'));
-		$uraian=trim($this->input->get('uraian'));
-		$ket=trim($this->input->get('ket'));
-		$kode=trim($this->input->get('kode'));
-		$retensi=trim($this->input->get('retensi'));
-		$penc=trim($this->input->get('penc'));
-		$peng=trim($this->input->get('peng'));
-		$lok=trim($this->input->get('lok'));
-		$med=trim($this->input->get('med'));
+        $noarsip=filter_var($this->input->get('noarsip'),FILTER_SANITIZE_STRING);
+		$tanggal=filter_var($this->input->get('tanggal'),FILTER_SANITIZE_STRING);
+		$uraian=filter_var($this->input->get('uraian'),FILTER_SANITIZE_STRING);
+		$ket=filter_var($this->input->get('ket'),FILTER_SANITIZE_STRING);
+		$kode=filter_var($this->input->get('kode'),FILTER_SANITIZE_STRING);
+		$retensi=filter_var($this->input->get('retensi'),FILTER_SANITIZE_STRING);
+		$penc=filter_var($this->input->get('penc'),FILTER_SANITIZE_STRING);
+		$peng=filter_var($this->input->get('peng'),FILTER_SANITIZE_STRING);
+		$lok=filter_var($this->input->get('lok'),FILTER_SANITIZE_STRING);
+		$med=filter_var($this->input->get('med'),FILTER_SANITIZE_STRING);
+		$nobox=filter_var($this->input->get('nobox'),FILTER_SANITIZE_STRING);
 
 		$w = array();
+		$klas = array();
 		if ($katakunci) {
 		  // simple search
 		  $w[] = " noarsip like '%".$katakunci."%'";
 		  $w[] = " uraian like '%".$katakunci."%'";
+		  $w[] = " nobox like '%".$katakunci."%'";
 		} else {
 			// advanced search
 			if($noarsip!="") {
@@ -62,7 +65,8 @@ class Home extends CI_Controller {
 				$w[] = " tanggal like '%".$tanggal."%'";
 			}
 			if($kode!="" && $kode!="all") {
-				$w[] = " kode like '%".$kode."%'";
+				//$w[] = " a.kode like '".$kode."%'";
+				$klas[] = $kode;
 			}
 			if($ket!="" && $ket!="all") {
 				$w[] = " ket='".$ket."'";
@@ -85,16 +89,31 @@ class Home extends CI_Controller {
 			if($med!="" && $med!="all") {
 				$w[] = " media ='".$med."'";
 			}
+			if($nobox!="") {
+				$w[] = " nobox like '%".$nobox."%'";
+			}
 		}
 
 		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
 		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
 		  FROM data_arsip AS a JOIN master_kode AS k ON k.kode=a.kode";
-		// die($q);
-
+		
+		if($_SESSION['akses_klas']!='') {
+			$k = explode(',',$_SESSION['akses_klas']);
+			$k=array_filter($k);
+			sort($k);
+			if(count($k)>0) {
+				$klas=array_merge($klas,$k);
+			}
+		}
+		
+		if(count($klas)>0) {
+			$w[] = " a.kode regexp '".implode('|',$klas)."'";
+		}
+		//var_dump($w); die();
 		if ($katakunci) {
 			$q .= " WHERE".implode(" OR ",$w);
-            $src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'');
+            $src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'',"nobox"=>$nobox);
             $qq = array($q, $src);
 			return $qq;
 		} else {
@@ -104,7 +123,7 @@ class Home extends CI_Controller {
 		}
 
         if($srcdata) {
-            $src = array("noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med);
+            $src = array("noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med,"nobox"=>$nobox);
             $qq = array($q, $src);
             return $qq;
         }else {
@@ -116,13 +135,14 @@ class Home extends CI_Controller {
 	public function search($offset=0)
 	{
 		$qq = $this->src(true); // var_dump($qq); die();
-		$q = $qq[0];
+		$q = $qq[0]; // var_dump($q); die();
         $data['src']=$qq[1];
         
 		//echo $q;
 		$q2 = $q;
 		$q .= " LIMIT 20 ";
 		if($offset>0) $q .= "OFFSET $offset";
+		//echo($q); die();
 		$hsl = $this->db->query($q);
 		$data['data'] = $hsl->result_array();
 		//$this->session->set_flashdata('zz', $q);
@@ -251,12 +271,37 @@ class Home extends CI_Controller {
 		// $q = "select * from master_user where username='$username' and password='$password'";
 		$q = "SELECT * FROM master_user WHERE username='$username'";
 		$user = $this->db->query($q)->row();
+		
+		/* $_SESSION['username'] = $username;
+		$_SESSION['id_user'] = $user->id;
+		$_SESSION['tipe'] = $user->tipe;
+		$_SESSION['akses_klas'] = $user->akses_klas;
+		$_SESSION['akses_modul'] = json_decode($user->akses_modul,true);
+		redirect('/home', 'refresh'); */
+		
         if($user) {
 			// check password
 			if (password_verify($password, $user->password)) {
 				$_SESSION['username'] = $username;
 				$_SESSION['id_user'] = $user->id;
 				$_SESSION['tipe'] = $user->tipe;
+				$_SESSION['akses_klas'] = $user->akses_klas;
+				$_SESSION['akses_modul'] = json_decode($user->akses_modul,true);
+				$_SESSION['menu_master'] = false;
+				if(count($_SESSION['akses_modul'])>0) {
+					$no=0;
+					foreach($_SESSION['akses_modul'] as $key=>$val) {
+						if($key=='klasifikasi') $no++;
+						if($key=='pencipta') $no++;
+						if($key=='pengolah') $no++;
+						if($key=='lokasi') $no++;
+						if($key=='media') $no++;
+						if($key=='user') $no++;
+					}
+					if($no>0) {
+						$_SESSION['menu_master'] = true;
+					}
+				}
 				if($previous=="") {
 					redirect('/home', 'refresh');
 				}else {

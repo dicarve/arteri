@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="module-submenu">
       <ul class="nav navbar-nav navbar-right">
-		  <li><a href="<?php echo site_url('/home/'); ?>"><i class="glyphicon glyphicon-search"></i> Lihat Data Arsip</a></li>
+		  <li><a href="<?php echo site_url('/admin/vedit/'.$id); ?>"><i class="glyphicon glyphicon-pencil"></i> Edit Arsip</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

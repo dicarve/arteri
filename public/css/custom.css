@@ -13,8 +13,12 @@ body
   background-size: cover;
   background-repeat: no-repeat;
   background-position: middle center;
-  background-image: url('../images/bg2.jpg');
   padding-bottom: 50px;
+  background: url('../images/bg2.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 .media{width:23%;background-color:#074f9f;;float:left;margin:5px 3px;border-radius: 5px;height:auto;}
 .media:first-child{margin: 6px 3px;}
@@ -113,4 +117,17 @@ label.isi {
 }
 .view-group {
 	margin-bottom:5px;
+}
+.chosen-single {
+	height:50px !important;
+	padding-top: 10px !important;
+}
+#zkode_chosen {
+	margin-top: -35px;
+}
+.ui-datepicker-month {
+	color:#000;
+}
+.ui-datepicker-year {
+	color:#000;
 }

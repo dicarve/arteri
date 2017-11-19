@@ -108,7 +108,7 @@ class Admin extends CI_Controller {
 		$row = $hsl->row_array();
 		$v = $row['vid'];
 		//var_dump($row);
-		redirect('/home/', 'refresh');
+		redirect('/home/view/'.$v, 'refresh');
 	}
 
 	public function vedit($id)
@@ -139,7 +139,7 @@ class Admin extends CI_Controller {
 
 	}
 
-	public function edit1()
+	public function edit()
 	{
 		$noarsip=trim($this->input->post('noarsip'));
 		$tanggal=trim($this->input->post('tanggal'));
@@ -172,11 +172,12 @@ class Admin extends CI_Controller {
 			$q = "update data_arsip set noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file',jumlah='$jumlah',pencipta=$pencipta,unit_pengolah=$unitpengolah,lokasi=$lokasi,media=$media where id=$id";
 			$hsl = $this->db->query($q);
 		}
-		if($previous=="") {
-			redirect('/home/', 'refresh');
+		redirect('/home/view/'.$id, 'refresh');
+		/* if($previous=="") {
+			redirect('/home/view/'.$id, 'refresh');
 		}else {
 			header('Location: ' . $previous);
-		}
+		} */
 	}
 
 	public function delfile()
@@ -604,13 +605,27 @@ class Admin extends CI_Controller {
 		$this->__output('vuser',$data);
 
 	}
+	
+	public function cekuser()
+	{
+		$username = trim($this->input->post('username'));
+		$q = "select username from master_user where username='$username'";
+		$hsl = $this->db->query($q)->row_array();
+		if($hsl['username']==$username) {
+			echo json_encode(['msg'=>'error']);
+		}else {
+			echo json_encode(['msg'=>'ok']);
+		}
+	}
 
 	public function adduser()
 	{
 		$username = trim($this->input->post('username'));
 		$password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
 		$tipe = trim($this->input->post('tipe'));
-		$q = "insert into master_user (username,password,tipe) values ('$username', '$password','$tipe')";
+		$akses_klas = trim($this->input->post('akses_klas'));
+		$akses_modul = json_encode($this->input->post('modul'));
+		$q = "insert into master_user (username,password,tipe,akses_klas,akses_modul) values ('$username', '$password','$tipe','$akses_klas','$akses_modul')";
 		$hsl = $this->db->query($q);
 
 	}
@@ -618,12 +633,17 @@ class Admin extends CI_Controller {
 	public function eduser()
 	{
 		$username = trim($this->input->post('username'));
-		$password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+		$password = "";
+		if($this->input->post('password')!="") {
+			$password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+		}
 		$tipe = trim($this->input->post('tipe'));
+		$akses_klas = trim($this->input->post('akses_klas'));
+		$akses_modul = json_encode($this->input->post('modul'));
 		$id = trim($this->input->post('id'));
 		$q = "update master_user set username='$username'";
 		if($password!="") $q .= ",password='$password'";
-		$q .= ",tipe='$tipe' where id=$id";
+		$q .= ",tipe='$tipe',akses_klas='$akses_klas',akses_modul='$akses_modul' where id=$id";
 		$hsl = $this->db->query($q);
 	}
 
@@ -655,7 +675,8 @@ class Admin extends CI_Controller {
 			<thead>
 				<th class='width-sm'>No</th>
 				<th>Username</th>
-				<th>Tipe</th>
+				<th>Akses Klasifikasi</th>
+				<th>Akses Modul</th>
 				<th class='width-sm'></th>
 				<th class='width-sm'></th>
 			</thead>";
@@ -664,7 +685,18 @@ class Admin extends CI_Controller {
 				echo "<tr>";
                 echo "<td>".$no."</td>";
                 echo "<td>".$u['username']."</td>";
-                echo "<td>".$u['tipe']."</td>";
+                echo "<td>".$u['akses_klas']."</td>";
+                echo "<td>";
+				$mm = $u['akses_modul'];
+				if($mm!="") {
+					$mm = json_decode($mm);
+					if($mm) {
+						foreach($mm as $key=>$val) {
+							echo $key.",";
+						}
+					}
+				}
+				echo "</td>";
                 echo "<td><a data-toggle=\"modal\" data-target=\"#edituser\" class='eduser' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
                 echo "<td><a data-toggle=\"modal\" data-target=\"#deluser\" class='deluser' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";

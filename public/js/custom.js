@@ -1,18 +1,14 @@
 $(document).ready(function () {
-	var dir_site = "/arteri/index.php";
-	var dir_site2 = "/arteri";
-	var cur_dir = window.location.href;
-	var myurl = document.location.protocol + "//" + document.location.hostname + "" + dir_site
-	cur_dir = cur_dir.split('/');
-
 	var url = $(location).attr('href');
 	var segments = url.split('/');
 	
 	//console.log(base_url);
 	//console.log(site_url);
 	
-	$("#tanggal, .hasDatepicker, .hasDatePicker").datepicker({ maxDate: '0', changeMonth: true, changeYear: true, dateFormat: "yyyy-mm-dd" });
-	////////////////
+	$("#tanggal").datepicker({ maxDate: '0', changeMonth: true, changeYear: true, dateFormat: "yy-mm-dd" });
+	$("#tgl_pinjam").datepicker({ maxDate: '0', changeMonth: true, changeYear: true, dateFormat: "yy-mm-dd" });
+	$("#tgl_haruskembali").datepicker({changeMonth: true, changeYear: true, dateFormat: "yy-mm-dd" });
+	//////////////// del data arsip
 	$(".deldata").click(function(){
 		var d = $(this).attr('id')
 		$("#deliddata").val(d);
@@ -26,7 +22,35 @@ $(document).ready(function () {
 		$('#deldata').modal('hide');
 		window.location.reload(true);
 	}
-	////////////////
+	//////////////// del data sirkulasi
+	$(".sdeldata").click(function(){
+		var d = $(this).attr('id')
+		$("#deliddata").val(d);
+	});
+	$('#sdeldatago').click(function () {
+		$('#fsdeldata').submit();
+	});
+	$('#fsdeldata').ajaxForm({ success: sdeldata });
+	function sdeldata() {
+		alert("Data telah sukses dihapus");
+		$('#deldata').modal('hide');
+		window.location.reload(true);
+	}
+	//////////////// kembalikan arsip sirkulasi
+	$(".kemdata").click(function(){
+		var d = $(this).attr('id')
+		$("#kemid").val(d);
+	});
+	$('#kemarsipgo').click(function () {
+		$('#fkemarsip').submit();
+	});
+	$('#fkemarsip').ajaxForm({ success: kembdata });
+	function kembdata() {
+		alert("Arsip telah sukses dikembalikan");
+		$('#arsipkembali').modal('hide');
+		window.location.reload(true);
+	}
+	//////////////// delete file attachment
 	$('#delfilego').click(function () {
 		$('#fdelfile').submit();
 	});
@@ -52,7 +76,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$("#deliduser").val(d);
 	});
-
+	
 	$('#delusergo').click(function () {
 		$('#fdeluser').submit();
 	});
@@ -69,11 +93,26 @@ $(document).ready(function () {
 	function eduser() {
 		alert("Data telah sukses disimpan");
 		reloaduser();
+		$("#feduser")[0].reset();
 		$('#edituser').modal('hide');
 	}
 
 	$('#addusergo').click(function () {
-		$('#fadduser').submit();
+		var d = $("#username").val();
+		$.ajax({
+			type: "POST",
+			url: site_url + "/admin/cekuser/",
+			data: "username=" + d,
+			cache: false,
+			success: function (ahtml) {
+				html = jQuery.parseJSON(ahtml);
+				if(html.msg=="ok") {
+					$('#fadduser').submit();
+				}else {
+					alert('username sudah terpakai!');
+				}
+			}
+		})
 	});
 	$('#fadduser').ajaxForm({ success: adduser });
 	function adduser() {
@@ -92,9 +131,24 @@ $(document).ready(function () {
 			cache: false,
 			success: function (ahtml) {
 				html = jQuery.parseJSON(ahtml);
+				$("#feduser")[0].reset();
 				$("#eusername").val(html.username);
 				$("#etipe").val(html.tipe);
+				$("#eakses_klas").val(html.akses_klas);
 				$("#ediduser").val(html.id);
+				if(html.akses_modul!="") {
+					var akses_modul = jQuery.parseJSON(html.akses_modul);
+					if(typeof akses_modul =='object') {
+						if(akses_modul.entridata=='on') $("#emodul1").prop('checked', true);
+						if(akses_modul.sirkulasi=='on') $("#emodul2").prop('checked', true);
+						if(akses_modul.klasifikasi=='on') $("#emodul3").prop('checked', true);
+						if(akses_modul.pencipta=='on') $("#emodul4").prop('checked', true);
+						if(akses_modul.pengolah=='on') $("#emodul5").prop('checked', true);
+						if(akses_modul.lokasi=='on') $("#emodul6").prop('checked', true);
+						if(akses_modul.media=='on') $("#emodul7").prop('checked', true);
+						if(akses_modul.user=='on') $("#emodul8").prop('checked', true);
+					}
+				}
 			}
 		})
 	}));
@@ -389,6 +443,15 @@ $(document).ready(function () {
 			}
 		})
 	}));
+	////////////
+	$('#kode').chosen();
+	$('#zkode').chosen({width: "160px"});
+	$('#pencipta').chosen();
+	$('#unitpengolah').chosen();
+	$('#lokasi').chosen();
+	$('#media').chosen();
+	$('#snoarsip').chosen();
+	$('#username_peminjam').chosen();
 	////////////
 	function formatnumber(x) {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

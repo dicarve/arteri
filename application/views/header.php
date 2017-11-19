@@ -20,6 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery-ui.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery-ui.structure.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery-ui.theme.min.css') ?>" />
+	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/chosen.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/custom.css') ?>" />
 	<script>
 		var base_url = '<?php echo base_url(); ?>';
@@ -55,17 +56,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="collapse navbar-collapse" id="arteri-main-menu">
                 <ul class="nav navbar-nav">
 					<?php
-						if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') {
+						if(isset($_SESSION['akses_modul']['entridata']) && $_SESSION['akses_modul']['entridata']=='on') {
+                            echo '<li><a href="'.site_url('/admin/entr').'"><i class="glyphicon glyphicon-plus"></i> Entri Data Baru</a></li>';
+						}
+						if(isset($_SESSION['akses_modul']['sirkulasi']) && $_SESSION['akses_modul']['sirkulasi']=='on') {
                             echo '<li><a href="'.site_url('/sirkulasi').'"><i class="glyphicon glyphicon-refresh"></i> Sirkulasi</a></li>';
+						}
+						if($_SESSION['menu_master']) 
+						{
 							echo '<li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <i class="glyphicon glyphicon-th-large"></i> Data Master <span class="caret"></span></a><ul class="dropdown-menu">';
-							echo "<li><a href=\"".site_url('admin/klas')."\"><i class=\"glyphicon glyphicon-tag\"></i> Klasifikasi</a></li>";
-							echo "<li><a href=\"".site_url('admin/penc')."\"><i class=\"glyphicon glyphicon-home\"></i> Pencipta arsip</a></li>";
-							echo "<li><a href=\"".site_url('admin/pengolah')."\"><i class=\"glyphicon glyphicon-home\"></i> Unit Pengolah</a></li>";
-							echo "<li><a href=\"".site_url('admin/lokasi')."\"><i class=\"glyphicon glyphicon-map-marker\"></i> Lokasi</a></li>";
-							echo "<li><a href=\"".site_url('admin/media')."\"><i class=\"glyphicon glyphicon-film\"></i> Media</a></li>";
-							echo "<li><a href=\"".site_url('admin/vuser')."\"><i class=\"glyphicon glyphicon-user\"></i> User</a></li>";
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							<i class="glyphicon glyphicon-th-large"></i> Data Master <span class="caret"></span></a><ul class="dropdown-menu">';
+							if(isset($_SESSION['akses_modul']['klasifikasi']) && $_SESSION['akses_modul']['klasifikasi']=='on') {
+								echo "<li><a href=\"".site_url('admin/klas')."\"><i class=\"glyphicon glyphicon-tag\"></i> Klasifikasi</a></li>";
+							}
+							if(isset($_SESSION['akses_modul']['pencipta']) && $_SESSION['akses_modul']['pencipta']=='on') {
+								echo "<li><a href=\"".site_url('admin/penc')."\"><i class=\"glyphicon glyphicon-home\"></i> Pencipta arsip</a></li>";
+							}
+							if(isset($_SESSION['akses_modul']['pengolah']) && $_SESSION['akses_modul']['pengolah']=='on') {
+								echo "<li><a href=\"".site_url('admin/pengolah')."\"><i class=\"glyphicon glyphicon-home\"></i> Unit Pengolah</a></li>";
+							}
+							if(isset($_SESSION['akses_modul']['lokasi']) && $_SESSION['akses_modul']['lokasi']=='on') {
+								echo "<li><a href=\"".site_url('admin/lokasi')."\"><i class=\"glyphicon glyphicon-map-marker\"></i> Lokasi</a></li>";
+							}
+							if(isset($_SESSION['akses_modul']['media']) && $_SESSION['akses_modul']['media']=='on') {
+								echo "<li><a href=\"".site_url('admin/media')."\"><i class=\"glyphicon glyphicon-film\"></i> Media</a></li>";
+							}
+							if(isset($_SESSION['akses_modul']['user']) && $_SESSION['akses_modul']['user']=='on') {
+								echo "<li><a href=\"".site_url('admin/vuser')."\"><i class=\"glyphicon glyphicon-user\"></i> User</a></li>";
+							}
 							echo "</ul>
 							</li>";
 						}

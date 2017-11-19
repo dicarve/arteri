@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="module-submenu">
       <ul class="nav navbar-nav navbar-right">
-	       <?php if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') : ?>
+	       <?php if(isset($_SESSION['akses_modul']['lokasi']) && $_SESSION['akses_modul']['lokasi']=='on') : ?>
 	       <li><a href="#" data-toggle="modal" data-target="#addlok"><i class="glyphicon glyphicon-plus"></i> Entry Data Baru</a></li>
         <?php endif; ?>
       </ul>

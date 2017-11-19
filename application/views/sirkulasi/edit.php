@@ -25,16 +25,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   </div><!-- /.container-fluid -->
 </nav>
 
-<form class="form-horizontal" data-toggle="validator" action="<?php echo site_url('/sirkulasi/gentr'); ?>" method="post" enctype="multipart/form-data">
+<form class="form-horizontal" data-toggle="validator" action="<?php echo site_url('/sirkulasi/update'); ?>" method="post" enctype="multipart/form-data">
 
 <!-- Form Name -->
 <div class="container">
 <div class="col-md-12"> <!-- 1st column -->
-
+<input type="hidden" name="id" value="<?php echo $id; ?>">
 <div class="form-group">
 	<label class="col-md-2 control-label" for="noarsip">Nomor Arsip</label>
 	<div class="col-md-8">
-	<input id="noarsip" name="noarsip" class="form-control input-md" type="text" required>
+	<select id="snoarsip" name="noarsip" class="form-control input-md" required>
+	<?php
+		if(isset($noarsip2)){
+			foreach($noarsip2 as $k) {
+				echo "<option value='".$k['noarsip']."'".($noarsip==$k['noarsip']?"selected=selected":"")." >".$k['noarsip']."</option>";
+			}
+		}
+	?>
+	</select>
 	</div>
 	<div class="col-md-2">
 	  <button id="singlebutton" name="singlebutton" type="submit" class="btn btn-success"><i class="glyphicon glyphicon-save"></i> Simpan</button>
@@ -44,14 +52,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-2 control-label" for="username_peminjam">Username Peminjam</label>
 	<div class="col-md-8">
-	<input id="username_peminjam" name="username_peminjam" class="form-control input-md" type="text" required>
+	<select id="username_peminjam" name="username_peminjam" class="form-control input-md" required>
+	<?php
+		if(isset($username2)){
+			foreach($username2 as $k) {
+				echo "<option value='".$k['username']."'".($username_peminjam==$k['username']?"selected=selected":"")." >".$k['username']."</option>";
+			}
+		}
+	?>
+	</select>
 	</div>
 </div>
 
 <div class="form-group">
 	<label class="col-md-2 control-label" for="keperluan">Alasan keperluan peminjaman</label>
 	<div class="col-md-8">
-	<textarea id="keperluan" name="keperluan" class="form-control" row="3" required></textarea>
+	<textarea id="keperluan" name="keperluan" class="form-control" row="3" required><?php echo $keperluan; ?></textarea>
 	</div>
 </div>
 
@@ -60,7 +76,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div class="col-md-8">
   <div class="input-group">
     <div class="input-group-addon">(yyyy-mm-dd)</div>
-    <input id="tgl_pinjam" name="tgl_pinjam" class="form-control input-md hasDatepicker" type="text" value="<?php print $now ?>" required>
+    <input id="tgl_pinjam" name="tgl_pinjam" class="form-control input-md" type="text" value="<?php print $tgl_pinjam; ?>" required>
 	</div>
 	</div>
 </div>
@@ -70,7 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div class="col-md-8">
   <div class="input-group">
     <div class="input-group-addon">(yyyy-mm-dd)</div>
-    <input id="tgl_haruskembali" name="tgl_haruskembali" class="form-control input-md hasDatepicker" type="text" required>
+    <input id="tgl_haruskembali" name="tgl_haruskembali" class="form-control input-md" value="<?php print $tgl_haruskembali; ?>" type="text" required>
 	</div>
 	</div>
 </div>
