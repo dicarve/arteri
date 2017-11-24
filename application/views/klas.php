@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="module-submenu">
       <ul class="nav navbar-nav navbar-right">
-	       <?php if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') : ?>
+	       <?php if(isset($_SESSION['akses_modul']['klasifikasi']) && $_SESSION['akses_modul']['klasifikasi']=='on') : ?>
 	       <li><a href="#" data-toggle="modal" data-target="#addkode"><i class="glyphicon glyphicon-plus"></i> Entry Data Baru</a></li>
         <?php endif; ?>
       </ul>
@@ -75,7 +75,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<div class="form-group">
 				<label class="col-sm-2 control-label" for="kode">Kode</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="kode" name="kode" />
+					<input type="text" class="form-control" id="adkode" name="kode" />
 				</div>
 			</div>
             <div class="form-group">

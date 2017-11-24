@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="module-submenu">
       <ul class="nav navbar-nav navbar-right">
-	       <?php if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') : ?>
+	       <?php if(isset($_SESSION['akses_modul']['user']) && $_SESSION['akses_modul']['user']=='on') : ?>
 	       <li><a href="#" data-toggle="modal" data-target="#adduser"><i class="glyphicon glyphicon-plus"></i> Entry User Baru</a></li>
         <?php endif; ?>
       </ul>
@@ -37,6 +37,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <thead>
         <th class="width-sm">No</th>
         <th>Username</th>
+        <th>Akses Klasifikasi</th>
+        <th>Akses Modul</th>
         <th>Tipe</th>
         <th class="width-sm"></th>
         <th class="width-sm"></th>
@@ -48,7 +50,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 echo "<tr>";
                 echo "<td>".$no."</td>";
                 echo "<td>".$u['username']."</td>";
-                echo "<td>".$u['tipe']."</td>";
+                echo "<td>".$u['akses_klas']."</td>";
+                echo "<td>";
+				$mm = $u['akses_modul'];
+				if($mm!="") {
+					$mm = json_decode($mm);
+					if($mm) {
+						foreach($mm as $key=>$val) {
+							echo $key.",";
+						}
+					}
+				}
+				echo "</td>";
+				echo "<td>".$u['tipe']."</td>";
                 echo "<td><a data-toggle=\"modal\" data-target=\"#edituser\" class='eduser' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
                 echo "<td><a data-toggle=\"modal\" data-target=\"#deluser\" class='deluser' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
                 echo "</tr>";
@@ -81,6 +95,49 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<label class="col-sm-2 control-label" for="password">password</label>
 				<div class="col-sm-10">
 					<input type="password" class="form-control" id="password" name="password" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="username">Hak Akses Klasifikasi</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="akses_klas" name="akses_klas" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="username">Hak Akses Modul</label>
+				<div class="col-sm-10">
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="modul1" name="modul[entridata]">
+						Entri Data
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="modul2" name="modul[sirkulasi]">
+						Sirkulasi
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="modul3" name="modul[klasifikasi]">
+						Klasifikasi
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="modul4" name="modul[pencipta]">
+						Pencipta Arsip
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="modul5" name="modul[pengolah]">
+						Pengolah Arsip
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="modul6" name="modul[lokasi]">
+						Lokasi Arsip
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="modul7" name="modul[media]">
+						Media Arsip
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="modul8" name="modul[user]">
+						User
+					</label>
 				</div>
 			</div>
             <div class="form-group">
@@ -125,6 +182,49 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<label class="col-sm-2 control-label" for="password">password</label>
 				<div class="col-sm-10">
 					<input type="password" class="form-control" id="epassword" name="password" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="username">Hak Akses Klasifikasi</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="eakses_klas" name="akses_klas" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="username">Hak Akses Modul</label>
+				<div class="col-sm-10">
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="emodul1" name="modul[entridata]">
+						Entri Data
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="emodul2" name="modul[sirkulasi]">
+						Sirkulasi
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="emodul3" name="modul[klasifikasi]">
+						Klasifikasi
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="emodul4" name="modul[pencipta]">
+						Pencipta Arsip
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="emodul5" name="modul[pengolah]">
+						Pengolah Arsip
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="emodul6" name="modul[lokasi]">
+						Lokasi Arsip
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="emodul7" name="modul[media]">
+						Media Arsip
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="emodul8" name="modul[user]">
+						User
+					</label>
 				</div>
 			</div>
             <div class="form-group">

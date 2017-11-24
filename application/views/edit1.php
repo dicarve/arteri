@@ -1,23 +1,24 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<form class="form-horizontal" data-toggle="validator" action="<?php echo site_url('/admin/edit1'); ?>" method="post" enctype="multipart/form-data">
+<form class="form-horizontal" data-toggle="validator" action="<?php echo site_url('/admin/edit'); ?>" method="post" enctype="multipart/form-data">
 <fieldset>
 <input type="hidden" name="id" value="<?php echo $id ?>">
 <input type="hidden" name="previous" value="<?php echo $previous ?>">
 <!-- Form Name -->
 <legend>Entri Data</legend>
-
+<div class="row">
+<div class="col-md-6"> <!-- 1st column -->
 <div class="form-group">
 	<label class="col-md-4 control-label" for="noarsip">Nomor Arsip</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<input id="noarsip" name="noarsip" class="form-control input-md" type="text" value="<?php echo $noarsip ?>">
 	</div>
 </div>
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="tanggal">Tanggal Penciptaan</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
   <div class="input-group">
     <div class="input-group-addon">(yyyy-mm-dd)</div>
     <input id="tanggal" name="tanggal" class="form-control input-md" type="text" value="<?php echo $tanggal ?>">
@@ -27,7 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="pencipta">Pencipta Arsip</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<select id="pencipta" name="pencipta" class="form-control input-md">
 	<?php
 		if(isset($pencipta2)){
@@ -42,7 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="unitpengolah">Unit Pengolah</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<select id="unitpengolah" name="unitpengolah" class="form-control input-md">
 	<?php
 		if(isset($unitpengolah2)){
@@ -57,7 +58,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="kode">Kode Klasifikasi</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<select id="kode" name="kode" class="form-control input-md">
 	<?php
 		if(isset($kode2)){
@@ -72,14 +73,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="uraian">Uraian</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
   <textarea id="uraian" name="uraian" class="form-control" rows="3"><?php echo $uraian ?></textarea>
 	</div>
 </div>
+</div><!-- /1st column -->
 
+<div class="col-md-6"><!-- 2nd column -->
 <div class="form-group">
 	<label class="col-md-4 control-label" for="lokasi">Lokasi Arsip</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<select id="lokasi" name="lokasi" class="form-control input-md">
 	<?php
 		if(isset($lokasi2)){
@@ -94,7 +97,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="media">Jenis Media</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<select id="media" name="media" class="form-control input-md">
 	<?php
 		if(isset($media2)){
@@ -109,7 +112,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="ket">Keterangan Keaslian</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<select class="form-control" name="ket" id="ket">
       <option value="asli" <?php echo ($ket=='asli'?"selected=selected":"") ?> >Asli</option>
       <option value="copy" <?php echo ($ket=='copy'?"selected=selected":"") ?> >Copy</option>
@@ -119,21 +122,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="jumlah">Jumlah</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<input id="jumlah" name="jumlah" class="form-control input-md" type="text" value="<?php echo $jumlah ?>">
 	</div>
 </div>
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="nobox">Nomor Box</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<input id="nobox" name="nobox" class="form-control input-md" type="text" value="<?php echo $nobox ?>">
 	</div>
 </div>
 
 <div class="form-group">
 	<label class="col-md-4 control-label" for="nobox">File</label>
-	<div class="col-md-4">
+	<div class="col-md-8">
 	<?php
 		if($file!="") {
 			echo "<span id='linkfile' class='form-control'><a href='".base_url('files/'.$file)."'>$file</a><span class='pull-right'><a href='#' data-toggle=\"modal\" data-target=\"#delfile\"><span class='glyphicon glyphicon-remove' style='color:red' aria-hidden='true'></span></a></span></span>";
@@ -150,10 +153,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="form-group">
   <label class="col-md-4 control-label" for="singlebutton"></label>
-  <div class="col-md-4">
+  <div class="col-md-8">
     <button id="singlebutton" name="singlebutton" class="btn btn-success">Simpan</button>
   </div>
 </div>
+
+</div><!-- /2nd column -->
+</div><!-- /.row -->
 
 
 </fieldset>
@@ -185,6 +191,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 function return_bytes($val) {
     $val = trim($val);
     $last = strtolower($val[strlen($val)-1]);
+	$val = (int)trim($val);
     switch($last)
     {
         case 'g':

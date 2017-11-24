@@ -34,7 +34,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-2 control-label" for="noarsip">Nomor Arsip</label>
 	<div class="col-md-8">
-	<input id="noarsip" name="noarsip" class="form-control input-md" type="text" required>
+	<select id="snoarsip" name="noarsip" class="form-control input-md" required>
+	<?php
+		if(isset($noarsip2)){
+			foreach($noarsip2 as $k) {
+				echo "<option value='".$k['noarsip']."' >".$k['noarsip']."</option>";
+			}
+		}
+	?>
+	</select>
 	</div>
 	<div class="col-md-2">
 	  <button id="singlebutton" name="singlebutton" type="submit" class="btn btn-success"><i class="glyphicon glyphicon-save"></i> Simpan</button>
@@ -44,7 +52,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-2 control-label" for="username_peminjam">Username Peminjam</label>
 	<div class="col-md-8">
-	<input id="username_peminjam" name="username_peminjam" class="form-control input-md" type="text" required>
+	<select id="username_peminjam" name="username_peminjam" class="form-control input-md" required>
+	<?php
+		if(isset($username2)){
+			foreach($username2 as $k) {
+				echo "<option value='".$k['username']."' >".$k['username']."</option>";
+			}
+		}
+	?>
+	</select>
 	</div>
 </div>
 
@@ -60,7 +76,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div class="col-md-8">
   <div class="input-group">
     <div class="input-group-addon">(yyyy-mm-dd)</div>
-    <input id="tgl_pinjam" name="tgl_pinjam" class="form-control input-md hasDatepicker" type="text" value="<?php print $now ?>" required>
+    <input id="tgl_pinjam" name="tgl_pinjam" class="form-control input-md" type="text" value="<?php print $now ?>" required>
 	</div>
 	</div>
 </div>
@@ -70,7 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div class="col-md-8">
   <div class="input-group">
     <div class="input-group-addon">(yyyy-mm-dd)</div>
-    <input id="tgl_haruskembali" name="tgl_haruskembali" class="form-control input-md hasDatepicker" type="text" required>
+    <input id="tgl_haruskembali" name="tgl_haruskembali" class="form-control input-md" type="text" required>
 	</div>
 	</div>
 </div>

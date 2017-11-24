@@ -24,9 +24,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="module-submenu">
           <ul class="nav navbar-nav navbar-right">
-			<?php if(isset($_SESSION['tipe']) && $_SESSION['tipe']=='admin') : ?>
-			<li><a href="<?php echo site_url('/admin/entr'); ?>"><i class="glyphicon glyphicon-plus"></i> Entry Data Baru</a></li>
-            <?php endif; ?>
 			<li><a href="#" role="button" data-toggle="collapse" data-target="#advanced-search" 
 			  aria-expanded="false" aria-controls="advanced-search" 
 			  class="open-advanced-search"><i class="glyphicon glyphicon-search"></i> Pencarian Lanjut</a></li>
@@ -111,7 +108,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<option value="copy" <?php echo ($src['ket']=='copy'?'selected=selected':''); ?> >Copy</option>
 			</select>
 			<span class = "input-group-addon">Kode Klasifikasi</span>
-			<select class="form-control" name="kode" id="kode">
+			<select class="form-control" name="kode" id="zkode">
 				<option value="all" >Semua</option>
 				<?php
 					if(isset($kode)) {
@@ -121,6 +118,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					}
 				?>
 			</select>
+			<span class = "input-group-addon">No. Box</span>
+			<input id="nobox" name="nobox" class="form-control input-md" type="text" value="<?php echo $src['nobox'] ?>">
 			<span class="input-group-btn">
 				<button class="btn btn-primary" type="submit" id="go"> Cari</button>
 			</span>
@@ -177,12 +176,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							echo "<td ".($a['f']=='sudah'?"class='danger'":"").">".$a['b']."</td>";
 							echo "<td><a href='".site_url('home/view/'.$a['id'])."' ><i class=\"glyphicon glyphicon-search\"></i></a></td>";
 							echo "<td>";
-							if($this->session->tipe=='admin') {
+							if(isset($_SESSION['akses_modul']['entridata']) && $_SESSION['akses_modul']['entridata']=='on') {
 								echo "<a href='".site_url('/admin/vedit/'.$a['id'])."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a>";
 							}
 							echo "</td>";
 							echo "<td>";
-							if($this->session->tipe=='admin') {
+							if(isset($_SESSION['akses_modul']['entridata']) && $_SESSION['akses_modul']['entridata']=='on') {
 								echo "<a class='deldata' id='".$a['id']."' href='#' data-toggle=\"modal\" data-target=\"#deldata\"><i class=\"glyphicon glyphicon-trash\"></i></a>";
 							}
 							echo "</td>";

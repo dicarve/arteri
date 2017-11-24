@@ -33,7 +33,7 @@ class Sirkulasi extends CI_Controller {
 		$w = array();
 		if ($katakunci) {
 		  // simple search
-		  $w[] = " noarsip like '%".$katakunci."%'";
+		  $w[] = " s.noarsip like '%".$katakunci."%'";
 		  $w[] = " username_peminjam like '%".$katakunci."%'";
 		  $w[] = " keperluan like '%".$katakunci."%'";
 		}
@@ -106,6 +106,10 @@ class Sirkulasi extends CI_Controller {
 		$data["title"]="Tambah Data Peminjaman";
         $date = new DateTime();
         $data['now'] =$date->format('Y-m-d');
+		$q = "select distinct noarsip from data_arsip order by noarsip asc";
+		$data['noarsip2'] = $this->db->query($q)->result_array();
+		$q = "select username from master_user order by username asc";
+		$data['username2'] = $this->db->query($q)->result_array();
         
 		$this->__output('sirkulasi/entri',$data);
 	}
@@ -123,6 +127,7 @@ class Sirkulasi extends CI_Controller {
 
 		$q = "INSERT INTO sirkulasi VALUES (NULL, '$noarsip','$username_peminjam','$keperluan','$tgl_pinjam',
             '$tgl_haruskembali', NULL, NOW());";
+		//echo $q; die();
 		$hsl = $this->db->query($q);
 		//var_dump($row);
 		redirect('/sirkulasi/', 'refresh');
@@ -140,6 +145,10 @@ class Sirkulasi extends CI_Controller {
 				$row['previous'] = $previous;
 			}
 			$row["title"]="Update Data Peminjaman";
+			$q = "select distinct noarsip from data_arsip order by noarsip asc";
+			$row['noarsip2'] = $this->db->query($q)->result_array();
+			$q = "select username from master_user order by username asc";
+			$row['username2'] = $this->db->query($q)->result_array();
 			if(count($row)>0) {
 				$this->__output('sirkulasi/edit',$row);
 			}else{
@@ -153,55 +162,40 @@ class Sirkulasi extends CI_Controller {
 
 	public function update()
 	{
-		$noarsip=trim($this->input->post('noarsip'));
-		$tanggal=trim($this->input->post('tanggal'));
-		$uraian=trim($this->input->post('uraian'));
-		$kode=trim($this->input->post('kode'));
-		$ket=trim($this->input->post('ket'));
-		$pencipta=trim($this->input->post('pencipta'));
-		$unitpengolah=trim($this->input->post('unitpengolah'));
-		$lokasi=trim($this->input->post('lokasi'));
-		$media=trim($this->input->post('media'));
-		$nobox=trim($this->input->post('nobox'));
-		$jumlah=trim($this->input->post('jumlah'));
 		$id=trim($this->input->post('id'));
-		$previous=trim($this->input->post('previous'));
-		$file="";
-		$config['upload_path'] = 'files/';
-		$config['allowed_types'] = 'pdf|docx|doc';
-		$this->load->library('upload', $config);
-		if ($this->upload->do_upload('file')) {
-			$datafile=$this->upload->data();
-			//$file = $datafile['full_path'];
-			$file = $datafile['file_name'];
-		}else {
-			$q = "select file from sirkulasi where id=$id";
-			$d = $this->db->query($q)->row_array()['file'];
-			$file=$d;
+		$noarsip=trim($this->input->post('noarsip'));
+		$username_peminjam=trim($this->input->post('username_peminjam'));
+		$keperluan=trim($this->input->post('keperluan'));
+		$tgl_pinjam=trim($this->input->post('tgl_pinjam'));
+		$tgl_haruskembali=trim($this->input->post('tgl_haruskembali'));
+		$previous = "";
+		if(isset($_SERVER['HTTP_REFERER'])) {
+			$previous = $_SERVER['HTTP_REFERER'];
+			$row['previous'] = $previous;
 		}
-
 		if(isset($_POST)) {
-			$q = "update sirkulasi set noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file',jumlah='$jumlah',pencipta=$pencipta,unit_pengolah=$unitpengolah,lokasi=$lokasi,media=$media where id=$id";
+			$q = "update sirkulasi set noarsip='$noarsip',username_peminjam='$username_peminjam',keperluan='$keperluan',tgl_pinjam='$tgl_pinjam',tgl_haruskembali='$tgl_haruskembali' where id=$id";
 			$hsl = $this->db->query($q);
 		}
-		if($previous=="") {
-			redirect('/home/', 'refresh');
+		redirect('/sirkulasi', 'refresh');
+		/* if($previous=="") {
+			redirect('/sirkulasi', 'refresh');
 		}else {
 			header('Location: ' . $previous);
-		}
+		} */
 	}
 
 	public function del()
 	{
 		$id=trim($this->input->post('id'));
-		$q = "select file from sirkulasi where id=$id";
-		$hsl = $this->db->query($q);
-		$row = $hsl->row_array()['file'];
-		if($row!=""){
-			$alamat = ROOTPATH."/files/".$row;
-			unlink($alamat);
-		}
 		$q = "delete from sirkulasi where id=$id";
+		$hsl = $this->db->query($q);
+	}
+	
+	public function kembalikan()
+	{
+		$id=trim($this->input->post('id'));
+		$q = "update sirkulasi set tgl_pengembalian=now() where id=$id";
 		$hsl = $this->db->query($q);
 	}
 }
