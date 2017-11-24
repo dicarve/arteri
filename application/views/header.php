@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a style="padding-top: 13px;" class="navbar-brand" href="<?php echo site_url('/home'); ?>"><img src="<?php echo base_url('/public/images/logo3-white-min.png'); ?>" alt="ARTERI" height="35"></a>
+                <a style="padding-top: 13px;" class="navbar-brand" href="<?php echo site_url('/home'); ?>"><img src="<?php echo base_url('/public/images/logo-horizontal.png'); ?>" alt="ARTERI" height="35"></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="arteri-main-menu">

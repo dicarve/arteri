@@ -11,7 +11,6 @@ body
   min-height: 100%;
   font-family: 'Actor', serif;
   background-size: cover;
-  background-repeat: no-repeat;
   background-position: middle center;
   background-image: url('../images/bg2.jpg');
   padding-bottom: 50px;

@@ -15,7 +15,7 @@
     	<div class="container" id="formContainer">
 
           <form class="form-signin" id="login" role="form" method="post" action="<?php echo site_url('/home/gologin'); ?>">
-		  <p align="center"><img src="<?php echo base_url("/public/logo4.png");?>" class="img-responsive"></p>
+		  <p align="center"><img src="<?php echo base_url("/public/logo-full.png");?>" class="img-responsive"></p>
             <h5 class="form-signin-heading"><p align="center">Masukkan username dan password anda</p></h5>
 			<?php
 			if($this->session->flashdata('erorlogin')) {

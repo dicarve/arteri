@@ -80,7 +80,7 @@ body
   border-top: 2px solid #aaa;
   box-shadow:  0 2px 10px rgba(0,0,0,0.8);
   width:288px;
-  height:450px;
+  min-height:500px;
   margin:0 auto;
   position:relative;
   z-index:1;
