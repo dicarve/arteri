@@ -182,6 +182,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 function return_bytes($val) {
     $val = trim($val);
     $last = strtolower($val[strlen($val)-1]);
+	$val = (int)trim($val);
     switch($last)
     {
         case 'g':
