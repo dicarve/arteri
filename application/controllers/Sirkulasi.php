@@ -96,6 +96,9 @@ class Sirkulasi extends CI_Controller {
     
 	private function __output($nview,$data=null)
 	{
+		if ($this->session->tipe == 'admin') {
+			$data['admin'] = true;
+		}
 		$this->load->view('header',$data);
 		$this->load->view($nview,$data);
 		$this->load->view('footer');
@@ -106,10 +109,10 @@ class Sirkulasi extends CI_Controller {
 		$data["title"]="Tambah Data Peminjaman";
         $date = new DateTime();
         $data['now'] =$date->format('Y-m-d');
-		$q = "select distinct noarsip from data_arsip order by noarsip asc";
-		$data['noarsip2'] = $this->db->query($q)->result_array();
-		$q = "select username from master_user order by username asc";
-		$data['username2'] = $this->db->query($q)->result_array();
+		// $q = "select distinct noarsip from data_arsip order by noarsip asc";
+		// $data['noarsip2'] = $this->db->query($q)->result_array();
+		// $q = "select username from master_user order by username asc";
+		// $data['username2'] = $this->db->query($q)->result_array();
         
 		$this->__output('sirkulasi/entri',$data);
 	}
@@ -188,14 +191,57 @@ class Sirkulasi extends CI_Controller {
 	public function del()
 	{
 		$id=trim($this->input->post('id'));
-		$q = "delete from sirkulasi where id=$id";
-		$hsl = $this->db->query($q);
+		$q = "delete from sirkulasi where id=?";
+		$hsl = $this->db->query($q, array($id));
 	}
 	
 	public function kembalikan()
 	{
 		$id=trim($this->input->post('id'));
-		$q = "update sirkulasi set tgl_pengembalian=now() where id=$id";
-		$hsl = $this->db->query($q);
+		$q = "update sirkulasi set tgl_pengembalian=now() where id=?";
+		$hsl = $this->db->query($q, array($id));
+	}
+
+	public function xhr_arsip($keywords = '')
+	{
+		$data = array();
+		$keywords = trim($keywords);
+		if (!$keywords) {
+			header('Content-Type: application/json');
+			exit('[]');
+		}
+
+		$this->db->select('noarsip,kode,nobox');
+		$this->db->like('noarsip', $keywords, 'after');
+		$this->db->or_like('kode', $keywords, 'after');
+		$this->db->limit(10);
+		$hsl = $this->db->get('data_arsip')->result();
+        foreach($hsl as $r) {
+          $data[] = $r;
+		}
+		header('Content-Type: application/json');
+		echo json_encode($data);
+		exit();
+	}
+
+	public function xhr_user($keywords = '')
+	{
+		$data = array();
+		$keywords = trim($keywords);
+		if (!$keywords) {
+			header('Content-Type: application/json');
+			exit('[]');
+		}
+
+		$this->db->select('username,id,tipe,akses_klas');
+		$this->db->like('username', $keywords, 'after');
+		$this->db->limit(10);
+		$hsl = $this->db->get('master_user')->result();
+        foreach($hsl as $r) {
+          $data[] = $r;
+		}		
+		header('Content-Type: application/json');		
+		echo json_encode($data);
+		exit();
 	}
 }

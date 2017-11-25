@@ -34,15 +34,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-2 control-label" for="noarsip">Nomor Arsip</label>
 	<div class="col-md-8">
-	<select id="snoarsip" name="noarsip" class="form-control input-md" required>
-	<?php
-		if(isset($noarsip2)){
-			foreach($noarsip2 as $k) {
-				echo "<option value='".$k['noarsip']."' >".$k['noarsip']."</option>";
-			}
-		}
-	?>
-	</select>
+	<input type="text" id="snoarsip" name="noarsip" class="form-control xhr"
+	  placeholder="Ketikan 3 huruf/angka pertama kode arsip atau klasifikasi arsip" 
+	  data-xhr="<?php echo site_url('/sirkulasi/xhr_arsip'); ?>" autocomplete="off" required />
 	</div>
 	<div class="col-md-2">
 	  <button id="singlebutton" name="singlebutton" type="submit" class="btn btn-success"><i class="glyphicon glyphicon-save"></i> Simpan</button>
@@ -52,15 +46,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-2 control-label" for="username_peminjam">Username Peminjam</label>
 	<div class="col-md-8">
-	<select id="username_peminjam" name="username_peminjam" class="form-control input-md" required>
-	<?php
-		if(isset($username2)){
-			foreach($username2 as $k) {
-				echo "<option value='".$k['username']."' >".$k['username']."</option>";
-			}
-		}
-	?>
-	</select>
+	<input type="text" id="username_peminjam" name="username_peminjam" class="form-control xhr" 
+	  placeholder="Ketikan 3 huruf pertama username yang akan meminjam"
+	  data-xhr="<?php echo site_url('/sirkulasi/xhr_user'); ?>" autocomplete="off" required />
 	</div>
 </div>
 

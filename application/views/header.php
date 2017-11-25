@@ -20,7 +20,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery-ui.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery-ui.structure.min.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery-ui.theme.min.css') ?>" />
-	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/chosen.min.css') ?>" />
+	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/chosen.css') ?>" />
+	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/jquery.auto-complete.css') ?>" />
 	<link type="text/css" rel="stylesheet" href="<?php echo base_url('/public/css/custom.css') ?>" />
 	<script>
 		var base_url = '<?php echo base_url(); ?>';

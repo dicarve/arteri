@@ -17,6 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <script src="<?php echo base_url('/public/js/jquery-ui.min.js')?>"></script>
 <script src="<?php echo base_url('/public/js/jquery.form.min.js')?>"></script>
 <script src="<?php echo base_url('/public/js/chosen.jquery.min.js')?>"></script>
+<script src="<?php echo base_url('/public/js/jquery.auto-complete.min.js')?>"></script>
 <script src="<?php echo base_url('/public/js/custom.js')?>"></script>
 
 </body>

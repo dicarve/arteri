@@ -444,14 +444,7 @@ $(document).ready(function () {
 		})
 	}));
 	////////////
-	$('#kode').chosen();
-	$('#zkode').chosen({width: "160px"});
-	$('#pencipta').chosen();
-	$('#unitpengolah').chosen();
-	$('#lokasi').chosen();
-	$('#media').chosen();
-	$('#snoarsip').chosen();
-	$('#username_peminjam').chosen();
+	$('.chosen').chosen();
 	////////////
 	function formatnumber(x) {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -459,5 +452,23 @@ $(document).ready(function () {
 
 	$('.trigger-submit').on('click', function(e) {
 		$('#singlebutton').trigger('click');
-	 });
+	});
+	
+	var xhr;
+	$('input.xhr').each(function() {
+		var obj = $(this);
+		obj.autoComplete({
+			minChars: 3,
+			source: function(term, response){
+				// try { xhr.abort(); } catch(e){}
+				xhr = $.getJSON(obj.attr('data-xhr')+'/'+term, { q: term }, function(data){ response(data); });
+			},
+			renderItem: function (item, search){
+				// convert ke array
+				var arr = Object.keys(item).map(function(k) { return item[k] });
+				return '<div class="autocomplete-suggestion" data-val="'+arr[0]+'">'+arr[0]+'</div>';
+			},
+		});
+	});
+
 });

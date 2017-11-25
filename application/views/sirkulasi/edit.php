@@ -34,15 +34,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-2 control-label" for="noarsip">Nomor Arsip</label>
 	<div class="col-md-8">
-	<select id="snoarsip" name="noarsip" class="form-control input-md" required>
-	<?php
-		if(isset($noarsip2)){
-			foreach($noarsip2 as $k) {
-				echo "<option value='".$k['noarsip']."'".($noarsip==$k['noarsip']?"selected=selected":"")." >".$k['noarsip']."</option>";
-			}
-		}
-	?>
-	</select>
+	<input type="text" value="<?php echo $noarsip ?>" id="snoarsip" name="noarsip" class="form-control disabled xhr"
+	  placeholder="Ketikan 3 huruf/angka pertama kode arsip atau klasifikasi arsip" 
+	  data-xhr="<?php echo site_url('/sirkulasi/xhr_arsip'); ?>" autocomplete="off" disabled required />
 	</div>
 	<div class="col-md-2">
 	  <button id="singlebutton" name="singlebutton" type="submit" class="btn btn-success"><i class="glyphicon glyphicon-save"></i> Simpan</button>
@@ -52,22 +46,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-2 control-label" for="username_peminjam">Username Peminjam</label>
 	<div class="col-md-8">
-	<select id="username_peminjam" name="username_peminjam" class="form-control input-md" required>
-	<?php
-		if(isset($username2)){
-			foreach($username2 as $k) {
-				echo "<option value='".$k['username']."'".($username_peminjam==$k['username']?"selected=selected":"")." >".$k['username']."</option>";
-			}
-		}
-	?>
-	</select>
+	<input type="text" value="<?php echo $username_peminjam ?>" id="username_peminjam" name="username_peminjam" class="form-control xhr" 
+	  placeholder="Ketikan 3 huruf pertama username yang akan meminjam"
+	  data-xhr="<?php echo site_url('/sirkulasi/xhr_user'); ?>" autocomplete="off" disabled required />
 	</div>
 </div>
 
 <div class="form-group">
 	<label class="col-md-2 control-label" for="keperluan">Alasan keperluan peminjaman</label>
 	<div class="col-md-8">
-	<textarea id="keperluan" name="keperluan" class="form-control" row="3" required><?php echo $keperluan; ?></textarea>
+	<textarea id="keperluan" name="keperluan" class="form-control" row="3" disabled required><?php echo $keperluan; ?></textarea>
 	</div>
 </div>
 
@@ -76,7 +64,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div class="col-md-8">
   <div class="input-group">
     <div class="input-group-addon">(yyyy-mm-dd)</div>
-    <input id="tgl_pinjam" name="tgl_pinjam" class="form-control input-md" type="text" value="<?php print $tgl_pinjam; ?>" required>
+    <input id="tgl_pinjam" name="tgl_pinjam" class="form-control input-md" type="text" value="<?php print $tgl_pinjam; ?>" disabled required>
 	</div>
 	</div>
 </div>
@@ -86,7 +74,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div class="col-md-8">
   <div class="input-group">
     <div class="input-group-addon">(yyyy-mm-dd)</div>
-    <input id="tgl_haruskembali" name="tgl_haruskembali" class="form-control input-md" value="<?php print $tgl_haruskembali; ?>" type="text" required>
+    <input id="tgl_haruskembali" name="tgl_haruskembali" class="form-control input-md" value="<?php print $tgl_haruskembali; ?>" type="text" disabled required>
 	</div>
 	</div>
 </div>

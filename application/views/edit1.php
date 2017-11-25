@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-4 control-label" for="pencipta">Pencipta Arsip</label>
 	<div class="col-md-8">
-	<select id="pencipta" name="pencipta" class="form-control input-md">
+	<select id="pencipta" name="pencipta" class="form-control input-md chosen">
 	<?php
 		if(isset($pencipta2)){
 			foreach($pencipta2 as $k) {
@@ -44,7 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-4 control-label" for="unitpengolah">Unit Pengolah</label>
 	<div class="col-md-8">
-	<select id="unitpengolah" name="unitpengolah" class="form-control input-md">
+	<select id="unitpengolah" name="unitpengolah" class="form-control input-md chosen">
 	<?php
 		if(isset($unitpengolah2)){
 			foreach($unitpengolah2 as $k) {
@@ -59,7 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-4 control-label" for="kode">Kode Klasifikasi</label>
 	<div class="col-md-8">
-	<select id="kode" name="kode" class="form-control input-md">
+	<select id="kode" name="kode" class="form-control input-md chosen">
 	<?php
 		if(isset($kode2)){
 			foreach($kode2 as $k) {
@@ -83,7 +83,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-4 control-label" for="lokasi">Lokasi Arsip</label>
 	<div class="col-md-8">
-	<select id="lokasi" name="lokasi" class="form-control input-md">
+	<select id="lokasi" name="lokasi" class="form-control input-md chosen">
 	<?php
 		if(isset($lokasi2)){
 			foreach($lokasi2 as $k) {
@@ -98,7 +98,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="form-group">
 	<label class="col-md-4 control-label" for="media">Jenis Media</label>
 	<div class="col-md-8">
-	<select id="media" name="media" class="form-control input-md">
+	<select id="media" name="media" class="form-control input-md chosen">
 	<?php
 		if(isset($media2)){
 			foreach($media2 as $k) {
