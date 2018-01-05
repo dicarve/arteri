@@ -94,9 +94,9 @@ class Home extends CI_Controller {
 			}
 		}
 
-		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
+		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,k.kode nama_kode,
 		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
-		  FROM data_arsip AS a JOIN master_kode AS k ON k.kode=a.kode";
+		  FROM data_arsip AS a JOIN master_kode AS k ON k.id=a.kode";
 		
 		if($_SESSION['akses_klas']!='') {
 			$k = explode(',',$_SESSION['akses_klas']);
@@ -108,7 +108,7 @@ class Home extends CI_Controller {
 		}
 		
 		if(count($klas)>0) {
-			$w[] = " a.kode regexp '".implode('|',$klas)."'";
+			$w[] = " k.kode regexp '".implode('|',$klas)."'";
 		}
 		//var_dump($w); die();
 		if ($katakunci) {
@@ -330,11 +330,12 @@ class Home extends CI_Controller {
 	{
 		$q="select a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,l.nama_lokasi,m.nama_media, 
 		DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
+		k.kode nama_kode,
 		(IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
 		from data_arsip a
 		left join master_pencipta p on p.id=a.pencipta
 		left join master_pengolah p2 on p2.id=a.unit_pengolah
-		left join master_kode k on k.kode=a.kode
+		left join master_kode k on k.id=a.kode
 		left join master_lokasi l on l.id=a.lokasi
 		left join master_media m on m.id=a.media
 		where a.id=$id";

@@ -53,7 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="view-group row">
 	<label class="col-md-6 control-label" for="kode">Kode Klasifikasi</label>
-	<label class="col-md-6 isi"><?php echo $kode." - ".$nama; ?></label>
+	<label class="col-md-6 isi"><?php echo $nama_kode." - ".$nama; ?></label>
 </div>
 
 <div class="view-group row">

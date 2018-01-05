@@ -85,7 +85,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<?php
 		if(isset($kode)){
 			foreach($kode as $k) {
-				echo "<option value='".$k['kode']."' >".$k['nama']." - ".$k['kode']."</option>";
+				echo "<option value='".$k['id']."' >".$k['nama']." - ".$k['kode']."</option>";
 			}
 		}
 	?>

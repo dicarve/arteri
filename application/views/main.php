@@ -163,7 +163,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							echo "<tr>";
 							echo "<td>".$a['noarsip']."</td>";
 							echo "<td>".$a['tanggal']."</td>";
-							echo "<td>".$a['kode']."</td>";
+							echo "<td>".$a['nama_kode']."</td>";
 							echo "<td>".$a['uraian']."</td>";
 							echo "<td>".$a['ket']."</td>";
 							if($a['file']=="") {
