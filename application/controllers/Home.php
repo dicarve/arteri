@@ -11,6 +11,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends CI_Controller {
 
+	/**
+	 * Controller class constructor
+	 * 
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -20,24 +24,27 @@ class Home extends CI_Controller {
 		}
 	}
 
-	public function index()
-	{
-		$this->search();
-	}
-
+	/**
+	 * Method to output complete page with header and footer
+	 * 
+	 */
 	protected function __output($nview,$data=null)
 	{
 		$this->load->view('header',$data);
 		$this->load->view($nview,$data);
 		$this->load->view('footer');
 	}
-    
-    protected function src($srcdata=false)
-    {
+	
+	/**
+	 * Method to compile SQL query based on search criteria
+	 * 
+	 */
+  protected function src($srcdata=false)
+  {
 		// simple search
 		$katakunci=filter_var($this->input->get('katakunci'),FILTER_SANITIZE_STRING);
 		// advanced search
-        $noarsip=filter_var($this->input->get('noarsip'),FILTER_SANITIZE_STRING);
+  	$noarsip=filter_var($this->input->get('noarsip'),FILTER_SANITIZE_STRING);
 		$tanggal=filter_var($this->input->get('tanggal'),FILTER_SANITIZE_STRING);
 		$uraian=filter_var($this->input->get('uraian'),FILTER_SANITIZE_STRING);
 		$ket=filter_var($this->input->get('ket'),FILTER_SANITIZE_STRING);
@@ -97,24 +104,25 @@ class Home extends CI_Controller {
 		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
 		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
 		  FROM data_arsip AS a JOIN master_kode AS k ON k.kode=a.kode";
-		
+
 		if($_SESSION['akses_klas']!='') {
 			$k = explode(',',$_SESSION['akses_klas']);
-			$k=array_filter($k);
+			$k = array_filter($k);
 			sort($k);
 			if(count($k)>0) {
 				$klas=array_merge($klas,$k);
 			}
 		}
-		
+	
 		if(count($klas)>0) {
 			$w[] = " a.kode regexp '".implode('|',$klas)."'";
 		}
+
 		//var_dump($w); die();
 		if ($katakunci) {
 			$q .= " WHERE".implode(" OR ",$w);
-            $src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'',"nobox"=>$nobox);
-            $qq = array($q, $src);
+  	    $src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'',"nobox"=>$nobox);
+  	  	$qq = array($q, $src);
 			return $qq;
 		} else {
 			if(count($w) > 0) {
@@ -122,21 +130,34 @@ class Home extends CI_Controller {
 			}
 		}
 
-        if($srcdata) {
-            $src = array("noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med,"nobox"=>$nobox);
-            $qq = array($q, $src);
-            return $qq;
-        }else {
-            return $q;
-        }
-        
+    if($srcdata) {
+      $src = array("noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med,"nobox"=>$nobox);
+      $qq = array($q, $src);
+      return $qq;
+    }else {
+      return $q;
     }
-    
+	}
+	
+	/**
+	 * Default route for Home controller
+	 * internal instance redirect to 'search' method
+	 * 
+	 */
+	public function index()
+	{
+		$this->search();
+	}
+
+	/**
+	 * Showing list of existing archives and search form
+	 * 
+	 */
 	public function search($offset=0)
 	{
 		$qq = $this->src(true); // var_dump($qq); die();
 		$q = $qq[0]; // var_dump($q); die();
-        $data['src']=$qq[1];
+    $data['src']=$qq[1];
         
 		//echo $q;
 		$q2 = $q;
@@ -192,66 +213,73 @@ class Home extends CI_Controller {
 
 		$this->__output('main',$data);
 	}
-    
-    public function dl()
-    {
-        $q = $this->src();
-        $hsl = $this->db->query($q);
-		$data = $hsl->result_array();
-        ///
-        $this->load->library('excel');
-        //activate worksheet number 1
-        $this->excel->setActiveSheetIndex(0);
-        //name the worksheet
-        //$this->excel->getActiveSheet()->setTitle('test worksheet');
-        //set cell A1 content with some text
-        $this->excel->getActiveSheet()->setCellValue('A1', 'Data Arsip');
-        //change the font size
-        $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(14);
-        //make the font become bold
-        $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
-        //merge cell A1 until D1
-        $this->excel->getActiveSheet()->mergeCells('A1:D1');
-        //set aligment to center for that merged cell (A1 to D1)
-        $this->excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, 'No.Arsip');
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, 2, 'Tanggal');
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, 2, 'Kode Klasifikasi');
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, 2, 'Uraian');
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, 2, 'Ket');
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, 2, 'Jumlah');
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, 2, 'No.Box');
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, 2, 'Retensi');
-        
-        $row=3;
-        $redblock = array('fill' => array(
-                'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                'color' => array('rgb' => 'FF0000')));
-        foreach($data as $d) {
-            $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $d['noarsip']);
-            $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $d['tanggal']);
-            $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $d['kode']);
-            $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $d['uraian']);
-            $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $d['ket']);
-            $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $d['jumlah']);
-            $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $d['nobox']);
-            $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $d['b']);
-            if($d['f']=='sudah') {
-                $this->excel->getActiveSheet()->getStyleByColumnAndRow(8, $row)->applyFromArray($redblock);
-            } 
-            $row++;
-        }
-        
-        
-        $filename='Data Arsip Arteri-'.getdate()[0].'.xls'; //save our workbook as this file name
-        header('Content-Type: application/vnd.ms-excel'); //mime type
-        header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
-        header('Cache-Control: max-age=0'); //no cache
-        $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
-        $objWriter->save('php://output');
-    }
 
+	/**
+	 * Download current archives data in Excel format
+	 * 
+	 */
+  public function dl()
+  {
+  	$q = $this->src();
+  	$hsl = $this->db->query($q);
+		$data = $hsl->result_array();
+  	$this->load->library('excel');
+  	//activate worksheet number 1
+  	$this->excel->setActiveSheetIndex(0);
+  	//name the worksheet
+  	//$this->excel->getActiveSheet()->setTitle('test worksheet');
+  	//set cell A1 content with some text
+  	$this->excel->getActiveSheet()->setCellValue('A1', 'Data Arsip');
+  	//change the font size
+  	$this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(14);
+  	//make the font become bold
+  	$this->excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
+  	//merge cell A1 until D1
+  	$this->excel->getActiveSheet()->mergeCells('A1:D1');
+  	//set aligment to center for that merged cell (A1 to D1)
+  	$this->excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, 'No.Arsip');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, 2, 'Tanggal');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, 2, 'Kode Klasifikasi');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, 2, 'Uraian');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, 2, 'Ket');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, 2, 'Jumlah');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, 2, 'No.Box');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, 2, 'Retensi');
+		
+  	$row=3;
+  	$redblock = array('fill' => array(
+  		'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			'color' => array('rgb' => 'FF0000')));
+
+  	foreach($data as $d) {
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $d['noarsip']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $d['tanggal']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $d['kode']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $d['uraian']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $d['ket']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $d['jumlah']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $d['nobox']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $d['b']);
+  	  if($d['f']=='sudah') {
+  	      $this->excel->getActiveSheet()->getStyleByColumnAndRow(8, $row)->applyFromArray($redblock);
+  	  } 
+  	  $row++;
+  	}
+	
+  	$filename='Data Arsip Arteri-'.getdate()[0].'.xls'; //save our workbook as this file name
+  	header('Content-Type: application/vnd.ms-excel'); //mime type
+  	header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+  	header('Cache-Control: max-age=0'); //no cache
+  	$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+  	$objWriter->save('php://output');
+  }
+
+	/**
+	 * Showing login page
+	 * 
+	 */
 	public function login()
 	{
 		$data=[];
@@ -262,12 +290,16 @@ class Home extends CI_Controller {
 		$this->load->view('login',$data);
 	}
 
+	/**
+	 * Login authentication process
+	 * 
+	 */
 	public function gologin()
 	{
 		$username=trim($this->input->post('username'));
-        // $password=md5($this->input->post('password'));
-        $password=$this->input->post('password');
-        $previous=trim($this->input->post('previous'));
+    // $password=md5($this->input->post('password'));
+    $password=$this->input->post('password');
+    $previous=trim($this->input->post('previous'));
 		// $q = "select * from master_user where username='$username' and password='$password'";
 		$q = "SELECT * FROM master_user WHERE username='$username'";
 		$user = $this->db->query($q)->row();
@@ -279,7 +311,7 @@ class Home extends CI_Controller {
 		$_SESSION['akses_modul'] = json_decode($user->akses_modul,true);
 		redirect('/home', 'refresh'); */
 		
-        if($user) {
+    if($user) {
 			// check password
 			if (password_verify($password, $user->password)) {
 				$_SESSION['username'] = $username;
@@ -304,40 +336,46 @@ class Home extends CI_Controller {
 				}
 				if($previous=="") {
 					redirect('/home', 'refresh');
-				}else {
+				} else {
 					header('Location: ' . $previous);
 				}
 			} else {
-              //echo "error login";
 			  $this->session->set_flashdata('erorlogin', 'Username atau password yang ada masukkan salah');
 			  redirect('/home/login', 'refresh');
 			}
-        }else {
-            //echo "error login";
+    } else {
 			$this->session->set_flashdata('erorlogin', 'Username atau password yang ada masukkan salah');
 			redirect('/home/login', 'refresh');
-        }
+    }
 	}
 
+	/**
+	 * Logout process
+	 * 
+	 */
 	public function logout()
 	{
 		unset($_SESSION['username']);
 		unset($_SESSION['id_user']);
 		redirect('/home', 'refresh');
 	}
-	
+
+	/**
+	 * Archive detail page
+	 * 
+	 */
 	public function view($id)
 	{
-		$q="select a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,l.nama_lokasi,m.nama_media, 
-		DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
-		(IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
-		from data_arsip a
-		left join master_pencipta p on p.id=a.pencipta
-		left join master_pengolah p2 on p2.id=a.unit_pengolah
-		left join master_kode k on k.kode=a.kode
-		left join master_lokasi l on l.id=a.lokasi
-		left join master_media m on m.id=a.media
-		where a.id=$id";
+		$q="SELECT a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,l.nama_lokasi,m.nama_media, 
+			DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
+			(IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
+			FROM data_arsip a
+			LEFT JOIN master_pencipta p ON p.id=a.pencipta
+			LEFT JOIN master_pengolah p2 ON p2.id=a.unit_pengolah
+			LEFT JOIN master_kode k ON k.kode=a.kode
+			LEFT JOIN master_lokasi l ON l.id=a.lokasi
+			LEFT JOIN master_media m ON m.id=a.media
+			WHERE a.id=$id";
 		$data=$this->db->query($q)->row_array();
 		
 		$this->__output('varsip',$data);
