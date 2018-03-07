@@ -11,6 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends CI_Controller {
 
+	private $data_per_page = 20;
 	/**
 	 * Controller class constructor
 	 * 
@@ -106,6 +107,7 @@ class Home extends CI_Controller {
 		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
 		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
 		  FROM data_arsip AS a JOIN master_kode AS k ON k.kode=a.kode";
+		$q_count = "SELECT COUNT(*) AS jmldata FROM data_arsip AS a JOIN master_kode AS k ON k.kode=a.kode";
 
 		if($_SESSION['akses_klas']!='') {
 			$k = explode(',',$_SESSION['akses_klas']);
@@ -123,21 +125,23 @@ class Home extends CI_Controller {
 		//var_dump($w); die();
 		if ($katakunci) {
 			$q .= " WHERE".implode(" OR ",$w);
-  	    $src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'',"nobox"=>$nobox);
-  	  	$qq = array($q, $src);
+			$q_count .= " WHERE".implode(" OR ",$w);
+  	  $src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'',"nobox"=>$nobox);
+  	  $qq = array($q, $q_count, $src);
 			return $qq;
 		} else {
 			if(count($w) > 0) {
 				$q .= " WHERE".implode(" AND ",$w);
+				$q_count .= " WHERE".implode(" AND ",$w);
 			}
 		}
 
-    if($srcdata) {
+    if(!$katakunci && $srcdata) {
       $src = array("noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med,"nobox"=>$nobox);
-      $qq = array($q, $src);
-      return $qq;
-    }else {
-      return $q;
+      return array($q, $q_count, $src);
+    } else {
+			$src = array("Kata kunci"=>$katakunci);
+      return array($q, $q_count, $src);
     }
 	}
 	
@@ -157,19 +161,32 @@ class Home extends CI_Controller {
 	 */
 	public function search($offset=0)
 	{
-		$qq = $this->src(true); // var_dump($qq); die();
+		$qq = $this->src(true); // print_r($qq); die();
 		$q = $qq[0]; // var_dump($q); die();
-    $data['src']=$qq[1];
+    $data['src']=$qq[2];
         
 		//echo $q;
-		$q2 = $q;
-		$q .= " LIMIT 20 ";
-		if($offset>0) $q .= "OFFSET $offset";
+		$q2 = $qq[1];
+		$q .= " LIMIT $this->data_per_page ";
+
+		$data['current_page'] = 1;
+		if ($offset>=$this->data_per_page) {
+			$data['current_page'] = floor(($offset+$this->data_per_page)/$this->data_per_page);
+		}
+		/*
+		if ($page<2) { 
+			$offset = 0;
+		} else {
+			$offset = ($page*$this->data_per_page)-$this->data_per_page;
+		}
+		*/
+		if ($offset>0) $q .= "OFFSET $offset";
 		//echo($q); die();
+		
 		$hsl = $this->db->query($q);
 		$data['data'] = $hsl->result_array();
-		//$this->session->set_flashdata('zz', $q);
-		$jmldata = $this->db->query($q2)->num_rows();
+
+		$jmldata = $this->db->query($q2)->row()->jmldata;
 		$data['jml']=$jmldata;
 
 		$q = "select distinct ket from data_arsip order by ket asc";
@@ -192,10 +209,10 @@ class Home extends CI_Controller {
 		$data['med'] = $hsl->result_array();
 
 		$this->load->library('pagination');
-		$config['base_url'] = site_url('/home/search');
+		$config['base_url'] = site_url('/home/search/');
 		$config['reuse_query_string'] = true;
 		$config['total_rows'] = $jmldata;
-		$config['per_page'] = 20;
+		$config['per_page'] = $this->data_per_page;
 		$config['num_tag_open'] = '<li>';
 		$config['num_tag_close'] = '</li>';
 		$config['cur_tag_open'] = '<li class="active"><a href="javascript: void(0)" disabled>';
