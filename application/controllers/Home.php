@@ -38,6 +38,8 @@ class Home extends CI_Controller {
 	/**
 	 * Method to compile SQL query based on search criteria
 	 * 
+	 * @return Array or String
+	 * 
 	 */
   protected function src($srcdata=false)
   {
