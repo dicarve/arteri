@@ -384,19 +384,6 @@ class Home extends CI_Controller {
 	 */
 	public function view($id)
 	{
-<<<<<<< HEAD
-		$q="select a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,l.nama_lokasi,m.nama_media, 
-		DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
-		k.kode nama_kode,
-		(IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
-		from data_arsip a
-		left join master_pencipta p on p.id=a.pencipta
-		left join master_pengolah p2 on p2.id=a.unit_pengolah
-		left join master_kode k on k.id=a.kode
-		left join master_lokasi l on l.id=a.lokasi
-		left join master_media m on m.id=a.media
-		where a.id=$id";
-=======
 		$q="SELECT a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,l.nama_lokasi,m.nama_media, 
 			DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
 			(IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
@@ -407,7 +394,6 @@ class Home extends CI_Controller {
 			LEFT JOIN master_lokasi l ON l.id=a.lokasi
 			LEFT JOIN master_media m ON m.id=a.media
 			WHERE a.id=$id";
->>>>>>> 13cae090994cb8d709577250c6e3e2f3d9baf2ed
 		$data=$this->db->query($q)->row_array();
 		
 		$this->__output('varsip',$data);
