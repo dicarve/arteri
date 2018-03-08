@@ -11,6 +11,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin extends CI_Controller {
 
+	/**
+	 * Controller class constructor
+	 * 
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -20,40 +24,63 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	public function __output($nview,$data=null)
+	/**
+	 * Method to output complete page with header and footer
+	 * 
+	 */
+	protected function __output($nview,$data=null)
 	{
 		$this->load->view('header',$data);
 		$this->load->view($nview,$data);
 		$this->load->view('footer');
 	}
-	
-	public function masterlist($tipe)
+
+	/**
+	 * Method to sanitize input data
+	 * 
+	 * @return String
+	 * 
+	 */
+	protected function __sanitizeString($str)
+	{
+		// return filter_var($this->__sanitizeString( $str),FILTER_SANITIZE_STRING);
+		return $this->db->escape($this->__sanitizeString( $str));
+	}
+
+	/**
+	 * Method to compile SQL query for master data
+	 * and return data in array format
+	 * 
+	 * @return Array
+	 * 
+	 */
+	protected function masterlist($tipe)
 	{
 		$data;
 		switch($tipe)
 		{
 			case "kode":
-			$q = "select * from master_kode order by kode asc";
+			$q = "SELECT * FROM master_kode ORDER BY kode ASC";
 			$hsl = $this->db->query($q);
 			$data = $hsl->result_array();
 			break;
 			case "pencipta":
-			$q = "select * from master_pencipta order by nama_pencipta asc";
+			$q = "SELECT * FROM master_pencipta ORDER BY nama_pencipta ASC";
 			$hsl = $this->db->query($q);
 			$data = $hsl->result_array();
 			break;
 			case "unitpengolah":
-			$q = "select * from master_pengolah order by nama_pengolah asc";
+			$q = "SELECT * FROM master_pengolah ORDER BY nama_pengolah ASC";
 			$hsl = $this->db->query($q);
 			$data = $hsl->result_array();
 			break;
 			case "lokasi":
-			$q = "select * from master_lokasi order by nama_lokasi asc";
+			$q = "SELECT * FROM master_lokasi ORDER BY nama_lokasi ASC";
 			$hsl = $this->db->query($q);
 			$data = $hsl->result_array();
 			break;
 			case "media":
-			$q = "select * from master_media order by nama_media asc";
+			$q = "SELECT * FROM master_media ORDER BY nama_media ASC";
 			$hsl = $this->db->query($q);
 			$data = $hsl->result_array();
 			break;
@@ -61,7 +88,11 @@ class Admin extends CI_Controller {
 		
 		return $data;
 	}
-	
+
+	/**
+	 * Show archive entry form
+	 * 
+	 */
 	public function entr()
 	{
 		$data["kode"]=$this->masterlist("kode");
@@ -74,19 +105,23 @@ class Admin extends CI_Controller {
 		$this->__output('entri1',$data);
 	}
 
+	/**
+	 * Process input data from archive entry form
+	 * 
+	 */
 	public function gentr()
 	{
-		$noarsip=trim($this->input->post('noarsip'));
-		$tanggal=trim($this->input->post('tanggal'));
-		$uraian=trim($this->input->post('uraian'));
-		$kode=trim($this->input->post('kode'));
-		$pencipta=trim($this->input->post('pencipta'));
-		$unitpengolah=trim($this->input->post('unitpengolah'));
-		$lokasi=trim($this->input->post('lokasi'));
-		$media=trim($this->input->post('media'));
-		$ket=trim($this->input->post('ket'));
-		$nobox=trim($this->input->post('nobox'));
-		$jumlah=trim($this->input->post('jumlah'));
+		$noarsip=$this->__sanitizeString($this->input->post('noarsip'));
+		$tanggal=$this->__sanitizeString($this->input->post('tanggal'));
+		$uraian=$this->__sanitizeString($this->input->post('uraian'));
+		$kode=$this->__sanitizeString($this->input->post('kode'));
+		$pencipta=$this->__sanitizeString($this->input->post('pencipta'));
+		$unitpengolah=$this->__sanitizeString($this->input->post('unitpengolah'));
+		$lokasi=$this->__sanitizeString($this->input->post('lokasi'));
+		$media=$this->__sanitizeString($this->input->post('media'));
+		$ket=$this->__sanitizeString($this->input->post('ket'));
+		$nobox=$this->__sanitizeString($this->input->post('nobox'));
+		$jumlah=$this->__sanitizeString($this->input->post('jumlah'));
 		$file="";
 		$config['upload_path'] = 'files/';
 		$config['allowed_types'] = 'pdf|docx|doc';
@@ -95,13 +130,14 @@ class Admin extends CI_Controller {
 			$datafile=$this->upload->data();
 			//$file = $datafile['full_path'];
 			$file = $datafile['file_name'];
-		}else {
+		} else {
 			//echo $this->upload->display_errors();
 			//echo $config['upload_path'];
 			//die();
 		}
 
-		$q = "insert into data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file,jumlah,pencipta,unit_pengolah,lokasi,media,tgl_input) values ('$noarsip','$tanggal','$uraian','$kode','$ket','$nobox','$file','$jumlah',$pencipta,$unitpengolah,$lokasi,$media,now());";
+		$q = "INSERT INTO data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file,jumlah,pencipta,unit_pengolah,lokasi,media,tgl_input) 
+			VALUES ('$noarsip','$tanggal','$uraian','$kode','$ket','$nobox','$file','$jumlah',$pencipta,$unitpengolah,$lokasi,$media,now());";
 		$hsl = $this->db->query($q);
 		$q = "SELECT LAST_INSERT_ID() as vid;";
 		$hsl = $this->db->query($q);
@@ -111,10 +147,16 @@ class Admin extends CI_Controller {
 		redirect('/home/view/'.$v, 'refresh');
 	}
 
+	/**
+	 * Edit archive data form
+	 * 
+	 * @param $id The ID of archive
+	 * 
+	 */
 	public function vedit($id)
 	{
 		if($id!=""){
-			$q = "select * from data_arsip where id=$id";
+			$q = "SELECT * FROM data_arsip WHERE id=$id";
 			$hsl = $this->db->query($q);
 			$row = $hsl->row_array();
 			$previous = "";
@@ -133,27 +175,30 @@ class Admin extends CI_Controller {
 			}else{
 				redirect('/home/', 'refresh');
 			}
-		}else {
+		} else {
 			redirect('/home/', 'refresh');
 		}
-
 	}
 
+	/**
+	 * Process input data from archive edit form
+	 * 
+	 */
 	public function edit()
 	{
-		$noarsip=trim($this->input->post('noarsip'));
-		$tanggal=trim($this->input->post('tanggal'));
-		$uraian=trim($this->input->post('uraian'));
-		$kode=trim($this->input->post('kode'));
-		$ket=trim($this->input->post('ket'));
-		$pencipta=trim($this->input->post('pencipta'));
-		$unitpengolah=trim($this->input->post('unitpengolah'));
-		$lokasi=trim($this->input->post('lokasi'));
-		$media=trim($this->input->post('media'));
-		$nobox=trim($this->input->post('nobox'));
-		$jumlah=trim($this->input->post('jumlah'));
-		$id=trim($this->input->post('id'));
-		$previous=trim($this->input->post('previous'));
+		$noarsip=$this->__sanitizeString($this->input->post('noarsip'));
+		$tanggal=$this->__sanitizeString($this->input->post('tanggal'));
+		$uraian=$this->__sanitizeString($this->input->post('uraian'));
+		$kode=$this->__sanitizeString($this->input->post('kode'));
+		$ket=$this->__sanitizeString($this->input->post('ket'));
+		$pencipta=$this->__sanitizeString($this->input->post('pencipta'));
+		$unitpengolah=$this->__sanitizeString($this->input->post('unitpengolah'));
+		$lokasi=$this->__sanitizeString($this->input->post('lokasi'));
+		$media=$this->__sanitizeString($this->input->post('media'));
+		$nobox=$this->__sanitizeString($this->input->post('nobox'));
+		$jumlah=$this->__sanitizeString($this->input->post('jumlah'));
+		$id=$this->__sanitizeString($this->input->post('id'));
+		$previous=$this->__sanitizeString($this->input->post('previous'));
 		$file="";
 		$config['upload_path'] = 'files/';
 		$config['allowed_types'] = 'pdf|docx|doc';
@@ -162,14 +207,14 @@ class Admin extends CI_Controller {
 			$datafile=$this->upload->data();
 			//$file = $datafile['full_path'];
 			$file = $datafile['file_name'];
-		}else {
-			$q = "select file from data_arsip where id=$id";
+		} else {
+			$q = "SELECT file FROM data_arsip WHERE id=$id";
 			$d = $this->db->query($q)->row_array()['file'];
 			$file=$d;
 		}
 
 		if(isset($_POST)) {
-			$q = "update data_arsip set noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file',jumlah='$jumlah',pencipta=$pencipta,unit_pengolah=$unitpengolah,lokasi=$lokasi,media=$media where id=$id";
+			$q = "UPDATE data_arsip SET noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file',jumlah='$jumlah',pencipta=$pencipta,unit_pengolah=$unitpengolah,lokasi=$lokasi,media=$media WHERE id=$id";
 			$hsl = $this->db->query($q);
 		}
 		redirect('/home/view/'.$id, 'refresh');
@@ -180,41 +225,59 @@ class Admin extends CI_Controller {
 		} */
 	}
 
+	/**
+	 * Delete archive file value in archive record
+	 * 
+	 */
 	public function delfile()
 	{
-		$id=trim($this->input->post('id'));
-		$q = "select file from data_arsip where id=$id";
+		$id=$this->__sanitizeString($this->input->post('id'));
+		$q = "SELECT file FROM data_arsip WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array()['file'];
 		if($row!=""){
 			$alamat = ROOTPATH."/files/".$row;
 			unlink($alamat);
 		}
-		$q = "update data_arsip set file='' where id=$id";
+		$q = "UPDATE data_arsip SET file='' WHERE id=$id";
 		$hsl = $this->db->query($q);
 	}
 
+	/**
+	 * Delete archive file
+	 * 
+	 */
 	public function del1()
 	{
-		$id=trim($this->input->post('id'));
-		$q = "select file from data_arsip where id=$id";
+		$id=$this->__sanitizeString($this->input->post('id'));
+		$q = "SELECT file FROM data_arsip WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array()['file'];
 		if($row!=""){
 			$alamat = ROOTPATH."/files/".$row;
 			unlink($alamat);
 		}
-		$q = "delete from data_arsip where id=$id";
+		$q = "DELETE FROM data_arsip WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Show classification data page
+	 * 
+	 */
 	public function klas()
 	{
-		$katakunci = trim($this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString($this->input->get('katakunci'));
 
 		$q = "SELECT * FROM master_kode "; 
 		if ($katakunci) {
-          $q .= ' WHERE kode LIKE \'%'.$katakunci.'%\' OR nama LIKE \'%'.$katakunci.'%\' ';
+      $q .= ' WHERE kode LIKE \'%'.$katakunci.'%\' OR nama LIKE \'%'.$katakunci.'%\' ';
 		}
 		$q .= " ORDER BY kode ASC";
 		$hsl = $this->db->query($q);
@@ -222,48 +285,89 @@ class Admin extends CI_Controller {
 		$this->__output('klas',$data);
 	}
 
+	/**
+	 * Add classification data and respond in JSON format
+	 * 
+	 */
 	public function addkode()
 	{
-		$kode = trim($this->input->post('kode'));
-		$nama = trim($this->input->post('nama'));
-		$retensi = trim($this->input->post('retensi'));
-		$q = "insert into master_kode (kode,nama,retensi) values ('$kode','$nama',$retensi)";
+		$kode = $this->__sanitizeString($this->input->post('kode'));
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$retensi = $this->__sanitizeString($this->input->post('retensi'));
+		$q = "INSERT INTO master_kode (kode,nama,retensi) VALUES ('$kode','$nama',$retensi)";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Update classification data and respond in JSON format
+	 * 
+	 */
 	public function edkode()
 	{
-		$kode = trim($this->input->post('kode'));
-		$nama = trim($this->input->post('nama'));
-		$retensi = trim($this->input->post('retensi'));
-		$id = trim($this->input->post('id'));
-		$q = "update master_kode set kode='$kode'";
+		$kode = $this->__sanitizeString($this->input->post('kode'));
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$retensi = $this->__sanitizeString($this->input->post('retensi'));
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = "UPDATE master_kode SET kode='$kode'";
 		$q .= ",nama='$nama'";
-		$q .= ",retensi=$retensi where id=$id";
+		$q .= ",retensi=$retensi WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Delete classification data and respond in JSON format
+	 * 
+	 */
 	public function delkode()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "delete from master_kode where id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = "DELETE FROM master_kode WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Get classification data and respond in JSON format
+	 * 
+	 */
 	public function akode()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "select * from master_kode where id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = "SELECT * FROM master_kode WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
 			echo json_encode($row);
+		}	else {
+			echo '[]';
 		}
+		exit();
 	}
 
+	/**
+	 * AJAX reload for classification data
+	 * 
+	 */
 	public function reloadkode()
 	{
-		$q = "select * from master_kode order by kode asc";
+		$q = "SELECT * FROM master_kode ORDER BY kode ASC";
 		$hsl = $this->db->query($q);
 		$row = $hsl->result_array();
 		if($row) {
@@ -278,21 +382,25 @@ class Admin extends CI_Controller {
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
-                echo "<td>".$u['kode']."</td>";
-                echo "<td>".$u['nama']."</td>";
-                echo "<td>".$u['retensi']." Tahun</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editkode\" class='edkode' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delkode\" class='delkode' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
-                echo "</tr>";
-                $no++;
+        echo "<td>".$u['kode']."</td>";
+        echo "<td>".$u['nama']."</td>";
+        echo "<td>".$u['retensi']." Tahun</td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#editkode\" class='edkode' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#delkode\" class='delkode' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
+        echo "</tr>";
+        $no++;
 			}
 			echo "</table>";
 		}
 	}
 	
+	/**
+	 * Show archive author/creator data page
+	 * 
+	 */
 	public function penc()
 	{
-		$katakunci = trim($this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
 
 		$q = "SELECT * FROM master_pencipta ";
 		if ($katakunci) {
@@ -304,43 +412,84 @@ class Admin extends CI_Controller {
 		$this->__output('pencipta',$data);
 	}
 	
+	/**
+	 * Add archive creator data and respond in JSON format
+	 * 
+	 */
 	public function addpenc()
 	{
-		$nama = trim($this->input->post('nama'));
-		$q = "insert into master_pencipta (nama_pencipta) values ('$nama')";
+		$nama = $this->__sanitizeString( $this->input->post('nama'));
+		$q = "INSERT INTO master_pencipta (nama_pencipta) VALUES ('$nama')";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Update archive creator data and respond in JSON format
+	 * 
+	 */
 	public function edpenc()
 	{
-		$nama = trim($this->input->post('nama'));
-		$id = trim($this->input->post('id'));
-		$q = "update master_pencipta set nama_pencipta='$nama'";
-		$q .= " where id=$id";
+		$nama = $this->__sanitizeString( $this->input->post('nama'));
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "UPDATE master_pencipta SET nama_pencipta='$nama'";
+		$q .= " WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Delete archive creator data and respond in JSON format
+	 * 
+	 */
 	public function delpenc()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "delete from master_pencipta where id=$id";
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "DELETE FROM master_pencipta WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Get archive creator data and respond in JSON format
+	 * 
+	 */
 	public function apenc()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "select * from master_pencipta where id=$id";
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "SELECT * FROM master_pencipta WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
 			echo json_encode($row);
+		}	else {
+			echo '[]';
 		}
+		exit();
 	}
 
+	/**
+	 * AJAX reload for archive creator
+	 * 
+	 */
 	public function reloadpenc()
 	{
-		$q = "select * from master_pencipta order by nama_pencipta asc";
+		$q = "SELECT * FROM master_pencipta ORDER BY nama_pencipta ASC";
 		$hsl = $this->db->query($q);
 		$row = $hsl->result_array();
 		if($row) {
@@ -354,21 +503,25 @@ class Admin extends CI_Controller {
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
-                echo "<td>".$no."</td>";
-                echo "<td>".$u['nama_pencipta']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editpenc\" class='edpenc' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delpenc\" class='delpenc' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
-                echo "</tr>";
-                echo "</tr>";
-                $no++;
+        echo "<td>".$no."</td>";
+        echo "<td>".$u['nama_pencipta']."</td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#editpenc\" class='edpenc' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#delpenc\" class='delpenc' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
+        echo "</tr>";
+        echo "</tr>";
+        $no++;
 			}
 			echo "</table>";
 		}
 	}
-	
+
+	/**
+	 * Show archival unit/manager data page
+	 * 
+	 */
 	public function pengolah()
 	{
-		$katakunci = trim($this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
 
 		$q = "SELECT * FROM master_pengolah ";
 		if ($katakunci) {
@@ -380,43 +533,84 @@ class Admin extends CI_Controller {
 		$this->__output('pengolah',$data);
 	}
 	
+	/**
+	 * Add archival unit data and respond in JSON format
+	 * 
+	 */
 	public function addpeng()
 	{
-		$nama = trim($this->input->post('nama'));
-		$q = "insert into master_pengolah (nama_pengolah) values ('$nama')";
+		$nama = $this->__sanitizeString( $this->input->post('nama'));
+		$q = "INSERT INTO master_pengolah (nama_pengolah) VALUES ('$nama')";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Update archival unit data and respond in JSON format
+	 * 
+	 */
 	public function edpeng()
 	{
-		$nama = trim($this->input->post('nama'));
-		$id = trim($this->input->post('id'));
-		$q = "update master_pengolah set nama_pengolah='$nama'";
-		$q .= " where id=$id";
+		$nama = $this->__sanitizeString( $this->input->post('nama'));
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "UPDATE master_pengolah SET nama_pengolah='$nama'";
+		$q .= " WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Delete archival unit data and respond in JSON format
+	 * 
+	 */
 	public function delpeng()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "delete from master_pengolah where id=$id";
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "DELETE FROM master_pengolah WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Get archival unit data and respond in JSON format
+	 * 
+	 */
 	public function apeng()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "select * from master_pengolah where id=$id";
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "SELECT * FROM master_pengolah WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
 			echo json_encode($row);
+		} else {
+			echo '[]';
 		}
+		exit();
 	}
 
+	/**
+	 * AJAX reload for archival unit data
+	 * 
+	 */
 	public function reloadpeng()
 	{
-		$q = "select * from master_pengolah order by nama_pengolah asc";
+		$q = "SELECT * FROM master_pengolah ORDER BY nama_pengolah ASC";
 		$hsl = $this->db->query($q);
 		$row = $hsl->result_array();
 		if($row) {
@@ -430,20 +624,24 @@ class Admin extends CI_Controller {
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
-                echo "<td>".$no."</td>";
-                echo "<td>".$u['nama_pengolah']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editpeng\" class='edpeng' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delpeng\" class='delpeng' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
-                echo "</tr>";
-                $no++;
+        echo "<td>".$no."</td>";
+        echo "<td>".$u['nama_pengolah']."</td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#editpeng\" class='edpeng' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#delpeng\" class='delpeng' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
+        echo "</tr>";
+        $no++;
 			}
 			echo "</table>";
 		}
 	}
-	
+
+	/**
+	 * Show archive location data page
+	 * 
+	 */
 	public function lokasi()
 	{
-		$katakunci = trim($this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
 		
 		$q = "SELECT * FROM master_lokasi ";
 		if ($katakunci) {
@@ -455,43 +653,84 @@ class Admin extends CI_Controller {
 		$this->__output('lokasi',$data);
 	}
 	
+	/**
+	 * Add archive location data and respond in JSON format
+	 * 
+	 */
 	public function addlok()
 	{
-		$nama = trim($this->input->post('nama'));
-		$q = "insert into master_lokasi (nama_lokasi) values ('$nama')";
+		$nama = $this->__sanitizeString( $this->input->post('nama'));
+		$q = "INSERT INTO master_lokasi (nama_lokasi) VALUES ('$nama')";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Update archive location data and respond in JSON format
+	 * 
+	 */
 	public function edlok()
 	{
-		$nama = trim($this->input->post('nama'));
-		$id = trim($this->input->post('id'));
-		$q = "update master_lokasi set nama_lokasi='$nama'";
-		$q .= " where id=$id";
+		$nama = $this->__sanitizeString( $this->input->post('nama'));
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "UPDATE master_lokasi SET nama_lokasi='$nama'";
+		$q .= " WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Delete archive location data and respond in JSON format
+	 * 
+	 */
 	public function dellok()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "delete from master_lokasi where id=$id";
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "DELETE FROM master_lokasi WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Get archive location data and respond in JSON format
+	 * 
+	 */
 	public function alok()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "select * from master_lokasi where id=$id";
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "SELECT * FROM master_lokasi WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
 			echo json_encode($row);
+		} else {
+			echo '[]';
 		}
+		exit();
 	}
 
+	/**
+	 * AJAX reload for location data
+	 * 
+	 */
 	public function reloadlok()
 	{
-		$q = "select * from master_lokasi order by nama_lokasi asc";
+		$q = "SELECT * FROM master_lokasi ORDER BY nama_lokasi ASC";
 		$hsl = $this->db->query($q);
 		$row = $hsl->result_array();
 		if($row) {
@@ -505,20 +744,24 @@ class Admin extends CI_Controller {
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
-                echo "<td>".$no."</td>";
-                echo "<td>".$u['nama_lokasi']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editlok\" class='edlok' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#dellok\" class='dellok' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
-                echo "</tr>";
-                $no++;
+        echo "<td>".$no."</td>";
+        echo "<td>".$u['nama_lokasi']."</td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#editlok\" class='edlok' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#dellok\" class='dellok' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
+        echo "</tr>";
+        $no++;
 			}
 			echo "</table>";
 		}
 	}
 	
+	/**
+	 * Show media data page
+	 * 
+	 */
 	public function media()
 	{
-		$katakunci = trim($this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
 		
 		$q = "SELECT * FROM master_media ";
 		if ($katakunci) {
@@ -530,43 +773,84 @@ class Admin extends CI_Controller {
 		$this->__output('media',$data);
 	}
 	
+	/**
+	 * Add media data and respond in JSON format
+	 * 
+	 */
 	public function addmed()
 	{
-		$nama = trim($this->input->post('nama'));
-		$q = "insert into master_media (nama_media) values ('$nama')";
+		$nama = $this->__sanitizeString( $this->input->post('nama'));
+		$q = "INSERT INTO master_media (nama_media) VALUES ('$nama')";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Update media data and respond in JSON format
+	 * 
+	 */
 	public function edmed()
 	{
-		$nama = trim($this->input->post('nama'));
-		$id = trim($this->input->post('id'));
-		$q = "update master_media set nama_media='$nama'";
-		$q .= " where id=$id";
+		$nama = $this->__sanitizeString( $this->input->post('nama'));
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "UPDATE master_media SET nama_media='$nama'";
+		$q .= " WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Delete media data and respond in JSON format
+	 * 
+	 */
 	public function delmed()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "delete from master_media where id=$id";
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "DELETE FROM master_media WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Get media data and respond in JSON format
+	 * 
+	 */
 	public function amed()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "select * from master_media where id=$id";
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "SELECT * FROM master_media WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
 			echo json_encode($row);
+		} else {
+			echo '[]';
 		}
+		exit();
 	}
 
+	/**
+	 * AJAX reload for media data
+	 * 
+	 */
 	public function reloadmed()
 	{
-		$q = "select * from master_media order by nama_media asc";
+		$q = "SELECT * FROM master_media ORDER BY nama_media ASC";
 		$hsl = $this->db->query($q);
 		$row = $hsl->result_array();
 		if($row) {
@@ -580,20 +864,24 @@ class Admin extends CI_Controller {
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
-                echo "<td>".$no."</td>";
-                echo "<td>".$u['nama_media']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#editmed\" class='edmed' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#delmed\" class='delmed' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
-                echo "</tr>";
-                $no++;
+        echo "<td>".$no."</td>";
+        echo "<td>".$u['nama_media']."</td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#editmed\" class='edmed' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#delmed\" class='delmed' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
+        echo "</tr>";
+        $no++;
 			}
 			echo "</table>";
 		}
 	}
 
+	/**
+	 * Show user data page
+	 * 
+	 */
 	public function vuser()
 	{
-		$katakunci = trim($this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
 		
 		$q = "SELECT * FROM master_user ";
 		if ($katakunci) {
@@ -603,71 +891,114 @@ class Admin extends CI_Controller {
 		$hsl = $this->db->query($q);
 		$data['user'] = $hsl->result_array();
 		$this->__output('vuser',$data);
-
 	}
-	
+
+	/**
+	 * Check for user data and respond in JSON format
+	 * 
+	 */
 	public function cekuser()
 	{
-		$username = trim($this->input->post('username'));
-		$q = "select username from master_user where username='$username'";
+		$username = $this->__sanitizeString($this->input->post('username'));
+		$q = "SELECT username FROM master_user WHERE username='$username'";
 		$hsl = $this->db->query($q)->row_array();
 		if($hsl['username']==$username) {
-			echo json_encode(['msg'=>'error']);
+			echo json_encode(array('msg'=>'error'));
 		}else {
-			echo json_encode(['msg'=>'ok']);
+			echo json_encode(array('msg'=>'ok'));
 		}
 	}
 
+	/**
+	 * Add user data and respond in JSON format
+	 * 
+	 */
 	public function adduser()
 	{
-		$username = trim($this->input->post('username'));
+		$username = $this->__sanitizeString( $this->input->post('username'));
 		$password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-		$tipe = trim($this->input->post('tipe'));
-		$akses_klas = trim($this->input->post('akses_klas'));
+		$tipe = $this->__sanitizeString( $this->input->post('tipe'));
+		$akses_klas = $this->__sanitizeString( $this->input->post('akses_klas'));
 		$akses_modul = json_encode($this->input->post('modul'));
-		$q = "insert into master_user (username,password,tipe,akses_klas,akses_modul) values ('$username', '$password','$tipe','$akses_klas','$akses_modul')";
+		$q = "INSERT INTO master_user (username,password,tipe,akses_klas,akses_modul) VALUES ('$username', '$password','$tipe','$akses_klas','$akses_modul')";
 		$hsl = $this->db->query($q);
-
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Update user data and respond in JSON format
+	 * 
+	 */
 	public function eduser()
 	{
-		$username = trim($this->input->post('username'));
+		$username = $this->__sanitizeString( $this->input->post('username'));
 		$password = "";
 		if($this->input->post('password')!="") {
 			$password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
 		}
-		$tipe = trim($this->input->post('tipe'));
-		$akses_klas = trim($this->input->post('akses_klas'));
+		$tipe = $this->__sanitizeString( $this->input->post('tipe'));
+		$akses_klas = $this->__sanitizeString( $this->input->post('akses_klas'));
 		$akses_modul = json_encode($this->input->post('modul'));
-		$id = trim($this->input->post('id'));
-		$q = "update master_user set username='$username'";
+		$id = $this->__sanitizeString( $this->input->post('id'));
+		$q = "UPDATE master_user SET username='$username'";
 		if($password!="") $q .= ",password='$password'";
-		$q .= ",tipe='$tipe',akses_klas='$akses_klas',akses_modul='$akses_modul' where id=$id";
+		$q .= ",tipe='$tipe',akses_klas='$akses_klas',akses_modul='$akses_modul' WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Delete user data and respond in JSON format
+	 * 
+	 */
 	public function deluser()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "delete from master_user where id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = "DELETE FROM master_user WHERE id=$id";
 		$hsl = $this->db->query($q);
+		if($hsl) {
+			echo json_encode(array('status' => 'success'));
+		} else {
+			echo '[]';
+		}
+		exit();
 	}
 
+	/**
+	 * Get user data in JSON format
+	 * 
+	 */
 	public function auser()
 	{
-		$id = trim($this->input->post('id'));
-		$q = "select * from master_user where id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = "SELECT * FROM master_user WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
 			echo json_encode($row);
+		} else {
+			echo '[]';
 		}
+		exit();
 	}
 
+	/**
+	 * AJAX reload for user data
+	 * 
+	 */
 	public function reloaduser()
 	{
-		$q = "select * from master_user";
+		$q = "SELECT * FROM master_user";
 		$hsl = $this->db->query($q);
 		$row = $hsl->result_array();
 		if($row) {
@@ -684,10 +1015,10 @@ class Admin extends CI_Controller {
 			$no=1;
 			foreach($row as $u) {
 				echo "<tr>";
-                echo "<td>".$no."</td>";
-                echo "<td>".$u['username']."</td>";
-                echo "<td>".$u['akses_klas']."</td>";
-                echo "<td>";
+        echo "<td>".$no."</td>";
+        echo "<td>".$u['username']."</td>";
+        echo "<td>".$u['akses_klas']."</td>";
+        echo "<td>";
 				$mm = $u['akses_modul'];
 				if($mm!="") {
 					$mm = json_decode($mm);
@@ -699,30 +1030,38 @@ class Admin extends CI_Controller {
 				}
 				echo "</td>";
 				echo "<td>".$u['tipe']."</td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#edituser\" class='eduser' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
-                echo "<td><a data-toggle=\"modal\" data-target=\"#deluser\" class='deluser' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
-                echo "</tr>";
-                $no++;
+        echo "<td><a data-toggle=\"modal\" data-target=\"#edituser\" class='eduser' href='#' id='".$u['id']."' title=\"Edit\"><i class=\"glyphicon glyphicon-edit\"></i> </a></td>";
+        echo "<td><a data-toggle=\"modal\" data-target=\"#deluser\" class='deluser' href='#' id='".$u['id']."' title=\"Delete\"><i class=\"glyphicon glyphicon-trash\"></i> </a></td>";
+        echo "</tr>";
+        $no++;
 			}
 			echo "</table>";
 		}
 	}
 
+	/**
+	 * Export/import data page
+	 * 
+	 */
 	public function eximp()
 	{
 		$this->__output('eximp');
 	}
 
+	/**
+	 * Export data to Excel file
+	 * 
+	 */
 	public function exportdata()
 	{
 		include('dbimexport.php');
 		$db_config = array(
-				'dbtype' => "MYSQL",
-				'host' => $this->db->hostname,
-				'database' => $this->db->database,
-				'user' => $this->db->username,
-				'password' => $this->db->password,
-			);
+			'dbtype' => "MYSQL",
+			'host' => $this->db->hostname,
+			'database' => $this->db->database,
+			'user' => $this->db->username,
+			'password' => $this->db->password,
+		);
 		$dbimexport = new dbimexport($db_config);
 		$dbimexport->download_path = "";
 		$dbimexport->download = true;
@@ -730,18 +1069,22 @@ class Admin extends CI_Controller {
 		$dbimexport->export();
 	}
 
+	/**
+	 * Import data from Excel file
+	 * 
+	 */
 	public function importdata()
 	{
 		if($_FILES["up_file"]["name"])
 		{
 			include('dbimexport.php');
 			$db_config = array(
-					'dbtype' => "MYSQL",
-					'host' => $this->db->hostname,
-					'database' => $this->db->database,
-					'user' => $this->db->username,
-					'password' => $this->db->password,
-				);
+				'dbtype' => "MYSQL",
+				'host' => $this->db->hostname,
+				'database' => $this->db->database,
+				'user' => $this->db->username,
+				'password' => $this->db->password,
+			);
 			$dbimexport = new dbimexport($db_config);
 			$filename = $_FILES["up_file"]["name"];
 			$source = $_FILES["up_file"]["tmp_name"];
