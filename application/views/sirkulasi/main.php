@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<th>Tgl. Pinjam</th>
 						<th>Tgl. Harus Kembali</th>
 						<th>Tgl. Pengembalian</th>
-						<?php if ($admin && isset($_SESSION['akses_modul']['sirkulasi']) && $_SESSION['akses_modul']['sirkulasi']=='on') : ?>
+						<?php if (isset($admin) && $admin && isset($_SESSION['akses_modul']['sirkulasi']) && $_SESSION['akses_modul']['sirkulasi']=='on') : ?>
 						<th class="width-sm"></th>
 						<th class="width-sm"></th>
             <?php endif; ?>
@@ -68,7 +68,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							echo "<td>".$a['tgl_haruskembali']."</td>";
 							echo "<td>";
 							// hanya user admin bisa mengubah data sirkulasi
-							if($admin && isset($_SESSION['akses_modul']['sirkulasi']) && $_SESSION['akses_modul']['sirkulasi']=='on') {
+							if(isset($admin) && $admin && isset($_SESSION['akses_modul']['sirkulasi']) && $_SESSION['akses_modul']['sirkulasi']=='on') {
 								if($a['tgl_pengembalian']==null) {
 									echo "<a href='#' id='".$a['id']."' data-toggle=\"modal\" data-target=\"#arsipkembali\" class='btn btn-primary btn-xs kemdata' >Kembalikan</a>";
 								}else {

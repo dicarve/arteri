@@ -94,6 +94,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<ul class="nav navbar-nav navbar-right">
 					<?php
 						if(isset($_SESSION['username'])) {
+							echo "<li><a href=\"#\"><span class=\"glyphicon glyphicon-user\"></span> ".$_SESSION['username']."</a></li>";
 							echo "<li><a href=\"".site_url('home/logout')."\"><span class=\"glyphicon glyphicon-log-out\"></span> Logout</a></li>";
 						}else {
 							echo "<li><a href=\"".site_url('home/login')."\"><span class=\"glyphicon glyphicon-log-in\"></span> Login</a></li>";

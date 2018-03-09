@@ -44,7 +44,8 @@ class Admin extends CI_Controller {
 	protected function __sanitizeString($str)
 	{
 		// return filter_var($this->__sanitizeString( $str),FILTER_SANITIZE_STRING);
-		return $this->db->escape($this->__sanitizeString( $str));
+		//return $this->db->escape($this->__sanitizeString( $str));
+		return $this->db->escape(filter_var($str,FILTER_SANITIZE_STRING));
 	}
 
 	/**
@@ -294,7 +295,7 @@ class Admin extends CI_Controller {
 		$kode = $this->__sanitizeString($this->input->post('kode'));
 		$nama = $this->__sanitizeString($this->input->post('nama'));
 		$retensi = $this->__sanitizeString($this->input->post('retensi'));
-		$q = "INSERT INTO master_kode (kode,nama,retensi) VALUES ('$kode','$nama',$retensi)";
+		$q = "INSERT INTO master_kode (kode,nama,retensi) VALUES ($kode,$nama,$retensi)";
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -314,8 +315,8 @@ class Admin extends CI_Controller {
 		$nama = $this->__sanitizeString($this->input->post('nama'));
 		$retensi = $this->__sanitizeString($this->input->post('retensi'));
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = "UPDATE master_kode SET kode='$kode'";
-		$q .= ",nama='$nama'";
+		$q = "UPDATE master_kode SET kode=$kode";
+		$q .= ",nama=$nama";
 		$q .= ",retensi=$retensi WHERE id=$id";
 		$hsl = $this->db->query($q);
 		if($hsl) {
@@ -419,7 +420,7 @@ class Admin extends CI_Controller {
 	public function addpenc()
 	{
 		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$q = "INSERT INTO master_pencipta (nama_pencipta) VALUES ('$nama')";
+		$q = "INSERT INTO master_pencipta (nama_pencipta) VALUES ($nama)";
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -437,7 +438,7 @@ class Admin extends CI_Controller {
 	{
 		$nama = $this->__sanitizeString( $this->input->post('nama'));
 		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_pencipta SET nama_pencipta='$nama'";
+		$q = "UPDATE master_pencipta SET nama_pencipta=$nama";
 		$q .= " WHERE id=$id";
 		$hsl = $this->db->query($q);
 		if($hsl) {
@@ -540,7 +541,7 @@ class Admin extends CI_Controller {
 	public function addpeng()
 	{
 		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$q = "INSERT INTO master_pengolah (nama_pengolah) VALUES ('$nama')";
+		$q = "INSERT INTO master_pengolah (nama_pengolah) VALUES ($nama)";
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -558,7 +559,7 @@ class Admin extends CI_Controller {
 	{
 		$nama = $this->__sanitizeString( $this->input->post('nama'));
 		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_pengolah SET nama_pengolah='$nama'";
+		$q = "UPDATE master_pengolah SET nama_pengolah=$nama";
 		$q .= " WHERE id=$id";
 		$hsl = $this->db->query($q);
 		if($hsl) {
@@ -660,7 +661,7 @@ class Admin extends CI_Controller {
 	public function addlok()
 	{
 		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$q = "INSERT INTO master_lokasi (nama_lokasi) VALUES ('$nama')";
+		$q = "INSERT INTO master_lokasi (nama_lokasi) VALUES ($nama)";
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -678,7 +679,7 @@ class Admin extends CI_Controller {
 	{
 		$nama = $this->__sanitizeString( $this->input->post('nama'));
 		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_lokasi SET nama_lokasi='$nama'";
+		$q = "UPDATE master_lokasi SET nama_lokasi=$nama";
 		$q .= " WHERE id=$id";
 		$hsl = $this->db->query($q);
 		if($hsl) {
@@ -780,7 +781,7 @@ class Admin extends CI_Controller {
 	public function addmed()
 	{
 		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$q = "INSERT INTO master_media (nama_media) VALUES ('$nama')";
+		$q = "INSERT INTO master_media (nama_media) VALUES ($nama)";
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -798,7 +799,7 @@ class Admin extends CI_Controller {
 	{
 		$nama = $this->__sanitizeString( $this->input->post('nama'));
 		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_media SET nama_media='$nama'";
+		$q = "UPDATE master_media SET nama_media=$nama";
 		$q .= " WHERE id=$id";
 		$hsl = $this->db->query($q);
 		if($hsl) {
@@ -900,7 +901,7 @@ class Admin extends CI_Controller {
 	public function cekuser()
 	{
 		$username = $this->__sanitizeString($this->input->post('username'));
-		$q = "SELECT username FROM master_user WHERE username='$username'";
+		$q = "SELECT username FROM master_user WHERE username=$username";
 		$hsl = $this->db->query($q)->row_array();
 		if($hsl['username']==$username) {
 			echo json_encode(array('msg'=>'error'));
@@ -920,7 +921,7 @@ class Admin extends CI_Controller {
 		$tipe = $this->__sanitizeString( $this->input->post('tipe'));
 		$akses_klas = $this->__sanitizeString( $this->input->post('akses_klas'));
 		$akses_modul = json_encode($this->input->post('modul'));
-		$q = "INSERT INTO master_user (username,password,tipe,akses_klas,akses_modul) VALUES ('$username', '$password','$tipe','$akses_klas','$akses_modul')";
+		$q = "INSERT INTO master_user (username,password,tipe,akses_klas,akses_modul) VALUES ($username, '$password',$tipe,$akses_klas,'$akses_modul')";
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -945,9 +946,9 @@ class Admin extends CI_Controller {
 		$akses_klas = $this->__sanitizeString( $this->input->post('akses_klas'));
 		$akses_modul = json_encode($this->input->post('modul'));
 		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_user SET username='$username'";
+		$q = "UPDATE master_user SET username=$username";
 		if($password!="") $q .= ",password='$password'";
-		$q .= ",tipe='$tipe',akses_klas='$akses_klas',akses_modul='$akses_modul' WHERE id=$id";
+		$q .= ",tipe=$tipe,akses_klas=$akses_klas,akses_modul='$akses_modul' WHERE id=$id";
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));

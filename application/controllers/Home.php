@@ -105,9 +105,10 @@ class Home extends CI_Controller {
 		}
 
 		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,k.kode nama_kode,
-		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
-		  FROM data_arsip AS a JOIN master_kode AS k ON k.kode=a.kode";
-		$q_count = "SELECT COUNT(*) AS jmldata FROM data_arsip AS a JOIN master_kode AS k ON k.kode=a.kode";
+		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) < CURDATE(),'sudah','belum')) AS f 
+		  FROM data_arsip AS a JOIN master_kode AS k ON k.id=a.kode";
+		
+		$q_count = "SELECT COUNT(*) AS jmldata FROM data_arsip AS a JOIN master_kode AS k ON k.id=a.kode";
 		if($_SESSION['akses_klas']!='') {
 			$k = explode(',',$_SESSION['akses_klas']);
 			$k = array_filter($k);
@@ -160,14 +161,14 @@ class Home extends CI_Controller {
 	 */
 	public function search($offset=0)
 	{
-		$qq = $this->src(true); // print_r($qq); die();
+		$qq = $this->src(true); //print_r($qq); die();
 		$q = $qq[0]; // var_dump($q); die();
-    $data['src']=$qq[2];
+		$data['src']=$qq[2];
         
 		//echo $q;
 		$q2 = $qq[1];
 		$q .= " LIMIT $this->data_per_page ";
-
+		
 		$data['current_page'] = 1;
 		if ($offset>=$this->data_per_page) {
 			$data['current_page'] = floor(($offset+$this->data_per_page)/$this->data_per_page);

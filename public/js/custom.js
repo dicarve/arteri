@@ -72,6 +72,9 @@ $(document).ready(function () {
 			}
 		});
 	}
+	if($("#divtabeluser").length>0) {
+		reloaduser();
+	}
 	$("#divtabeluser").on('click','.deluser',function () {
 		var d = $(this).attr("id");
 		$("#deliduser").val(d);
@@ -164,6 +167,9 @@ $(document).ready(function () {
 			}
 		});
 	}
+	if($("#divtabelkode").length>0) {
+		reloadkode();
+	}
 	$("#divtabelkode").on('click','.delkode',function () {
 		var d = $(this).attr("id");
 		$("#delidkode").val(d);
@@ -226,6 +232,9 @@ $(document).ready(function () {
 			}
 		});
 	}
+	if($("#divtabelpenc").length>0) {
+		reloadpenc();
+	}
 	$("#divtabelpenc").on('click','.delpenc',function () {
 		var d = $(this).attr("id");
 		$("#delidpenc").val(d);
@@ -282,6 +291,9 @@ $(document).ready(function () {
 				$("#divtabelpeng").html(html);
 			}
 		});
+	}
+	if($("#divtabelpeng").length>0) {
+		reloadpeng();
 	}
 	$("#divtabelpeng").on('click','.delpeng',function () {
 		var d = $(this).attr("id");
@@ -340,6 +352,9 @@ $(document).ready(function () {
 			}
 		});
 	}
+	if($("#divtabellok").length>0) {
+		reloadlok();
+	}
 	$("#divtabellok").on('click','.dellok',function () {
 		var d = $(this).attr("id");
 		$("#delidlok").val(d);
@@ -396,6 +411,9 @@ $(document).ready(function () {
 				$("#divtabelmed").html(html);
 			}
 		});
+	}
+	if($("#divtabelmed").length>0) {
+		reloadmed();
 	}
 	$("#divtabelmed").on('click','.delmed',function () {
 		var d = $(this).attr("id");
