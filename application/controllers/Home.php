@@ -105,8 +105,15 @@ class Home extends CI_Controller {
 		}
 
 		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,k.kode nama_kode,
-		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) < CURDATE(),'sudah','belum')) AS f 
-		  FROM data_arsip AS a JOIN master_kode AS k ON k.id=a.kode";
+		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) < CURDATE(),'sudah','belum')) AS f,
+		  nama_lokasi,nama_media,nama_pencipta,nama_pengolah 
+		  FROM data_arsip AS a 
+		  JOIN master_kode AS k ON k.id=a.kode
+		  JOIN master_lokasi AS l ON l.id=a.lokasi
+		  JOIN master_media AS m ON m.id=a.media
+		  JOIN master_pencipta AS p ON p.id=a.pencipta
+		  JOIN master_pengolah AS pn ON pn.id=a.unit_pengolah
+		   ";
 		
 		$q_count = "SELECT COUNT(*) AS jmldata FROM data_arsip AS a JOIN master_kode AS k ON k.id=a.kode";
 		if($_SESSION['akses_klas']!='') {
@@ -240,7 +247,7 @@ class Home extends CI_Controller {
   public function dl()
   {
   	$q = $this->src();
-  	$hsl = $this->db->query($q);
+  	$hsl = $this->db->query($q[0]);
 		$data = $hsl->result_array();
   	$this->load->library('excel');
   	//activate worksheet number 1
@@ -258,33 +265,44 @@ class Home extends CI_Controller {
   	//set aligment to center for that merged cell (A1 to D1)
   	$this->excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 		
-  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, 'No.Arsip');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, 'No.');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, 2, 'No.Arsip');
   	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, 2, 'Tanggal');
   	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, 2, 'Kode Klasifikasi');
   	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, 2, 'Uraian');
-  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, 2, 'Ket');
-  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, 2, 'Jumlah');
-  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, 2, 'No.Box');
-  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, 2, 'Retensi');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, 2, 'Pencipta');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, 2, 'Pengolah');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, 2, 'Media');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, 2, 'Lokasi');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, 2, 'Ket');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, 2, 'Jumlah');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, 2, 'No.Box');
+  	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, 2, 'Retensi');
 		
   	$row=3;
   	$redblock = array('fill' => array(
   		'type' => PHPExcel_Style_Fill::FILL_SOLID,
 			'color' => array('rgb' => 'FF0000')));
-
+	$no=1;
   	foreach($data as $d) {
-  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $d['noarsip']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $d['noarsip']);
   	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $d['tanggal']);
-  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $d['kode']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $d['nama_kode']);
   	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $d['uraian']);
-  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $d['ket']);
-  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $d['jumlah']);
-  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $d['nobox']);
-  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $d['b']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $d['nama_pencipta']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $d['nama_pengolah']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $d['nama_media']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $d['nama_lokasi']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $d['ket']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $d['jumlah']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $d['nobox']);
+  	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, $d['b']);
   	  if($d['f']=='sudah') {
-  	      $this->excel->getActiveSheet()->getStyleByColumnAndRow(8, $row)->applyFromArray($redblock);
+  	      $this->excel->getActiveSheet()->getStyleByColumnAndRow(12, $row)->applyFromArray($redblock);
   	  } 
-  	  $row++;
+		$row++;
+		$no++;
   	}
 	
   	$filename='Data Arsip Arteri-'.getdate()[0].'.xls'; //save our workbook as this file name
