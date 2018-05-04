@@ -45,7 +45,8 @@ class Admin extends CI_Controller {
 	{
 		// return filter_var($this->__sanitizeString( $str),FILTER_SANITIZE_STRING);
 		//return $this->db->escape($this->__sanitizeString( $str));
-		return $this->db->escape(filter_var($str,FILTER_SANITIZE_STRING));
+		//return $this->db->escape(filter_var($str,FILTER_SANITIZE_STRING));
+		return html_purify($str);
 	}
 
 	/**

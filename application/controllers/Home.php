@@ -403,13 +403,13 @@ class Home extends CI_Controller {
 	 */
 	public function view($id)
 	{
-		$q="SELECT a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,l.nama_lokasi,m.nama_media, 
+		$q="SELECT a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,k.kode nama_kode,l.nama_lokasi,m.nama_media, 
 			DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
 			(IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
 			FROM data_arsip a
 			LEFT JOIN master_pencipta p ON p.id=a.pencipta
 			LEFT JOIN master_pengolah p2 ON p2.id=a.unit_pengolah
-			LEFT JOIN master_kode k ON k.kode=a.kode
+			LEFT JOIN master_kode k ON k.id=a.kode
 			LEFT JOIN master_lokasi l ON l.id=a.lokasi
 			LEFT JOIN master_media m ON m.id=a.media
 			WHERE a.id=$id";
