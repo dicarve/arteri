@@ -23,12 +23,26 @@ class Sirkulasi extends CI_Controller {
 	public function index()
 	{
 		$this->datalist();
-    }
+	}
+	
+	/**
+	 * Method to sanitize input data
+	 * 
+	 * @return String
+	 * 
+	 */
+	protected function __sanitizeString($str)
+	{
+		// return filter_var($this->__sanitizeString( $str),FILTER_SANITIZE_STRING);
+		//return $this->db->escape($this->__sanitizeString( $str));
+		//return $this->db->escape(filter_var($str,FILTER_SANITIZE_STRING));
+		return html_purify($str);
+	}
 
     protected function src()
     {
 		// simple search
-		$katakunci=trim($this->input->get('katakunci'));
+		$katakunci=$this->__sanitizeString($this->input->get('katakunci'));
 
 		$w = array();
 		if ($katakunci) {
@@ -121,11 +135,11 @@ class Sirkulasi extends CI_Controller {
 	{
         $date = new DateTime();
         $now = $date->format('Y-m-d H:i:s');
-		$noarsip=trim($this->input->post('noarsip'));
-		$username_peminjam=trim($this->input->post('username_peminjam'));
-		$keperluan=trim($this->input->post('keperluan'));
-		$tgl_pinjam=trim($this->input->post('tgl_pinjam'));
-		$tgl_haruskembali=trim($this->input->post('tgl_haruskembali'));
+		$noarsip=$this->__sanitizeString($this->input->post('noarsip'));
+		$username_peminjam=$this->__sanitizeString($this->input->post('username_peminjam'));
+		$keperluan=$this->__sanitizeString($this->input->post('keperluan'));
+		$tgl_pinjam=$this->__sanitizeString($this->input->post('tgl_pinjam'));
+		$tgl_haruskembali=$this->__sanitizeString($this->input->post('tgl_haruskembali'));
 		$tgl_transaksi=$now;
 
 		$q = "INSERT INTO sirkulasi VALUES (NULL, '$noarsip','$username_peminjam','$keperluan','$tgl_pinjam',
@@ -165,12 +179,12 @@ class Sirkulasi extends CI_Controller {
 
 	public function update()
 	{
-		$id=trim($this->input->post('id'));
-		$noarsip=trim($this->input->post('noarsip'));
-		$username_peminjam=trim($this->input->post('username_peminjam'));
-		$keperluan=trim($this->input->post('keperluan'));
-		$tgl_pinjam=trim($this->input->post('tgl_pinjam'));
-		$tgl_haruskembali=trim($this->input->post('tgl_haruskembali'));
+		$id=$this->__sanitizeString($this->input->post('id'));
+		$noarsip=$this->__sanitizeString($this->input->post('noarsip'));
+		$username_peminjam=$this->__sanitizeString($this->input->post('username_peminjam'));
+		$keperluan=$this->__sanitizeString($this->input->post('keperluan'));
+		$tgl_pinjam=$this->__sanitizeString($this->input->post('tgl_pinjam'));
+		$tgl_haruskembali=$this->__sanitizeString($this->input->post('tgl_haruskembali'));
 		$previous = "";
 		if(isset($_SERVER['HTTP_REFERER'])) {
 			$previous = $_SERVER['HTTP_REFERER'];
@@ -205,7 +219,7 @@ class Sirkulasi extends CI_Controller {
 	public function xhr_arsip($keywords = '')
 	{
 		$data = array();
-		$keywords = trim($keywords);
+		$keywords = $this->__sanitizeString($keywords);
 		if (!$keywords) {
 			header('Content-Type: application/json');
 			exit('[]');
@@ -227,7 +241,7 @@ class Sirkulasi extends CI_Controller {
 	public function xhr_user($keywords = '')
 	{
 		$data = array();
-		$keywords = trim($keywords);
+		$keywords = $this->__sanitizeString($keywords);
 		if (!$keywords) {
 			header('Content-Type: application/json');
 			exit('[]');

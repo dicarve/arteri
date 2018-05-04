@@ -37,6 +37,20 @@ class Home extends CI_Controller {
 	}
 	
 	/**
+	 * Method to sanitize input data
+	 * 
+	 * @return String
+	 * 
+	 */
+	protected function __sanitizeString($str)
+	{
+		// return filter_var($this->__sanitizeString( $str),FILTER_SANITIZE_STRING);
+		//return $this->db->escape($this->__sanitizeString( $str));
+		//return $this->db->escape(filter_var($str,FILTER_SANITIZE_STRING));
+		return html_purify($str);
+	}
+
+	/**
 	 * Method to compile SQL query based on search criteria
 	 * 
 	 * @return Array or String
@@ -45,19 +59,19 @@ class Home extends CI_Controller {
   protected function src($srcdata=false)
   {
 		// simple search
-		$katakunci=filter_var($this->input->get('katakunci'),FILTER_SANITIZE_STRING);
+		$katakunci=$this->__sanitizeString($this->input->get('katakunci'));
 		// advanced search
-  	$noarsip=filter_var($this->input->get('noarsip'),FILTER_SANITIZE_STRING);
-		$tanggal=filter_var($this->input->get('tanggal'),FILTER_SANITIZE_STRING);
-		$uraian=filter_var($this->input->get('uraian'),FILTER_SANITIZE_STRING);
-		$ket=filter_var($this->input->get('ket'),FILTER_SANITIZE_STRING);
-		$kode=filter_var($this->input->get('kode'),FILTER_SANITIZE_STRING);
-		$retensi=filter_var($this->input->get('retensi'),FILTER_SANITIZE_STRING);
-		$penc=filter_var($this->input->get('penc'),FILTER_SANITIZE_STRING);
-		$peng=filter_var($this->input->get('peng'),FILTER_SANITIZE_STRING);
-		$lok=filter_var($this->input->get('lok'),FILTER_SANITIZE_STRING);
-		$med=filter_var($this->input->get('med'),FILTER_SANITIZE_STRING);
-		$nobox=filter_var($this->input->get('nobox'),FILTER_SANITIZE_STRING);
+  	$noarsip=$this->__sanitizeString($this->input->get('noarsip'));
+		$tanggal=$this->__sanitizeString($this->input->get('tanggal'));
+		$uraian=$this->__sanitizeString($this->input->get('uraian'));
+		$ket=$this->__sanitizeString($this->input->get('ket'));
+		$kode=$this->__sanitizeString($this->input->get('kode'));
+		$retensi=$this->__sanitizeString($this->input->get('retensi'));
+		$penc=$this->__sanitizeString($this->input->get('penc'));
+		$peng=$this->__sanitizeString($this->input->get('peng'));
+		$lok=$this->__sanitizeString($this->input->get('lok'));
+		$med=$this->__sanitizeString($this->input->get('med'));
+		$nobox=$this->__sanitizeString($this->input->get('nobox'));
 
 		$w = array();
 		$klas = array();
@@ -333,10 +347,10 @@ class Home extends CI_Controller {
 	 */
 	public function gologin()
 	{
-		$username=trim($this->input->post('username'));
-    // $password=md5($this->input->post('password'));
-    $password=$this->input->post('password');
-    $previous=trim($this->input->post('previous'));
+		$username=$this->__sanitizeString($this->input->post('username'));
+		//$password=md5($this->input->post('password'));
+		$password=$this->input->post('password');
+		$previous=$this->__sanitizeString($this->input->post('previous'));
 		// $q = "select * from master_user where username='$username' and password='$password'";
 		$q = "SELECT * FROM master_user WHERE username='$username'";
 		$user = $this->db->query($q)->row();

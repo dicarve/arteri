@@ -50,11 +50,12 @@ INSERT INTO `data_arsip` (`id`, `noarsip`, `pencipta`, `unit_pengolah`, `tanggal
 (18,	'99/A5/HKP.02/2016',	'5',	'4',	'2016-12-10',	'Laporan hasil audit internal pada tahun anggaran 2016',	'asli',	'19',	2,	'B8292920',	'5',	'2',	'',	'2017-11-10 03:38:28',	'0000-00-00 00:00:00',	'admin'),
 (19,	'88/E2/SDM.01.01/2017',	'3',	'2',	'2017-07-10',	'Surat pengangkatan pegawai tetap setelah melalui masa percobaan selama 6 bulan',	'asli',	'11',	1,	'B982002',	'4',	'2',	'',	'2017-11-10 03:53:14',	'0000-00-00 00:00:00',	'admin'),
 (20,	'192/K1/UMUM.01/2017',	'7',	'6',	'2017-06-13',	'Laporan inventarisasi PT Arteri',	'asli',	'21',	50,	'B8292922',	'2',	'2',	'',	'2017-11-10 04:11:52',	'0000-00-00 00:00:00',	'user'),
-(21,	'29/A1/SDM.05/2017',	'3',	'2',	'2017-04-10',	'Surat pemberhentian pegawai oleh Manajer HRD',	'asli',	'12',	1,	'B9200202',	'5',	'2',	'',	'2017-11-10 04:30:31',	'0000-00-00 00:00:00',	'admin');
+(21,	'29/A1/SDM.05/2017',	'3',	'2',	'2017-04-10',	'Surat pemberhentian pegawai oleh Manajer HRD',	'asli',	'12',	1,	'B9200202',	'5',	'2',	'',	'2017-11-10 04:30:31',	'0000-00-00 00:00:00',	'admin'),
+(22,	'tes123',	'4',	'1',	'2018-05-01',	'zxc aseqw asc \r\nlink\r\nhttp://google.com',	'asli',	'12',	12,	'22',	'4',	'3',	'',	'2018-05-04 10:04:32',	'0000-00-00 00:00:00',	'');
 
 DROP TABLE IF EXISTS `master_kode`;
 CREATE TABLE `master_kode` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kode` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `nama` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `retensi` int(11) NOT NULL,
@@ -85,7 +86,7 @@ INSERT INTO `master_kode` (`id`, `kode`, `nama`, `retensi`) VALUES
 
 DROP TABLE IF EXISTS `master_lokasi`;
 CREATE TABLE `master_lokasi` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama_lokasi` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nama_lokasi` (`nama_lokasi`)
@@ -98,7 +99,7 @@ INSERT INTO `master_lokasi` (`id`, `nama_lokasi`) VALUES
 
 DROP TABLE IF EXISTS `master_media`;
 CREATE TABLE `master_media` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama_media` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nama_media` (`nama_media`)
@@ -114,7 +115,7 @@ INSERT INTO `master_media` (`id`, `nama_media`) VALUES
 
 DROP TABLE IF EXISTS `master_pencipta`;
 CREATE TABLE `master_pencipta` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama_pencipta` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nama_pencipta` (`nama_pencipta`)
@@ -199,4 +200,4 @@ CREATE TABLE `system_log` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- 2018-03-09 00:52:07
+-- 2018-05-04 08:55:07
