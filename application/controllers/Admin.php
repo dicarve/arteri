@@ -354,7 +354,7 @@ class Admin extends CI_Controller {
 			}
 			exit();
 		}else { //ada arsip yng menggunakan, klasifikasi jangan dihapus dulu
-			
+
 		}
 		
 	}
@@ -470,14 +470,21 @@ class Admin extends CI_Controller {
 	public function delpenc()
 	{
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = sprintf("DELETE FROM master_pencipta WHERE id=%d", $id);
-		$hsl = $this->db->query($q);
-		if($hsl) {
-			echo json_encode(array('status' => 'success'));
-		} else {
-			echo '[]';
+		//cek dulu apakah ada arsip yang menggunakan pencipta ini
+		$q = sprintf("SELECT count(id) jml FROM data_arsip WHERE pencipta=%d", $id);
+		$jml = $this->db->query($q)->row_array()['jml'];
+		if($jml==0) { //kalau tidak data arsip yang menggunakan, boleh dihapus
+			$q = sprintf("DELETE FROM master_pencipta WHERE id=%d", $id);
+			$hsl = $this->db->query($q);
+			if($hsl) {
+				echo json_encode(array('status' => 'success'));
+			} else {
+				echo '[]';
+			}
+			exit();
+		}else {
+
 		}
-		exit();
 	}
 
 	/**
@@ -591,14 +598,21 @@ class Admin extends CI_Controller {
 	public function delpeng()
 	{
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = sprintf("DELETE FROM master_pengolah WHERE id=%d", $id);
-		$hsl = $this->db->query($q);
-		if($hsl) {
-			echo json_encode(array('status' => 'success'));
-		} else {
-			echo '[]';
+		//cek dulu apakah ada arsip yang menggunakan unit pengolah ini
+		$q = sprintf("SELECT count(id) jml FROM data_arsip WHERE unit_pengolah=%d", $id);
+		$jml = $this->db->query($q)->row_array()['jml'];
+		if($jml==0) { //kalau tidak data arsip yang menggunakan, boleh dihapus
+			$q = sprintf("DELETE FROM master_pengolah WHERE id=%d", $id);
+			$hsl = $this->db->query($q);
+			if($hsl) {
+				echo json_encode(array('status' => 'success'));
+			} else {
+				echo '[]';
+			}
+			exit();
+		}else{
+
 		}
-		exit();
 	}
 
 	/**
@@ -710,14 +724,21 @@ class Admin extends CI_Controller {
 	public function dellok()
 	{
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = sprintf("DELETE FROM master_lokasi WHERE id=%d", $id);
-		$hsl = $this->db->query($q);
-		if($hsl) {
-			echo json_encode(array('status' => 'success'));
-		} else {
-			echo '[]';
+		//cek dulu apakah ada arsip yang menggunakan lokasi ini
+		$q = sprintf("SELECT count(id) jml FROM data_arsip WHERE lokasi=%d", $id);
+		$jml = $this->db->query($q)->row_array()['jml'];
+		if($jml==0) { //kalau tidak data arsip yang menggunakan, boleh dihapus
+			$q = sprintf("DELETE FROM master_lokasi WHERE id=%d", $id);
+			$hsl = $this->db->query($q);
+			if($hsl) {
+				echo json_encode(array('status' => 'success'));
+			} else {
+				echo '[]';
+			}
+			exit();
+		}else {
+
 		}
-		exit();
 	}
 
 	/**
@@ -829,14 +850,21 @@ class Admin extends CI_Controller {
 	public function delmed()
 	{
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = sprintf("DELETE FROM master_media WHERE id=%d", $id);
-		$hsl = $this->db->query($q);
-		if($hsl) {
-			echo json_encode(array('status' => 'success'));
-		} else {
-			echo '[]';
+		//cek dulu apakah ada arsip yang menggunakan media ini
+		$q = sprintf("SELECT count(id) jml FROM data_arsip WHERE media=%d", $id);
+		$jml = $this->db->query($q)->row_array()['jml'];
+		if($jml==0) { //kalau tidak data arsip yang menggunakan, boleh dihapus
+			$q = sprintf("DELETE FROM master_media WHERE id=%d", $id);
+			$hsl = $this->db->query($q);
+			if($hsl) {
+				echo json_encode(array('status' => 'success'));
+			} else {
+				echo '[]';
+			}
+			exit();
+		}else {
+
 		}
-		exit();
 	}
 
 	/**
