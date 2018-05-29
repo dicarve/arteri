@@ -138,9 +138,9 @@ class Admin extends CI_Controller {
 			//die();
 		}
 
-		$q = sprintf("INSERT INTO data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file,jumlah,pencipta,unit_pengolah,lokasi,media,tgl_input) 
-			VALUES ('%s','%s','%s','%s','%s','%s','%s','%d',%d,%d,%d,%d,now())",
-		  $noarsip,$tanggal,$uraian,$kode,$ket,$nobox,$file,$jumlah,$pencipta,$unitpengolah,$lokasi,$media);
+		$q = sprintf("INSERT INTO data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file,jumlah,pencipta,unit_pengolah,lokasi,media,tgl_input,username) 
+			VALUES ('%s','%s','%s','%s','%s','%s','%s','%d',%d,%d,%d,%d,now(),'%s')",
+		  $noarsip,$tanggal,$uraian,$kode,$ket,$nobox,$file,$jumlah,$pencipta,$unitpengolah,$lokasi,$media,$_SESSION['username']);
 		$hsl = $this->db->query($q);
 		$q = "SELECT LAST_INSERT_ID() as vid;";
 		$hsl = $this->db->query($q);
@@ -341,14 +341,22 @@ class Admin extends CI_Controller {
 	public function delkode()
 	{
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = sprintf("DELETE FROM master_kode WHERE id=%d", $id);
-		$hsl = $this->db->query($q);
-		if($hsl) {
-			echo json_encode(array('status' => 'success'));
-		} else {
-			echo '[]';
+		//cek dulu apakah ada arsip yang menggunakan klasifikasi ini
+		$q = sprintf("SELECT count(id) jml FROM data_arsip WHERE kode=%d", $id);
+		$jml = $this->db->query($q)->row_array()['jml'];
+		if($jml==0) { //kalau tidak data arsip yang menggunakan, boleh dihapus
+			$q = sprintf("DELETE FROM master_kode WHERE id=%d", $id);
+			$hsl = $this->db->query($q);
+			if($hsl) {
+				echo json_encode(array('status' => 'success'));
+			} else {
+				echo '[]';
+			}
+			exit();
+		}else { //ada arsip yng menggunakan, klasifikasi jangan dihapus dulu
+			
 		}
-		exit();
+		
 	}
 
 	/**
