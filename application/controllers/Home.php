@@ -61,7 +61,7 @@ class Home extends CI_Controller {
 		// simple search
 		$katakunci=$this->__sanitizeString($this->input->get('katakunci'));
 		// advanced search
-  	$noarsip=$this->__sanitizeString($this->input->get('noarsip'));
+  		$noarsip=$this->__sanitizeString($this->input->get('noarsip'));
 		$tanggal=$this->__sanitizeString($this->input->get('tanggal'));
 		$uraian=$this->__sanitizeString($this->input->get('uraian'));
 		$ket=$this->__sanitizeString($this->input->get('ket'));
@@ -129,7 +129,13 @@ class Home extends CI_Controller {
 		  JOIN master_pengolah AS pn ON pn.id=a.unit_pengolah
 		   ";
 		
-		$q_count = "SELECT COUNT(*) AS jmldata FROM data_arsip AS a JOIN master_kode AS k ON k.id=a.kode";
+		$q_count = "SELECT COUNT(*) AS jmldata 
+		FROM data_arsip AS a 
+		JOIN master_kode AS k ON k.id=a.kode
+		JOIN master_lokasi AS l ON l.id=a.lokasi
+		JOIN master_media AS m ON m.id=a.media
+		JOIN master_pencipta AS p ON p.id=a.pencipta
+		JOIN master_pengolah AS pn ON pn.id=a.unit_pengolah";
 		if($_SESSION['akses_klas']!='') {
 			$k = explode(',',$_SESSION['akses_klas']);
 			$k = array_filter($k);
@@ -147,8 +153,8 @@ class Home extends CI_Controller {
 		if ($katakunci) {
 			$q .= " WHERE".implode(" OR ",$w);
 			$q_count .= " WHERE".implode(" OR ",$w);
-  	  $src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'',"nobox"=>$nobox);
-  	  $qq = array($q, $q_count, $src);
+			$src = array("noarsip"=>$katakunci,"tanggal"=>'',"uraian"=>$katakunci,"ket"=>'',"kode"=>'',"retensi"=>'',"penc"=>'',"peng"=>'',"lok"=>'',"med"=>'',"nobox"=>$nobox);
+			$qq = array($q, $q_count, $src);
 			return $qq;
 		} else {
 			if(count($w) > 0) {
@@ -161,7 +167,7 @@ class Home extends CI_Controller {
       $src = array("noarsip"=>$noarsip,"tanggal"=>$tanggal,"uraian"=>$uraian,"ket"=>$ket,"kode"=>$kode,"retensi"=>$retensi,"penc"=>$penc,"peng"=>$peng,"lok"=>$lok,"med"=>$med,"nobox"=>$nobox);
       return array($q, $q_count, $src);
     } else {
-			$src = array("Kata kunci"=>$katakunci);
+		$src = array("Kata kunci"=>$katakunci);
       return array($q, $q_count, $src);
     }
 	}
