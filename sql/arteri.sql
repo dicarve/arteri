@@ -1,4 +1,4 @@
--- Adminer 4.3.1 MySQL dump
+-- Arteri application main MySQL database structure 
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -19,7 +19,7 @@ CREATE TABLE `data_arsip` (
   `nobox` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `lokasi` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `media` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `file` text COLLATE utf8_unicode_ci NOT NULL,
+  `file` text COLLATE utf8_unicode_ci,
   `tgl_input` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `tgl_update` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE `data_arsip` (
   KEY `pencipta` (`pencipta`),
   KEY `unit_pengolah` (`unit_pengolah`),
   FULLTEXT KEY `uraian` (`uraian`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `data_arsip` (`id`, `noarsip`, `pencipta`, `unit_pengolah`, `tanggal`, `uraian`, `ket`, `kode`, `jumlah`, `nobox`, `lokasi`, `media`, `file`, `tgl_input`, `tgl_update`, `username`) VALUES
 (1,	'103/D1.1/SDM.01/2016',	'5',	'0',	'2016-11-11',	'Melalui rapat dewan direksi, prosedur rekrutmen pegawai mengalami perubahan sesuai dengan perkembangan dan kebutuhan perusahaan.',	'asli',	'5',	1,	'B01001',	'2',	'5',	'SURAT_DINAS_Prosedur_Rekrutmen2.pdf',	'2017-11-10 02:44:54',	'2017-11-10 02:44:54',	'admin'),
@@ -50,8 +50,7 @@ INSERT INTO `data_arsip` (`id`, `noarsip`, `pencipta`, `unit_pengolah`, `tanggal
 (18,	'99/A5/HKP.02/2016',	'5',	'4',	'2016-12-10',	'Laporan hasil audit internal pada tahun anggaran 2016',	'asli',	'19',	2,	'B8292920',	'5',	'2',	'',	'2017-11-10 03:38:28',	'0000-00-00 00:00:00',	'admin'),
 (19,	'88/E2/SDM.01.01/2017',	'3',	'2',	'2017-07-10',	'Surat pengangkatan pegawai tetap setelah melalui masa percobaan selama 6 bulan',	'asli',	'11',	1,	'B982002',	'4',	'2',	'',	'2017-11-10 03:53:14',	'0000-00-00 00:00:00',	'admin'),
 (20,	'192/K1/UMUM.01/2017',	'7',	'6',	'2017-06-13',	'Laporan inventarisasi PT Arteri',	'asli',	'21',	50,	'B8292922',	'2',	'2',	'',	'2017-11-10 04:11:52',	'0000-00-00 00:00:00',	'user'),
-(21,	'29/A1/SDM.05/2017',	'3',	'2',	'2017-04-10',	'Surat pemberhentian pegawai oleh Manajer HRD',	'asli',	'12',	1,	'B9200202',	'5',	'2',	'',	'2017-11-10 04:30:31',	'0000-00-00 00:00:00',	'admin'),
-(22,	'tes123',	'4',	'1',	'2018-05-01',	'zxc aseqw asc \r\nlink\r\nhttp://google.com',	'asli',	'12',	12,	'22',	'4',	'3',	'',	'2018-05-04 10:04:32',	'0000-00-00 00:00:00',	'');
+(21,	'29/A1/SDM.05/2017',	'3',	'2',	'2017-04-10',	'Surat pemberhentian pegawai oleh Manajer HRD',	'asli',	'12',	1,	'B9200202',	'5',	'2',	'',	'2017-11-10 04:30:31',	'0000-00-00 00:00:00',	'admin');
 
 DROP TABLE IF EXISTS `master_kode`;
 CREATE TABLE `master_kode` (
@@ -62,7 +61,7 @@ CREATE TABLE `master_kode` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `kode` (`kode`),
   KEY `nama` (`nama`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `master_kode` (`id`, `kode`, `nama`, `retensi`) VALUES
 (5,	'SDM.01',	'Rekrutmen Pegawai',	1),
@@ -90,12 +89,12 @@ CREATE TABLE `master_lokasi` (
   `nama_lokasi` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nama_lokasi` (`nama_lokasi`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `master_lokasi` (`id`, `nama_lokasi`) VALUES
-(2,	'Gedung A, Unit II'),
-(4,	'Gedung B, Unit III'),
-(5,	'Gedung C, Unit IV');
+(1,	'Gedung A, Unit II'),
+(2,	'Gedung B, Unit III'),
+(3,	'Gedung C, Unit IV');
 
 DROP TABLE IF EXISTS `master_media`;
 CREATE TABLE `master_media` (
@@ -103,7 +102,7 @@ CREATE TABLE `master_media` (
   `nama_media` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nama_media` (`nama_media`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `master_media` (`id`, `nama_media`) VALUES
 (5,	'Audio Cassette'),
@@ -111,7 +110,8 @@ INSERT INTO `master_media` (`id`, `nama_media`) VALUES
 (4,	'Blueprint'),
 (3,	'Kartografi'),
 (2,	'Tekstual'),
-(7,	'Video Cartridge');
+(7,	'Video Cartridge'),
+(8,	'Digital');
 
 DROP TABLE IF EXISTS `master_pencipta`;
 CREATE TABLE `master_pencipta` (
@@ -119,7 +119,7 @@ CREATE TABLE `master_pencipta` (
   `nama_pencipta` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nama_pencipta` (`nama_pencipta`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `master_pencipta` (`id`, `nama_pencipta`) VALUES
 (5,	'Bidang Hukum dan Tata Laksana'),
@@ -135,15 +135,15 @@ CREATE TABLE `master_pengolah` (
   `nama_pengolah` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nama_pengolah` (`nama_pengolah`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `master_pengolah` (`id`, `nama_pengolah`) VALUES
-(1,	'pengolah 1'),
-(4,	'Sekretariat Hukum dan Tata Laksana'),
-(2,	'Sekretariat Kepegawaian'),
-(5,	'Sekretariat Pengadaan'),
-(6,	'Sekretariat Umum dan Rumah Tangga'),
-(3,	'Unit Kearsipan');
+(1,	'Unit Arsip Teknologi Informasi'),
+(4,	'Unit Arsip Sekretariat Hukum dan Tata Laksana'),
+(2,	'Unit Arsip Kepegawaian'),
+(5,	'Unit Arsip Pengadaan'),
+(6,	'Unit Arsip Biro Umum dan Rumah Tangga'),
+(3,	'Unit Kearsipan Pusat');
 
 DROP TABLE IF EXISTS `master_user`;
 CREATE TABLE `master_user` (
@@ -155,13 +155,11 @@ CREATE TABLE `master_user` (
   `akses_modul` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `master_user` (`id`, `username`, `password`, `tipe`, `akses_klas`, `akses_modul`) VALUES
 (1,	'admin',	'$2y$10$M57KBHBtl9HsFQP6rxrqUOuSqO/MiQJnTqTu4wM5OlWwa/lTKyb2S',	'admin',	'',	'{\"entridata\":\"on\",\"sirkulasi\":\"on\",\"klasifikasi\":\"on\",\"pencipta\":\"on\",\"pengolah\":\"on\",\"lokasi\":\"on\",\"media\":\"on\",\"user\":\"on\"}'),
-(6,	'user',	'$2y$10$uE3PKQ/tWOoGQwnfKXVYjOXHRHQ43o5PgYpN2wf2lp.iI4.DFshoq',	'user',	'sdm,hkp',	'{\"sirkulasi\":\"on\"}'),
-(7,	'user2',	'$2y$10$zbKoLuFb/OnduoqJc1YYg.Nn5Ew8zTSaP7SeEDFQLDX1j.t1p4VFW',	'admin',	'',	'{\"sirkulasi\":\"on\",\"klasifikasi\":\"on\",\"pencipta\":\"on\"}'),
-(8,	'zzz',	'$2y$10$Z3ti5J1DcSHy9avlOvMo5.s7DVFgLp.GVujd0LAsq0ntjRul9UW9q',	'admin',	'keu',	'{\"sirkulasi\":\"on\",\"klasifikasi\":\"on\",\"lokasi\":\"on\"}');
+(6,	'user',	'$2y$10$uE3PKQ/tWOoGQwnfKXVYjOXHRHQ43o5PgYpN2wf2lp.iI4.DFshoq',	'user',	'sdm,hkp',	'{\"sirkulasi\":\"on\"}');
 
 DROP TABLE IF EXISTS `sirkulasi`;
 CREATE TABLE `sirkulasi` (
@@ -179,7 +177,7 @@ CREATE TABLE `sirkulasi` (
   KEY `tgl_pinjam` (`tgl_pinjam`),
   KEY `tgl_pengembalian` (`tgl_pengembalian`),
   KEY `tgl_haruskembali` (`tgl_haruskembali`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `sirkulasi` (`id`, `noarsip`, `username_peminjam`, `keperluan`, `tgl_pinjam`, `tgl_haruskembali`, `tgl_pengembalian`, `tgl_transaksi`) VALUES
 (1,	'103/D1.1/SDM.01/2016',	'user',	'keperluan pembuktian',	'2017-11-14 16:45:27',	'2017-11-17 00:00:00',	NULL,	'2017-11-14 16:45:27'),
@@ -200,4 +198,4 @@ CREATE TABLE `system_log` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- 2018-05-04 08:55:07
+-- 2018-05-29 09:00:20

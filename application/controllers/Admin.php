@@ -43,9 +43,9 @@ class Admin extends CI_Controller {
 	 */
 	protected function __sanitizeString($str)
 	{
-		// return filter_var($this->__sanitizeString( $str),FILTER_SANITIZE_STRING);
-		//return $this->db->escape($this->__sanitizeString( $str));
-		//return $this->db->escape(filter_var($str,FILTER_SANITIZE_STRING));
+		// return filter_var($this->__sanitizeString($str),FILTER_SANITIZE_STRING);
+		// return $this->db->escape($this->__sanitizeString($str));
+		// return $this->db->escape(filter_var($str,FILTER_SANITIZE_STRING));
 		return html_purify($str);
 	}
 
@@ -138,8 +138,9 @@ class Admin extends CI_Controller {
 			//die();
 		}
 
-		$q = "INSERT INTO data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file,jumlah,pencipta,unit_pengolah,lokasi,media,tgl_input) 
-			VALUES ('$noarsip','$tanggal','$uraian','$kode','$ket','$nobox','$file','$jumlah',$pencipta,$unitpengolah,$lokasi,$media,now());";
+		$q = sprintf("INSERT INTO data_arsip (noarsip,tanggal,uraian,kode,ket,nobox,file,jumlah,pencipta,unit_pengolah,lokasi,media,tgl_input) 
+			VALUES ('%s','%s','%s','%s','%s','%s','%s','%d',%d,%d,%d,%d,now())",
+		  $noarsip,$tanggal,$uraian,$kode,$ket,$nobox,$file,$jumlah,$pencipta,$unitpengolah,$lokasi,$media);
 		$hsl = $this->db->query($q);
 		$q = "SELECT LAST_INSERT_ID() as vid;";
 		$hsl = $this->db->query($q);
@@ -158,7 +159,7 @@ class Admin extends CI_Controller {
 	public function vedit($id)
 	{
 		if($id!=""){
-			$q = "SELECT * FROM data_arsip WHERE id=$id";
+			$q = sprintf("SELECT * FROM data_arsip WHERE id=%d", $id);
 			$hsl = $this->db->query($q);
 			$row = $hsl->row_array();
 			$previous = "";
@@ -216,7 +217,12 @@ class Admin extends CI_Controller {
 		}
 
 		if(isset($_POST)) {
-			$q = "UPDATE data_arsip SET noarsip='$noarsip',tanggal='$tanggal',uraian='$uraian',kode='$kode',ket='$ket',nobox='$nobox',file='$file',jumlah='$jumlah',pencipta=$pencipta,unit_pengolah=$unitpengolah,lokasi=$lokasi,media=$media WHERE id=$id";
+			$q = sprintf("UPDATE data_arsip SET noarsip='%s',tanggal='%s',uraian='%s',kode='%s',
+							ket='%s',nobox='%s',file='%s',jumlah='%d',
+							pencipta=%d,unit_pengolah=%d,lokasi=%d,media=%d WHERE id=$id",
+							$noarsip,$tanggal,$uraian,$kode,
+							$ket,$nobox,$file,$jumlah,
+							$pencipta,$unitpengolah,$lokasi,$media);
 			$hsl = $this->db->query($q);
 		}
 		redirect('/home/view/'.$id, 'refresh');
@@ -241,7 +247,7 @@ class Admin extends CI_Controller {
 			$alamat = ROOTPATH."/files/".$row;
 			unlink($alamat);
 		}
-		$q = "UPDATE data_arsip SET file='' WHERE id=$id";
+		$q = sprintf("UPDATE data_arsip SET file=NULL WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 	}
 
@@ -259,7 +265,7 @@ class Admin extends CI_Controller {
 			$alamat = ROOTPATH."/files/".$row;
 			unlink($alamat);
 		}
-		$q = "DELETE FROM data_arsip WHERE id=$id";
+		$q = sprintf("DELETE FROM data_arsip WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -296,7 +302,8 @@ class Admin extends CI_Controller {
 		$kode = $this->__sanitizeString($this->input->post('kode'));
 		$nama = $this->__sanitizeString($this->input->post('nama'));
 		$retensi = $this->__sanitizeString($this->input->post('retensi'));
-		$q = "INSERT INTO master_kode (kode,nama,retensi) VALUES ($kode,$nama,$retensi)";
+		$q = sprintf("INSERT INTO master_kode (kode,nama,retensi) VALUES ('%s','%s','%s')",
+				   $kode,$nama,$retensi);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -316,9 +323,8 @@ class Admin extends CI_Controller {
 		$nama = $this->__sanitizeString($this->input->post('nama'));
 		$retensi = $this->__sanitizeString($this->input->post('retensi'));
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = "UPDATE master_kode SET kode=$kode";
-		$q .= ",nama=$nama";
-		$q .= ",retensi=$retensi WHERE id=$id";
+		$q = sprintf("UPDATE master_kode SET kode='%s',nama='%s',retensi='%s' WHERE id=%d", 
+		       $kode,$nama,$retensi,$id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -335,7 +341,7 @@ class Admin extends CI_Controller {
 	public function delkode()
 	{
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = "DELETE FROM master_kode WHERE id=$id";
+		$q = sprintf("DELETE FROM master_kode WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -352,7 +358,7 @@ class Admin extends CI_Controller {
 	public function akode()
 	{
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = "SELECT * FROM master_kode WHERE id=$id";
+		$q = sprintf("SELECT * FROM master_kode WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
@@ -402,7 +408,7 @@ class Admin extends CI_Controller {
 	 */
 	public function penc()
 	{
-		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString($this->input->get('katakunci'));
 
 		$q = "SELECT * FROM master_pencipta ";
 		if ($katakunci) {
@@ -420,8 +426,8 @@ class Admin extends CI_Controller {
 	 */
 	public function addpenc()
 	{
-		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$q = "INSERT INTO master_pencipta (nama_pencipta) VALUES ($nama)";
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$q = sprintf("INSERT INTO master_pencipta (nama_pencipta) VALUES ('%s')", $nama);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -437,10 +443,9 @@ class Admin extends CI_Controller {
 	 */
 	public function edpenc()
 	{
-		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_pencipta SET nama_pencipta=$nama";
-		$q .= " WHERE id=$id";
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("UPDATE master_pencipta SET nama_pencipta='%s' WHERE id=%d", $nama, $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -456,8 +461,8 @@ class Admin extends CI_Controller {
 	 */
 	public function delpenc()
 	{
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "DELETE FROM master_pencipta WHERE id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("DELETE FROM master_pencipta WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -473,8 +478,8 @@ class Admin extends CI_Controller {
 	 */
 	public function apenc()
 	{
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "SELECT * FROM master_pencipta WHERE id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("SELECT * FROM master_pencipta WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
@@ -523,7 +528,7 @@ class Admin extends CI_Controller {
 	 */
 	public function pengolah()
 	{
-		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString($this->input->get('katakunci'));
 
 		$q = "SELECT * FROM master_pengolah ";
 		if ($katakunci) {
@@ -541,8 +546,8 @@ class Admin extends CI_Controller {
 	 */
 	public function addpeng()
 	{
-		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$q = "INSERT INTO master_pengolah (nama_pengolah) VALUES ($nama)";
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$q = sprintf("INSERT INTO master_pengolah (nama_pengolah) VALUES ('%s')", $nama);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -558,9 +563,9 @@ class Admin extends CI_Controller {
 	 */
 	public function edpeng()
 	{
-		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_pengolah SET nama_pengolah=$nama";
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("UPDATE master_pengolah SET nama_pengolah='%s'", $nama);
 		$q .= " WHERE id=$id";
 		$hsl = $this->db->query($q);
 		if($hsl) {
@@ -577,8 +582,8 @@ class Admin extends CI_Controller {
 	 */
 	public function delpeng()
 	{
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "DELETE FROM master_pengolah WHERE id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("DELETE FROM master_pengolah WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -594,8 +599,8 @@ class Admin extends CI_Controller {
 	 */
 	public function apeng()
 	{
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "SELECT * FROM master_pengolah WHERE id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("SELECT * FROM master_pengolah WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {
@@ -643,7 +648,7 @@ class Admin extends CI_Controller {
 	 */
 	public function lokasi()
 	{
-		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString($this->input->get('katakunci'));
 		
 		$q = "SELECT * FROM master_lokasi ";
 		if ($katakunci) {
@@ -661,8 +666,8 @@ class Admin extends CI_Controller {
 	 */
 	public function addlok()
 	{
-		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$q = "INSERT INTO master_lokasi (nama_lokasi) VALUES ($nama)";
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$q = sprintf("INSERT INTO master_lokasi (nama_lokasi) VALUES ('%s')", $nama);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -678,10 +683,9 @@ class Admin extends CI_Controller {
 	 */
 	public function edlok()
 	{
-		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_lokasi SET nama_lokasi=$nama";
-		$q .= " WHERE id=$id";
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("UPDATE master_lokasi SET nama_lokasi='%s' WHERE id=%d", $nama, $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -697,8 +701,8 @@ class Admin extends CI_Controller {
 	 */
 	public function dellok()
 	{
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "DELETE FROM master_lokasi WHERE id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("DELETE FROM master_lokasi WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -714,7 +718,7 @@ class Admin extends CI_Controller {
 	 */
 	public function alok()
 	{
-		$id = $this->__sanitizeString( $this->input->post('id'));
+		$id = $this->__sanitizeString($this->input->post('id'));
 		$q = "SELECT * FROM master_lokasi WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
@@ -763,7 +767,7 @@ class Admin extends CI_Controller {
 	 */
 	public function media()
 	{
-		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString($this->input->get('katakunci'));
 		
 		$q = "SELECT * FROM master_media ";
 		if ($katakunci) {
@@ -781,8 +785,8 @@ class Admin extends CI_Controller {
 	 */
 	public function addmed()
 	{
-		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$q = "INSERT INTO master_media (nama_media) VALUES ($nama)";
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$q = sprintf("INSERT INTO master_media (nama_media) VALUES ('%s')", $nama);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -798,10 +802,9 @@ class Admin extends CI_Controller {
 	 */
 	public function edmed()
 	{
-		$nama = $this->__sanitizeString( $this->input->post('nama'));
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_media SET nama_media=$nama";
-		$q .= " WHERE id=$id";
+		$nama = $this->__sanitizeString($this->input->post('nama'));
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("UPDATE master_media SET nama_media='%s' WHERE id=%d", $nama, $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -817,8 +820,8 @@ class Admin extends CI_Controller {
 	 */
 	public function delmed()
 	{
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "DELETE FROM master_media WHERE id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("DELETE FROM master_media WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -834,7 +837,7 @@ class Admin extends CI_Controller {
 	 */
 	public function amed()
 	{
-		$id = $this->__sanitizeString( $this->input->post('id'));
+		$id = $this->__sanitizeString($this->input->post('id'));
 		$q = "SELECT * FROM master_media WHERE id=$id";
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
@@ -883,7 +886,7 @@ class Admin extends CI_Controller {
 	 */
 	public function vuser()
 	{
-		$katakunci = $this->__sanitizeString( $this->input->get('katakunci'));
+		$katakunci = $this->__sanitizeString($this->input->get('katakunci'));
 		
 		$q = "SELECT * FROM master_user ";
 		if ($katakunci) {
@@ -902,7 +905,7 @@ class Admin extends CI_Controller {
 	public function cekuser()
 	{
 		$username = $this->__sanitizeString($this->input->post('username'));
-		$q = "SELECT username FROM master_user WHERE username=$username";
+		$q = "SELECT username FROM master_user WHERE username='$username'";
 		$hsl = $this->db->query($q)->row_array();
 		if($hsl['username']==$username) {
 			echo json_encode(array('msg'=>'error'));
@@ -917,12 +920,19 @@ class Admin extends CI_Controller {
 	 */
 	public function adduser()
 	{
-		$username = $this->__sanitizeString( $this->input->post('username'));
+		$password_str = $this->input->post('password');
+		$conf_password_str = $this->input->post('conf_password');
+		if ($password_str !== $conf_password_str) {
+			echo json_encode(array('status' => 'error', 'pesan' => 'PASSWORD_UNMATCH')); exit();
+		}
+
+		$username = $this->__sanitizeString($this->input->post('username'));
 		$password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-		$tipe = $this->__sanitizeString( $this->input->post('tipe'));
-		$akses_klas = $this->__sanitizeString( $this->input->post('akses_klas'));
+		$tipe = $this->__sanitizeString($this->input->post('tipe'));
+		$akses_klas = $this->__sanitizeString($this->input->post('akses_klas'));
 		$akses_modul = json_encode($this->input->post('modul'));
-		$q = "INSERT INTO master_user (username,password,tipe,akses_klas,akses_modul) VALUES ($username, '$password',$tipe,$akses_klas,'$akses_modul')";
+		$q = sprintf("INSERT INTO master_user (username,password,tipe,akses_klas,akses_modul) VALUES ('%s', '%s',%d,%d,'%s')",
+				   $username, $password,$tipe,$akses_klas,$akses_modul);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -938,18 +948,19 @@ class Admin extends CI_Controller {
 	 */
 	public function eduser()
 	{
-		$username = $this->__sanitizeString( $this->input->post('username'));
+		$username = $this->__sanitizeString($this->input->post('username'));
 		$password = "";
 		if($this->input->post('password')!="") {
 			$password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
 		}
-		$tipe = $this->__sanitizeString( $this->input->post('tipe'));
-		$akses_klas = $this->__sanitizeString( $this->input->post('akses_klas'));
+		$tipe = $this->__sanitizeString($this->input->post('tipe'));
+		$akses_klas = $this->__sanitizeString($this->input->post('akses_klas'));
 		$akses_modul = json_encode($this->input->post('modul'));
-		$id = $this->__sanitizeString( $this->input->post('id'));
-		$q = "UPDATE master_user SET username=$username";
-		if($password!="") $q .= ",password='$password'";
-		$q .= ",tipe=$tipe,akses_klas=$akses_klas,akses_modul='$akses_modul' WHERE id=$id";
+		$id = $this->__sanitizeString($this->input->post('id'));
+		$q = sprintf("UPDATE master_user SET username='%s'", $username);
+		if($password!="") $q .= sprintf(",password='%s'", $password);
+		$q .= sprintf(",tipe=%d,akses_klas=%d,akses_modul='%s' WHERE id=%d",
+		        $tipe,$akses_klas,$akses_modul,$id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -966,7 +977,7 @@ class Admin extends CI_Controller {
 	public function deluser()
 	{
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = "DELETE FROM master_user WHERE id=$id";
+		$q = sprintf("DELETE FROM master_user WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -983,7 +994,7 @@ class Admin extends CI_Controller {
 	public function auser()
 	{
 		$id = $this->__sanitizeString($this->input->post('id'));
-		$q = "SELECT * FROM master_user WHERE id=$id";
+		$q = sprintf("SELECT * FROM master_user WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array();
 		if($row) {

@@ -1,3 +1,11 @@
+/**
+ * This application is licensed under GNU General Public License version 3
+ * Developers:
+ * Syauqi Fuadi ( xfuadi@gmail.com )
+ * Arie Nugraha ( dicarve@gmail.com )
+ * 
+ */
+
 $(document).ready(function () {
 	var url = $(location).attr('href');
 	var segments = url.split('/');
@@ -13,7 +21,7 @@ $(document).ready(function () {
 		var d = $(this).attr('id')
 		$("#deliddata").val(d);
 	});
-	$('#deldatago').click(function () {
+	$('#deldatago').on('click', function() {
 		$('#fdeldata').submit();
 	});
 	$('#fdeldata').ajaxForm({ success: deldata });
@@ -22,12 +30,13 @@ $(document).ready(function () {
 		$('#deldata').modal('hide');
 		window.location.reload(true);
 	}
-	//////////////// del data sirkulasi
+	
+	/** Fungsi untuk menghapus data sirkulasi arsip */
 	$(".sdeldata").click(function(){
 		var d = $(this).attr('id')
 		$("#deliddata").val(d);
 	});
-	$('#sdeldatago').click(function () {
+	$('#sdeldatago').on('click', function() {
 		$('#fsdeldata').submit();
 	});
 	$('#fsdeldata').ajaxForm({ success: sdeldata });
@@ -36,12 +45,13 @@ $(document).ready(function () {
 		$('#deldata').modal('hide');
 		window.location.reload(true);
 	}
-	//////////////// kembalikan arsip sirkulasi
+	
+	/** Fungsi untuk mengembalikan arsip dalam sirkulasi */
 	$(".kemdata").click(function(){
 		var d = $(this).attr('id')
 		$("#kemid").val(d);
 	});
-	$('#kemarsipgo').click(function () {
+	$('#kemarsipgo').on('click', function() {
 		$('#fkemarsip').submit();
 	});
 	$('#fkemarsip').ajaxForm({ success: kembdata });
@@ -50,8 +60,9 @@ $(document).ready(function () {
 		$('#arsipkembali').modal('hide');
 		window.location.reload(true);
 	}
-	//////////////// delete file attachment
-	$('#delfilego').click(function () {
+	
+	/** Fungsi untuk menghapus file attachment arsip */
+	$('#delfilego').on('click', function() {
 		$('#fdelfile').submit();
 	});
 	$('#fdelfile').ajaxForm({ success: delfile });
@@ -61,7 +72,8 @@ $(document).ready(function () {
 		$("#linkfile").hide();
 		$('#delfile').modal('hide');
 	}
-	////////////////user
+	
+	/** Fungsi-fungsi terkait dengan data master user aplikasi arsip */
 	function reloaduser() {
 		$.ajax({
 			type: "POST",
@@ -80,7 +92,7 @@ $(document).ready(function () {
 		$("#deliduser").val(d);
 	});
 	
-	$('#delusergo').click(function () {
+	$('#delusergo').on('click', function() {
 		$('#fdeluser').submit();
 	});
 	$('#fdeluser').ajaxForm({ success: deluser });
@@ -89,7 +101,7 @@ $(document).ready(function () {
 		reloaduser();
 		$('#deluser').modal('hide');
 	}
-	$('#editusergo').click(function () {
+	$('#editusergo').on('click', function() {
 		$('#feduser').submit();
 	});
 	$('#feduser').ajaxForm({ success: eduser });
@@ -100,7 +112,7 @@ $(document).ready(function () {
 		$('#edituser').modal('hide');
 	}
 
-	$('#addusergo').click(function () {
+	$('#addusergo').on('click', function() {
 		var d = $("#username").val();
 		$.ajax({
 			type: "POST",
@@ -175,7 +187,7 @@ $(document).ready(function () {
 		$("#delidkode").val(d);
 	});
 
-	$('#delkodego').click(function () {
+	$('#delkodego').on('click', function() {
 		$('#fdelkode').submit();
 	});
 	$('#fdelkode').ajaxForm({ success: delkode });
@@ -184,7 +196,7 @@ $(document).ready(function () {
 		reloadkode();
 		$('#delkode').modal('hide');
 	}
-	$('#editkodego').click(function () {
+	$('#editkodego').on('click', function() {
 		$('#fedkode').submit();
 	});
 	$('#fedkode').ajaxForm({ success: edkode });
@@ -194,7 +206,7 @@ $(document).ready(function () {
 		$('#editkode').modal('hide');
 	}
 
-	$('#addkodego').click(function () {
+	$('#addkodego').on('click', function() {
 		$('#faddkode').submit();
 	});
 	$('#faddkode').ajaxForm({ success: addkode });
@@ -221,7 +233,8 @@ $(document).ready(function () {
 			}
 		})
 	}));
-	////////////////////// penc
+	
+	/** Fungsi-fungsi terkait dengan data master pencipta arsip */
 	function reloadpenc() {
 		$.ajax({
 			type: "POST",
@@ -239,7 +252,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$("#delidpenc").val(d);
 	});
-	$('#delpencgo').click(function () {
+	$('#delpencgo').on('click', function() {
 		$('#fdelpenc').submit();
 	});
 	$('#fdelpenc').ajaxForm({ success: delpenc });
@@ -248,7 +261,9 @@ $(document).ready(function () {
 		$('#delpenc').modal('hide');
 		reloadpenc();
 	}
-	$('#editpencgo').click(function () {
+
+	// AJAX untuk edit data pencipta
+	$('#editpencgo').on('click', function() {
 		$('#fedpenc').submit();
 	});
 	$('#fedpenc').ajaxForm({ success: edpenc });
@@ -257,16 +272,21 @@ $(document).ready(function () {
 		$('#editpenc').modal('hide');
 		reloadpenc();
 	}
-	$('#addpencgo').click(function () {
-		$('#faddpenc').submit();
+
+	// AJAX untuk tambah data pencipta
+	$('#addpencgo').on('click', function() {
+		// alert($('#faddpenc').serialize());
+		var form = $('#faddpenc');
+		$.post( form.attr('action'), form.serialize() )
+			.done(addpenc);
 	});
-	$('#faddpenc').ajaxForm({ success: addpenc });
-	function addpenc() {
+	function addpenc(data) {
 		alert("Data telah sukses disimpan");
 		$('#addpenc').modal('hide');
 		$("#faddpenc")[0].reset();
 		reloadpenc();
 	}
+
 	$("#divtabelpenc").on('click','.edpenc',(function () {
 		var d = $(this).attr("id");
 		$.ajax({
@@ -281,7 +301,8 @@ $(document).ready(function () {
 			}
 		})
 	}));
-	////////////////////// penG
+
+	/** Fungsi-fungsi terkait dengan data master unit pengolah arsip */
 	function reloadpeng() {
 		$.ajax({
 			type: "POST",
@@ -299,7 +320,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$("#delidpeng").val(d);
 	});
-	$('#delpenggo').click(function () {
+	$('#delpenggo').on('click', function() {
 		$('#fdelpeng').submit();
 	});
 	$('#fdelpeng').ajaxForm({ success: delpeng });
@@ -308,7 +329,7 @@ $(document).ready(function () {
 		$('#delpeng').modal('hide');
 		reloadpeng();
 	}
-	$('#editpenggo').click(function () {
+	$('#editpenggo').on('click', function() {
 		$('#fedpeng').submit();
 	});
 	$('#fedpeng').ajaxForm({ success: edpeng });
@@ -317,7 +338,7 @@ $(document).ready(function () {
 		$('#editpeng').modal('hide');
 		reloadpeng();
 	}
-	$('#addpenggo').click(function () {
+	$('#addpenggo').on('click', function() {
 		$('#faddpeng').submit();
 	});
 	$('#faddpeng').ajaxForm({ success: addpeng });
@@ -341,7 +362,8 @@ $(document).ready(function () {
 			}
 		})
 	}));
-	////////////////////// lok
+	
+	/** Fungsi-fungsi terkait dengan data master lokasi arsip */
 	function reloadlok() {
 		$.ajax({
 			type: "POST",
@@ -359,7 +381,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$("#delidlok").val(d);
 	});
-	$('#dellokgo').click(function () {
+	$('#dellokgo').on('click', function() {
 		$('#fdellok').submit();
 	});
 	$('#fdellok').ajaxForm({ success: dellok });
@@ -368,7 +390,7 @@ $(document).ready(function () {
 		$('#dellok').modal('hide');
 		reloadlok();
 	}
-	$('#editlokgo').click(function () {
+	$('#editlokgo').on('click', function() {
 		$('#fedlok').submit();
 	});
 	$('#fedlok').ajaxForm({ success: edlok });
@@ -377,7 +399,7 @@ $(document).ready(function () {
 		$('#editlok').modal('hide');
 		reloadlok();
 	}
-	$('#addlokgo').click(function () {
+	$('#addlokgo').on('click', function() {
 		$('#faddlok').submit();
 	});
 	$('#faddlok').ajaxForm({ success: addlok });
@@ -401,7 +423,8 @@ $(document).ready(function () {
 			}
 		})
 	}));
-	////////////////////// med
+	
+	/** Fungsi-fungsi terkait dengan data master media arsip */
 	function reloadmed() {
 		$.ajax({
 			type: "POST",
@@ -419,7 +442,7 @@ $(document).ready(function () {
 		var d = $(this).attr("id");
 		$("#delidmed").val(d);
 	});
-	$('#delmedgo').click(function () {
+	$('#delmedgo').on('click', function() {
 		$('#fdelmed').submit();
 	});
 	$('#fdelmed').ajaxForm({ success: delmed });
@@ -428,7 +451,7 @@ $(document).ready(function () {
 		$('#delmed').modal('hide');
 		reloadmed();
 	}
-	$('#editmedgo').click(function () {
+	$('#editmedgo').on('click', function() {
 		$('#fedmed').submit();
 	});
 	$('#fedmed').ajaxForm({ success: edmed });
@@ -437,7 +460,7 @@ $(document).ready(function () {
 		$('#editmed').modal('hide');
 		reloadmed();
 	}
-	$('#addmedgo').click(function () {
+	$('#addmedgo').on('click', function() {
 		$('#faddmed').submit();
 	});
 	$('#faddmed').ajaxForm({ success: addmed });
@@ -461,9 +484,10 @@ $(document).ready(function () {
 			}
 		})
 	}));
-	////////////
+	
+	/** Init plugins dropdown chosen */
 	$('.chosen').chosen();
-	////////////
+
 	function formatnumber(x) {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 	}
