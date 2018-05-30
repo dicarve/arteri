@@ -16,7 +16,8 @@ $(document).ready(function () {
 	$("#tanggal").datepicker({ maxDate: '0', changeMonth: true, changeYear: true, dateFormat: "yy-mm-dd" });
 	$("#tgl_pinjam").datepicker({ maxDate: '0', changeMonth: true, changeYear: true, dateFormat: "yy-mm-dd" });
 	$("#tgl_haruskembali").datepicker({changeMonth: true, changeYear: true, dateFormat: "yy-mm-dd" });
-	//////////////// del data arsip
+	
+	/** Fungsi untuk menghapus data arsip */
 	$(".deldata").click(function(){
 		var d = $(this).attr('id')
 		$("#deliddata").val(d);
@@ -130,10 +131,17 @@ $(document).ready(function () {
 		})
 	});
 	$('#fadduser').ajaxForm({ success: adduser });
-	function adduser() {
+	function adduser(responseText, statusText, xhr, $form) {
+		var jsonData = JSON.parse(responseText);
+		if (jsonData.status == 'error' && jsonData.pesan == 'PASSWORD_UNMATCH') {
+			alert("Password yang anda tuliskan tidak sama dengan konfirmasi password.\nHarap periksa penggunaan huruf besar kecil.");
+			$('#password, #conf_password').addClass('input-error');
+			return false;
+		}
 		alert("Data telah sukses disimpan");
 		reloaduser();
 		$('#adduser').modal('hide');
+		$('#password, #conf_password').removeClass('input-error');
 		$("#fadduser")[0].reset();
 	}
 

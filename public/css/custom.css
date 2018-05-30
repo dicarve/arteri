@@ -130,3 +130,7 @@ label.isi {
 .ui-datepicker-year {
 	color:#000;
 }
+.input-error {
+    border-color: red;
+    background-color: orange;
+}
