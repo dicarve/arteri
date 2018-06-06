@@ -414,6 +414,10 @@ class Home extends CI_Controller {
 	{
 		unset($_SESSION['username']);
 		unset($_SESSION['id_user']);
+		unset($_SESSION['tipe']);
+		unset($_SESSION['akses_klas']);
+		unset($_SESSION['akses_modul']);
+		unset($_SESSION['menu_master']);
 		redirect('/home', 'refresh');
 	}
 
