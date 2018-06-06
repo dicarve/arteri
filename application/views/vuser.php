@@ -100,7 +100,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <div class="form-group">
 				<label class="col-sm-2 control-label" for="conf_password">Konfirmasi password</label>
 				<div class="col-sm-10">
-					<input type="password" class="form-control" id="conf_password" name="password" />
+					<input type="password" class="form-control" id="conf_password" name="conf_password" />
 				</div>
 			</div>
 			<div class="form-group">

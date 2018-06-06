@@ -18,7 +18,6 @@ class Admin extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
 		if(!$this->session->tipe=='admin') {
 			redirect('/home/login', 'refresh');
 		}
@@ -258,7 +257,7 @@ class Admin extends CI_Controller {
 	public function del1()
 	{
 		$id=$this->__sanitizeString($this->input->post('id'));
-		$q = "SELECT file FROM data_arsip WHERE id=$id";
+		$q = sprintf("SELECT file FROM data_arsip WHERE id=%d", $id);
 		$hsl = $this->db->query($q);
 		$row = $hsl->row_array()['file'];
 		if($row!=""){
