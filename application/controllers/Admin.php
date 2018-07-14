@@ -966,8 +966,8 @@ class Admin extends CI_Controller {
 		$tipe = $this->__sanitizeString($this->input->post('tipe'));
 		$akses_klas = $this->__sanitizeString($this->input->post('akses_klas'));
 		$akses_modul = json_encode($this->input->post('modul'));
-		$q = sprintf("INSERT INTO master_user (username,password,tipe,akses_klas,akses_modul) VALUES ('%s', '%s',%d,%d,'%s')",
-				   $username, $password,$tipe,$akses_klas,$akses_modul);
+		$q = sprintf("INSERT INTO master_user (username,password,tipe,akses_klas,akses_modul) VALUES ('%s', '%s',%d,'%s','%s')",
+		$username, $password,$tipe,$akses_klas,$akses_modul);
 		$hsl = $this->db->query($q);
 		if($hsl) {
 			echo json_encode(array('status' => 'success'));
@@ -994,7 +994,7 @@ class Admin extends CI_Controller {
 		$id = $this->__sanitizeString($this->input->post('id'));
 		$q = sprintf("UPDATE master_user SET username='%s'", $username);
 		if($password!="") $q .= sprintf(",password='%s'", $password);
-		$q .= sprintf(",tipe=%d,akses_klas=%d,akses_modul='%s' WHERE id=%d",
+		$q .= sprintf(",tipe='%s',akses_klas='%s',akses_modul='%s' WHERE id=%d",
 		        $tipe,$akses_klas,$akses_modul,$id);
 		$hsl = $this->db->query($q);
 		if($hsl) {
