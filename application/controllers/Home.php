@@ -4,7 +4,7 @@
  * Developers:
  * Syauqi Fuadi ( xfuadi@gmail.com )
  * Arie Nugraha ( dicarve@gmail.com )
- * 
+ *
  */
 
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -14,7 +14,7 @@ class Home extends CI_Controller {
 	private $data_per_page = 20;
 	/**
 	 * Controller class constructor
-	 * 
+	 *
 	 */
 	public function __construct()
 	{
@@ -27,7 +27,7 @@ class Home extends CI_Controller {
 
 	/**
 	 * Method to output complete page with header and footer
-	 * 
+	 *
 	 */
 	protected function __output($nview,$data=null)
 	{
@@ -35,12 +35,12 @@ class Home extends CI_Controller {
 		$this->load->view($nview,$data);
 		$this->load->view('footer');
 	}
-	
+
 	/**
 	 * Method to sanitize input data
-	 * 
+	 *
 	 * @return String
-	 * 
+	 *
 	 */
 	protected function __sanitizeString($str)
 	{
@@ -52,9 +52,9 @@ class Home extends CI_Controller {
 
 	/**
 	 * Method to compile SQL query based on search criteria
-	 * 
+	 *
 	 * @return Array or String
-	 * 
+	 *
 	 */
   protected function src($srcdata=false)
   {
@@ -120,17 +120,17 @@ class Home extends CI_Controller {
 
 		$q = "SELECT a.*, k.retensi, DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,k.kode nama_kode,
 		  (IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) < CURDATE(),'sudah','belum')) AS f,
-		  nama_lokasi,nama_media,nama_pencipta,nama_pengolah 
-		  FROM data_arsip AS a 
+		  nama_lokasi,nama_media,nama_pencipta,nama_pengolah
+		  FROM data_arsip AS a
 		  JOIN master_kode AS k ON k.id=a.kode
 		  JOIN master_lokasi AS l ON l.id=a.lokasi
 		  JOIN master_media AS m ON m.id=a.media
 		  JOIN master_pencipta AS p ON p.id=a.pencipta
 		  JOIN master_pengolah AS pn ON pn.id=a.unit_pengolah
 		   ";
-		
-		$q_count = "SELECT COUNT(*) AS jmldata 
-		FROM data_arsip AS a 
+
+		$q_count = "SELECT COUNT(*) AS jmldata
+		FROM data_arsip AS a
 		JOIN master_kode AS k ON k.id=a.kode
 		JOIN master_lokasi AS l ON l.id=a.lokasi
 		JOIN master_media AS m ON m.id=a.media
@@ -144,7 +144,7 @@ class Home extends CI_Controller {
 				$klas=array_merge($klas,$k);
 			}
 		}
-	
+
 		if(count($klas)>0) {
 			$w[] = " k.kode regexp '".implode('|',$klas)."'";
 		}
@@ -171,11 +171,11 @@ class Home extends CI_Controller {
       return array($q, $q_count, $src);
     }
 	}
-	
+
 	/**
 	 * Default route for Home controller
 	 * internal instance redirect to 'search' method
-	 * 
+	 *
 	 */
 	public function index()
 	{
@@ -184,24 +184,24 @@ class Home extends CI_Controller {
 
 	/**
 	 * Showing list of existing archives and search form
-	 * 
+	 *
 	 */
 	public function search($offset=0)
 	{
 		$qq = $this->src(true); //print_r($qq); die();
 		$q = $qq[0]; // var_dump($q); die();
 		$data['src']=$qq[2];
-        
+
 		//echo $q;
 		$q2 = $qq[1];
 		$q .= " LIMIT $this->data_per_page ";
-		
+
 		$data['current_page'] = 1;
 		if ($offset>=$this->data_per_page) {
 			$data['current_page'] = floor(($offset+$this->data_per_page)/$this->data_per_page);
 		}
 		/*
-		if ($page<2) { 
+		if ($page<2) {
 			$offset = 0;
 		} else {
 			$offset = ($page*$this->data_per_page)-$this->data_per_page;
@@ -209,7 +209,7 @@ class Home extends CI_Controller {
 		*/
 		if ($offset>0) $q .= "OFFSET $offset";
 		//echo($q); die();
-		
+
 		$hsl = $this->db->query($q);
 		$data['data'] = $hsl->result_array();
 
@@ -262,7 +262,7 @@ class Home extends CI_Controller {
 
 	/**
 	 * Download current archives data in Excel format
-	 * 
+	 *
 	 */
   public function dl()
   {
@@ -284,7 +284,7 @@ class Home extends CI_Controller {
   	$this->excel->getActiveSheet()->mergeCells('A1:D1');
   	//set aligment to center for that merged cell (A1 to D1)
   	$this->excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		
+
   	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, 'No.');
   	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, 2, 'No.Arsip');
   	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, 2, 'Tanggal');
@@ -298,7 +298,7 @@ class Home extends CI_Controller {
   	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, 2, 'Jumlah');
   	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, 2, 'No.Box');
   	$this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, 2, 'Retensi');
-		
+
   	$row=3;
   	$redblock = array('fill' => array(
   		'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -320,22 +320,22 @@ class Home extends CI_Controller {
   	  $this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, $d['b']);
   	  if($d['f']=='sudah') {
   	      $this->excel->getActiveSheet()->getStyleByColumnAndRow(12, $row)->applyFromArray($redblock);
-  	  } 
+  	  }
 		$row++;
 		$no++;
   	}
-	
+
   	$filename='Data Arsip Arteri-'.getdate()[0].'.xls'; //save our workbook as this file name
   	header('Content-Type: application/vnd.ms-excel'); //mime type
   	header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
   	header('Cache-Control: max-age=0'); //no cache
-  	$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+  	$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
   	$objWriter->save('php://output');
   }
 
 	/**
 	 * Showing login page
-	 * 
+	 *
 	 */
 	public function login()
 	{
@@ -349,7 +349,7 @@ class Home extends CI_Controller {
 
 	/**
 	 * Login authentication process
-	 * 
+	 *
 	 */
 	public function gologin()
 	{
@@ -360,14 +360,14 @@ class Home extends CI_Controller {
 		// $q = "select * from master_user where username='$username' and password='$password'";
 		$q = "SELECT * FROM master_user WHERE username='$username'";
 		$user = $this->db->query($q)->row();
-		
+
 		/* $_SESSION['username'] = $username;
 		$_SESSION['id_user'] = $user->id;
 		$_SESSION['tipe'] = $user->tipe;
 		$_SESSION['akses_klas'] = $user->akses_klas;
 		$_SESSION['akses_modul'] = json_decode($user->akses_modul,true);
 		redirect('/home', 'refresh'); */
-		
+
     if($user) {
 			// check password
 			if (password_verify($password, $user->password)) {
@@ -386,6 +386,7 @@ class Home extends CI_Controller {
 						if($key=='lokasi') $no++;
 						if($key=='media') $no++;
 						if($key=='user') $no++;
+						if($key=='import') $no++;
 					}
 					if($no>0) {
 						$_SESSION['menu_master'] = true;
@@ -408,7 +409,7 @@ class Home extends CI_Controller {
 
 	/**
 	 * Logout process
-	 * 
+	 *
 	 */
 	public function logout()
 	{
@@ -423,13 +424,13 @@ class Home extends CI_Controller {
 
 	/**
 	 * Archive detail page
-	 * 
+	 *
 	 */
 	public function view($id)
 	{
-		$q="SELECT a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,k.kode nama_kode,l.nama_lokasi,m.nama_media, 
+		$q="SELECT a.*,p.nama_pencipta,p2.nama_pengolah,k.nama,k.kode nama_kode,l.nama_lokasi,m.nama_media,
 			DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) AS b,
-			(IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f 
+			(IF(DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR)<CURDATE(),'sudah','belum')) AS f
 			FROM data_arsip a
 			LEFT JOIN master_pencipta p ON p.id=a.pencipta
 			LEFT JOIN master_pengolah p2 ON p2.id=a.unit_pengolah
@@ -438,7 +439,7 @@ class Home extends CI_Controller {
 			LEFT JOIN master_media m ON m.id=a.media
 			WHERE a.id=$id";
 		$data=$this->db->query($q)->row_array();
-		
+
 		$this->__output('varsip',$data);
 	}
 }

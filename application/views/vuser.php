@@ -19,7 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     	  	<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button></span>
         </div>
     </form>
-  
+
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="module-submenu">
       <ul class="nav navbar-nav navbar-right">
@@ -144,6 +144,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<input class="form-check-input" type="checkbox" id="modul8" name="modul[user]">
 						User
 					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="modul9" name="modul[import]">
+						Import Data
+					</label>
 				</div>
 			</div>
             <div class="form-group">
@@ -230,6 +234,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<label class="form-check-label">
 						<input class="form-check-input" type="checkbox" id="emodul8" name="modul[user]">
 						User
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" id="emodul9" name="modul[import]">
+						Import Data
 					</label>
 				</div>
 			</div>
