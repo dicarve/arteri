@@ -9,8 +9,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#module-submenu" aria-expanded="false">
       </button>
       <a class="navbar-brand" href="#">Data Arsip</a>
-    </div>  
-  	  
+    </div>
+
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="module-submenu">
       <ul class="nav navbar-nav navbar-right">
@@ -31,7 +31,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div class="view-group row">
 	<label class="col-md-6 control-label" for="tanggal">Tanggal Penciptaan</label>
-	<label class="col-md-6 isi"><?php echo  date_format(date_create($tanggal),'d-M-Y'); 
+	<label class="col-md-6 isi"><?php echo  date_format(date_create($tanggal),'d-M-Y');
 		if($f=='sudah') {
 			echo "<br /><b>Retensi Sudah Lewat : ".date_format(date_create($b),'d-M-Y')."</b>";
 		}else {
@@ -92,6 +92,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="view-group row">
 	<label class="col-md-6 control-label" for="nobox">File</label>
 	<label class="col-md-6 isi"><?php echo ($file==""?"":"<a href='".base_url('files/'.$file)."' target='_blank'>".$file."</a>"); ?></label>
+</div>
+
+<div class="view-group row">
+	<label class="col-md-6 control-label" for="nobox">Nama penginput</label>
+	<label class="col-md-6 isi"><?php echo $username; ?></label>
 </div>
 
 </div><!-- /2nd column -->
