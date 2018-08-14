@@ -1,4 +1,4 @@
--- Arteri application main MySQL database structure 
+-- Adminer 4.3.1 MySQL dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -20,8 +20,8 @@ CREATE TABLE `data_arsip` (
   `lokasi` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `media` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `file` text COLLATE utf8_unicode_ci,
-  `tgl_input` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `tgl_update` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `tgl_input` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tgl_update` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `noarsip` (`noarsip`),
@@ -32,8 +32,8 @@ CREATE TABLE `data_arsip` (
 
 INSERT INTO `data_arsip` (`id`, `noarsip`, `pencipta`, `unit_pengolah`, `tanggal`, `uraian`, `ket`, `kode`, `jumlah`, `nobox`, `lokasi`, `media`, `file`, `tgl_input`, `tgl_update`, `username`) VALUES
 (1,	'103/D1.1/SDM.01/2016',	'5',	'0',	'2016-11-11',	'Melalui rapat dewan direksi, prosedur rekrutmen pegawai mengalami perubahan sesuai dengan perkembangan dan kebutuhan perusahaan.',	'asli',	'5',	1,	'B01001',	'2',	'5',	'SURAT_DINAS_Prosedur_Rekrutmen2.pdf',	'2017-11-10 02:44:54',	'2017-11-10 02:44:54',	'admin'),
-(2,	'22/A2/HKP.01.01/2011',	'5',	'4',	'2011-11-01',	'Keputusan Direksi mengenai Kebijakan Tata Kelola Kearsipan dalam lingkungan internal perusahaan. Mulai dari penciptaan, pengolahan hingga retensi',	'asli',	'18',	1,	'B02003',	'2',	'5',	'KEPUTUSAN_DIREKSI_Keputusan_Direksi_Mengenai_Tata_Kelola_Arsip.pdf',	'2017-11-10 02:39:50',	'2017-11-10 02:39:50',	'admin'),
-(3,	'110/KEU.03/2017',	'5',	'4',	'2017-08-10',	'Surat Perintah Kerja dalam kegiatan pengadaan server oleh vendor PT ABC pada tahun anggaran 2017',	'asli',	'15',	1,	'B100382828',	'2',	'5',	'SPK_Pengadaan_Server1.pdf',	'2017-11-10 02:44:20',	'2017-11-10 02:44:20',	'user'),
+(2,	'22/A2/HKP.01.01/2011',	'5',	'6',	'2011-11-01',	'tag:kegiatan B .Keputusan Direksi mengenai Kebijakan Tata Kelola Kearsipan dalam lingkungan internal perusahaan. Mulai dari penciptaan, pengolahan hingga retensi',	'asli',	'18',	1,	'B02003',	'2',	'5',	'KEPUTUSAN_DIREKSI_Keputusan_Direksi_Mengenai_Tata_Kelola_Arsip.pdf',	'2017-11-10 02:39:50',	'2017-11-10 02:39:50',	'admin'),
+(3,	'110/KEU.03/2017',	'5',	'6',	'2017-08-10',	'tag:kegiatan B .Surat Perintah Kerja dalam kegiatan pengadaan server oleh vendor PT ABC pada tahun anggaran 2017',	'asli',	'15',	1,	'B100382828',	'2',	'5',	'SPK_Pengadaan_Server1.pdf',	'2017-11-10 02:44:20',	'2017-11-10 02:44:20',	'user'),
 (4,	'08/TR/SDM.03.01/2015',	'5',	'4',	'2015-04-02',	'Surat tugas kepada software engineer senior dari perusahaan untuk mengikuti pelatihan mengenai Machine Learning',	'asli',	'9',	1,	'B9088829',	'2',	'5',	'SURAT_TUGAS_Pelatihan_Machine_Learning_Syauqi.pdf',	'2017-11-10 02:45:49',	'2017-11-10 02:45:49',	'admin'),
 (5,	'17/A1.3/KEU.01/2016',	'5',	'4',	'2016-12-25',	'Rencana Anggaran pada bidang produksi, meliputi anggaran prototype, desain produk sampai dengan pengadaan ATK',	'asli',	'13',	1,	'B9020020',	'2',	'5',	'RABBidang_Produksi_2016.pdf',	'2017-11-10 02:45:54',	'2017-11-10 02:45:54',	'admin'),
 (6,	'101/B1/RND.01/2017',	'8',	'3',	'2017-01-01',	'Laporan penelitian dan pengembangan indexing tools menggunakan Struts 2 Java Framework untuk pengembangan aplikasi kearsipan',	'asli',	'20',	5,	'B9829920',	'5',	'2',	'LAPORAN_Penelitian_Pengembangan_Indexing_Tools.pdf',	'2017-11-10 03:22:21',	'0000-00-00 00:00:00',	'admin'),
@@ -50,7 +50,9 @@ INSERT INTO `data_arsip` (`id`, `noarsip`, `pencipta`, `unit_pengolah`, `tanggal
 (18,	'99/A5/HKP.02/2016',	'5',	'4',	'2016-12-10',	'Laporan hasil audit internal pada tahun anggaran 2016',	'asli',	'19',	2,	'B8292920',	'5',	'2',	'',	'2017-11-10 03:38:28',	'0000-00-00 00:00:00',	'admin'),
 (19,	'88/E2/SDM.01.01/2017',	'3',	'2',	'2017-07-10',	'Surat pengangkatan pegawai tetap setelah melalui masa percobaan selama 6 bulan',	'asli',	'11',	1,	'B982002',	'4',	'2',	'',	'2017-11-10 03:53:14',	'0000-00-00 00:00:00',	'admin'),
 (20,	'192/K1/UMUM.01/2017',	'7',	'6',	'2017-06-13',	'Laporan inventarisasi PT Arteri',	'asli',	'21',	50,	'B8292922',	'2',	'2',	'',	'2017-11-10 04:11:52',	'0000-00-00 00:00:00',	'user'),
-(21,	'29/A1/SDM.05/2017',	'3',	'2',	'2017-04-10',	'Surat pemberhentian pegawai oleh Manajer HRD',	'asli',	'12',	1,	'B9200202',	'5',	'2',	'',	'2017-11-10 04:30:31',	'0000-00-00 00:00:00',	'admin');
+(21,	'29/A1/SDM.05/2017',	'3',	'2',	'2017-04-10',	'Surat pemberhentian pegawai oleh Manajer HRD',	'asli',	'12',	1,	'B9200202',	'5',	'2',	'',	'2017-11-10 04:30:31',	'0000-00-00 00:00:00',	'admin'),
+(23,	'eee',	'4',	'6',	'2018-05-01',	'zzz tag:kegiatan A\r\n',	'asli',	'8',	1,	'',	'1',	'8',	'',	'2018-05-29 18:19:52',	'0000-00-00 00:00:00',	'admin'),
+(24,	'123',	'4',	'4',	'2018-05-09',	'asd tag:kegiatan A',	'asli',	'13',	1,	'',	'1',	'5',	'',	'2018-05-31 10:29:57',	'0000-00-00 00:00:00',	'admin');
 
 DROP TABLE IF EXISTS `master_kode`;
 CREATE TABLE `master_kode` (
@@ -81,7 +83,9 @@ INSERT INTO `master_kode` (`id`, `kode`, `nama`, `retensi`) VALUES
 (19,	'HKP.02',	'Pengawasan Internal',	10),
 (20,	'RND.01',	'Penelitian dan Pengembangan',	3),
 (21,	'UMUM.01',	'Inventarisasi Barang Bergerak',	5),
-(22,	'UMUM.02',	'Inventarisasi Barang Tidak Bergerak',	5);
+(22,	'UMUM.02',	'Inventarisasi Barang Tidak Bergerak',	5),
+(27,	'ZZZ',	'',	0),
+(28,	'ZZZ.01',	'',	0);
 
 DROP TABLE IF EXISTS `master_lokasi`;
 CREATE TABLE `master_lokasi` (
@@ -94,7 +98,10 @@ CREATE TABLE `master_lokasi` (
 INSERT INTO `master_lokasi` (`id`, `nama_lokasi`) VALUES
 (1,	'Gedung A, Unit II'),
 (2,	'Gedung B, Unit III'),
-(3,	'Gedung C, Unit IV');
+(3,	'Gedung C, Unit IV'),
+(4,	'Lokasi'),
+(5,	'Gedung C lt 2'),
+(6,	'Gedung B lt4');
 
 DROP TABLE IF EXISTS `master_media`;
 CREATE TABLE `master_media` (
@@ -111,7 +118,10 @@ INSERT INTO `master_media` (`id`, `nama_media`) VALUES
 (3,	'Kartografi'),
 (2,	'Tekstual'),
 (7,	'Video Cartridge'),
-(8,	'Digital');
+(8,	'Digital'),
+(9,	'Media'),
+(10,	'kertas koran'),
+(11,	'usb');
 
 DROP TABLE IF EXISTS `master_pencipta`;
 CREATE TABLE `master_pencipta` (
@@ -127,7 +137,10 @@ INSERT INTO `master_pencipta` (`id`, `nama_pencipta`) VALUES
 (6,	'Bidang Keuangan'),
 (4,	'Bidang Pengadaan'),
 (8,	'Bidang Produksi'),
-(7,	'Bidang Umum dan Rumah Tangga');
+(7,	'Bidang Umum dan Rumah Tangga'),
+(9,	'Pencipta'),
+(10,	'Bidang ZZZ'),
+(11,	'Bidang QWE');
 
 DROP TABLE IF EXISTS `master_pengolah`;
 CREATE TABLE `master_pengolah` (
@@ -143,7 +156,10 @@ INSERT INTO `master_pengolah` (`id`, `nama_pengolah`) VALUES
 (2,	'Unit Arsip Kepegawaian'),
 (5,	'Unit Arsip Pengadaan'),
 (6,	'Unit Arsip Biro Umum dan Rumah Tangga'),
-(3,	'Unit Kearsipan Pusat');
+(3,	'Unit Kearsipan Pusat'),
+(7,	'Pengolah'),
+(8,	'unit ABC'),
+(9,	'Unit SDF');
 
 DROP TABLE IF EXISTS `master_user`;
 CREATE TABLE `master_user` (
@@ -158,7 +174,7 @@ CREATE TABLE `master_user` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `master_user` (`id`, `username`, `password`, `tipe`, `akses_klas`, `akses_modul`) VALUES
-(1,	'admin',	'$2y$10$M57KBHBtl9HsFQP6rxrqUOuSqO/MiQJnTqTu4wM5OlWwa/lTKyb2S',	'admin',	'',	'{\"entridata\":\"on\",\"sirkulasi\":\"on\",\"klasifikasi\":\"on\",\"pencipta\":\"on\",\"pengolah\":\"on\",\"lokasi\":\"on\",\"media\":\"on\",\"user\":\"on\"}'),
+(1,	'admin',	'$2y$10$M57KBHBtl9HsFQP6rxrqUOuSqO/MiQJnTqTu4wM5OlWwa/lTKyb2S',	'admin',	'',	'{\"entridata\":\"on\",\"sirkulasi\":\"on\",\"klasifikasi\":\"on\",\"pencipta\":\"on\",\"pengolah\":\"on\",\"lokasi\":\"on\",\"media\":\"on\",\"user\":\"on\",\"import\":\"on\"}'),
 (6,	'user',	'$2y$10$uE3PKQ/tWOoGQwnfKXVYjOXHRHQ43o5PgYpN2wf2lp.iI4.DFshoq',	'user',	'sdm,hkp',	'{\"sirkulasi\":\"on\"}');
 
 DROP TABLE IF EXISTS `sirkulasi`;
@@ -182,8 +198,9 @@ CREATE TABLE `sirkulasi` (
 INSERT INTO `sirkulasi` (`id`, `noarsip`, `username_peminjam`, `keperluan`, `tgl_pinjam`, `tgl_haruskembali`, `tgl_pengembalian`, `tgl_transaksi`) VALUES
 (1,	'103/D1.1/SDM.01/2016',	'user',	'keperluan pembuktian',	'2017-11-14 16:45:27',	'2017-11-17 00:00:00',	NULL,	'2017-11-14 16:45:27'),
 (2,	'22/A2/HKP.01.01/2011',	'admin',	'untuk membuat rancangan kegiatan',	'2017-11-17 00:00:00',	'2017-11-21 00:00:00',	'2017-11-18 07:10:25',	'2017-11-17 20:33:27'),
-(3,	'192/K1/UMUM.01/2017',	'user',	'keperluan pengecekan untuk rencana anggaran',	'2017-11-17 00:00:00',	'2017-11-25 00:00:00',	NULL,	'2017-11-17 20:34:18'),
-(5,	'110/KEU.03/2017',	'admin',	'untuk pembuktian kegiatan',	'2017-11-17 00:00:00',	'2017-11-29 00:00:00',	'2018-01-05 14:51:43',	'2017-11-17 20:41:54');
+(3,	'192/K1/UMUM.01/2017',	'user',	'keperluan pengecekan untuk rencana anggaran',	'2017-11-17 00:00:00',	'2017-11-25 00:00:00',	'2018-06-06 09:24:29',	'2017-11-17 20:34:18'),
+(5,	'110/KEU.03/2017',	'admin',	'untuk pembuktian kegiatan',	'2017-11-17 00:00:00',	'2017-11-29 00:00:00',	'2018-01-05 14:51:43',	'2017-11-17 20:41:54'),
+(6,	'eee',	'user',	'tes',	'2018-05-29 00:00:00',	'2018-06-15 00:00:00',	NULL,	'2018-05-29 19:47:41');
 
 DROP TABLE IF EXISTS `system_log`;
 CREATE TABLE `system_log` (
@@ -198,4 +215,4 @@ CREATE TABLE `system_log` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- 2018-05-29 09:00:20
+-- 2018-08-14 05:01:40
