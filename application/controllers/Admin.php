@@ -1242,12 +1242,13 @@ class Admin extends CI_Controller
                         $id_lok,
                         $id_med,
                         $user);
-                    echo $q . "<br/>";
+                    //echo $q . "<br/>";
+                    $this->db->query($q);
                 }
             }
 
             $this->session->set_flashdata('zz', "Data berhasil diimport");
-            //redirect('/admin/import', 'refresh');
+            redirect('/admin/import', 'refresh');
         } else {
             $this->session->set_flashdata('zz', "Tidak ada file yang diupload");
             redirect('/admin/import', 'refresh');
