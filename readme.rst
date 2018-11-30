@@ -7,6 +7,8 @@ ARTERI adalah aplikasi pengelolaan arsip elektronik berbasis web. Bertujuan untu
 *******************
 Release Information
 *******************
+Download arteri `di sini
+<https://github.com/dicarve/arteri/releases>`_ .
 
 This repo contains in-development code for future releases. To download the
 latest stable release please visit the `Link
