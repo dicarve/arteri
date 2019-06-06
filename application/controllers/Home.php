@@ -99,7 +99,11 @@ class Home extends CI_Controller {
 				$w[] = " uraian like '%".$uraian."%'";
 			}
 			if($retensi!="" && $retensi!="all") {
-				$w[] = " f='".$retensi."'";
+				if($retensi=="sudah") {
+					$w[] = " DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) < CURDATE()";
+				}else {
+					$w[] = " DATE_ADD(a.tanggal,INTERVAL k.retensi YEAR) > CURDATE()";
+				}
 			}
 			if($penc!="" && $penc!="all") {
 				$w[] = " pencipta ='".$penc."'";

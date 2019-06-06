@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<?php
 		if(isset($unitpengolah2)){
 			foreach($unitpengolah2 as $k) {
-				echo "<option value='".$k['id']."'".($unitpengolah==$k['id']?"selected=selected":"")." >".$k['nama_pengolah']."</option>";
+				echo "<option value='".$k['id']."'".($unit_pengolah==$k['id']?"selected=selected":"")." >".$k['nama_pengolah']."</option>";
 			}
 		}
 	?>
