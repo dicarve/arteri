@@ -15,7 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
     <form class="navbar-form navbar-left width-half-full" method="get" action="<?php echo site_url('/admin/pengolah'); ?>">
     	  <div class="input-group width-full">
-    	  <input type="text" name="katakunci" class="form-control" placeholder="kata kunci nama/kode" /><span class="input-group-btn">
+    	  <input type="text" name="katakunci" class="form-control" placeholder="kata kunci nama/kode" value="<?php echo $this->input->get('katakunci') ?>"/><span class="input-group-btn">
     	  	<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button></span>
         </div>
     </form>

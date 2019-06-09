@@ -382,7 +382,13 @@ class Admin extends CI_Controller
      */
     public function reloadkode()
     {
-        $q = "SELECT * FROM master_kode ORDER BY kode ASC";
+        $katakunci = $this->__sanitizeString($this->input->get('katakunci'));
+
+        $q = "SELECT * FROM master_kode ";
+        if ($katakunci) {
+            $q .= ' WHERE kode LIKE \'%' . $katakunci . '%\' OR nama LIKE \'%' . $katakunci . '%\' ';
+        }
+        $q .= " ORDER BY kode ASC";
         $hsl = $this->db->query($q);
         $row = $hsl->result_array();
         if ($row) {
@@ -510,7 +516,13 @@ class Admin extends CI_Controller
      */
     public function reloadpenc()
     {
-        $q = "SELECT * FROM master_pencipta ORDER BY nama_pencipta ASC";
+        $katakunci = $this->__sanitizeString($this->input->get('katakunci'));
+
+        $q = "SELECT * FROM master_pencipta ";
+        if ($katakunci) {
+            $q .= ' WHERE nama_pencipta LIKE \'%' . $katakunci . '%\' OR id LIKE \'%' . $katakunci . '%\' ';
+        }
+        $q .= " ORDER BY nama_pencipta ASC";
         $hsl = $this->db->query($q);
         $row = $hsl->result_array();
         if ($row) {
@@ -638,7 +650,13 @@ class Admin extends CI_Controller
      */
     public function reloadpeng()
     {
-        $q = "SELECT * FROM master_pengolah ORDER BY nama_pengolah ASC";
+        $katakunci = $this->__sanitizeString($this->input->get('katakunci'));
+
+        $q = "SELECT * FROM master_pengolah ";
+        if ($katakunci) {
+            $q .= ' WHERE nama_pengolah LIKE \'%' . $katakunci . '%\' OR id LIKE \'%' . $katakunci . '%\' ';
+        }
+        $q .= " ORDER BY nama_pengolah ASC";
         $hsl = $this->db->query($q);
         $row = $hsl->result_array();
         if ($row) {
@@ -764,7 +782,13 @@ class Admin extends CI_Controller
      */
     public function reloadlok()
     {
-        $q = "SELECT * FROM master_lokasi ORDER BY nama_lokasi ASC";
+        $katakunci = $this->__sanitizeString($this->input->get('katakunci'));
+
+        $q = "SELECT * FROM master_lokasi ";
+        if ($katakunci) {
+            $q .= ' WHERE nama_lokasi LIKE \'%' . $katakunci . '%\' OR id LIKE \'%' . $katakunci . '%\' ';
+        }
+        $q .= " ORDER BY nama_lokasi ASC";
         $hsl = $this->db->query($q);
         $row = $hsl->result_array();
         if ($row) {
@@ -890,7 +914,13 @@ class Admin extends CI_Controller
      */
     public function reloadmed()
     {
-        $q = "SELECT * FROM master_media ORDER BY nama_media ASC";
+        $katakunci = $this->__sanitizeString($this->input->get('katakunci'));
+
+        $q = "SELECT * FROM master_media ";
+        if ($katakunci) {
+            $q .= ' WHERE nama_media LIKE \'%' . $katakunci . '%\' OR id LIKE \'%' . $katakunci . '%\' ';
+        }
+        $q .= " ORDER BY nama_media ASC";
         $hsl = $this->db->query($q);
         $row = $hsl->result_array();
         if ($row) {
@@ -1049,7 +1079,13 @@ class Admin extends CI_Controller
      */
     public function reloaduser()
     {
-        $q = "SELECT * FROM master_user";
+        $katakunci = $this->__sanitizeString($this->input->get('katakunci'));
+
+        $q = "SELECT * FROM master_user ";
+        if ($katakunci) {
+            $q .= ' WHERE username LIKE \'%' . $katakunci . '%\' OR tipe LIKE \'%' . $katakunci . '%\' ';
+        }
+        $q .= " ORDER BY username ASC";
         $hsl = $this->db->query($q);
         $row = $hsl->result_array();
         if ($row) {

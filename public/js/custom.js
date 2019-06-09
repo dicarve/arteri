@@ -100,7 +100,7 @@ $(document).ready(function() {
 		});
 	}
 	if ($("#divtabeluser").length > 0) {
-		reloaduser();
+		// reloaduser();
 	}
 	$("#divtabeluser").on("click", ".deluser", function() {
 		var d = $(this).attr("id");
@@ -210,7 +210,7 @@ $(document).ready(function() {
 		});
 	}
 	if ($("#divtabelkode").length > 0) {
-		reloadkode();
+		//reloadkode();
 	}
 	$("#divtabelkode").on("click", ".delkode", function() {
 		var d = $(this).attr("id");
@@ -276,7 +276,7 @@ $(document).ready(function() {
 		});
 	}
 	if ($("#divtabelpenc").length > 0) {
-		reloadpenc();
+		// reloadpenc();
 	}
 	$("#divtabelpenc").on("click", ".delpenc", function() {
 		var d = $(this).attr("id");
@@ -343,7 +343,7 @@ $(document).ready(function() {
 		});
 	}
 	if ($("#divtabelpeng").length > 0) {
-		reloadpeng();
+		// reloadpeng();
 	}
 	$("#divtabelpeng").on("click", ".delpeng", function() {
 		var d = $(this).attr("id");
@@ -404,7 +404,7 @@ $(document).ready(function() {
 		});
 	}
 	if ($("#divtabellok").length > 0) {
-		reloadlok();
+		// reloadlok();
 	}
 	$("#divtabellok").on("click", ".dellok", function() {
 		var d = $(this).attr("id");
@@ -465,7 +465,7 @@ $(document).ready(function() {
 		});
 	}
 	if ($("#divtabelmed").length > 0) {
-		reloadmed();
+		// reloadmed();
 	}
 	$("#divtabelmed").on("click", ".delmed", function() {
 		var d = $(this).attr("id");
