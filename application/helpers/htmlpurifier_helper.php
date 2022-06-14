@@ -22,7 +22,7 @@ if (!defined('BASEPATH')) {
 if (!function_exists('html_purify')) {
     function html_purify($dirty_html, $config = false)
     {
-        require_once APPPATH.'third_party/htmlpurifier-4.10.0-standalone/HTMLPurifier.standalone.php';
+        require_once APPPATH.'third_party/htmlpurifier-4.14.0-standalone/HTMLPurifier.standalone.php';
 
         if (is_array($dirty_html)) {
             foreach ($dirty_html as $key => $val) {
