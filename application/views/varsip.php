@@ -14,7 +14,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="module-submenu">
       <ul class="nav navbar-nav navbar-right">
-		  <li><a href="<?php echo site_url('/admin/vedit/'.$id); ?>"><i class="glyphicon glyphicon-pencil"></i> Edit Arsip</a></li>
+	      <?php
+	      if(isset($_SESSION['akses_modul']['entridata']) && $_SESSION['akses_modul']['entridata']=='on') {
+		      echo '<li><a href="'.site_url('/admin/vedit/'.$id).'"><i class="glyphicon glyphicon-pencil"></i> Edit Arsip</a></li>';
+	      }
+		?>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
